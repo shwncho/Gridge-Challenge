@@ -1,4 +1,4 @@
-package com.server.insta.entity;
+package com.server.insta.domain;
 
 import lombok.ToString;
 

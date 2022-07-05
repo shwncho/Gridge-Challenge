@@ -1,6 +1,6 @@
-package com.server.insta.dto;
+package com.server.insta.dto.response;
 
-import com.server.insta.entity.User;
+import com.server.insta.domain.User.User;
 import lombok.Data;
 
 @Data

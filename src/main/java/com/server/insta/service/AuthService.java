@@ -2,12 +2,12 @@ package com.server.insta.service;
 
 import com.server.insta.config.Entity.Status;
 import com.server.insta.config.jwt.JwtProvider;
-import com.server.insta.dto.LogInRequestDto;
-import com.server.insta.dto.LogInResponseDto;
-import com.server.insta.dto.SignUpRequestDto;
-import com.server.insta.dto.SignUpResponseDto;
-import com.server.insta.entity.User;
-import com.server.insta.repository.UserRepository;
+import com.server.insta.dto.request.LogInRequestDto;
+import com.server.insta.dto.response.LogInResponseDto;
+import com.server.insta.dto.request.SignUpRequestDto;
+import com.server.insta.dto.response.SignUpResponseDto;
+import com.server.insta.domain.User.User;
+import com.server.insta.domain.User.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

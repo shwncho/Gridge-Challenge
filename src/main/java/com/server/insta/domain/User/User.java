@@ -1,8 +1,9 @@
-package com.server.insta.entity;
+package com.server.insta.domain.User;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.server.insta.config.Entity.BaseTimeEntity;
 import com.server.insta.config.Entity.Status;
+import com.server.insta.domain.Authority;
 import lombok.*;
 
 import javax.persistence.*;
@@ -25,9 +26,14 @@ public class User extends BaseTimeEntity {
 
     private String nickName;
 
+    private String name;
+
     private String phoneNumber;
 
+    @Column(columnDefinition = "TEXT")
     private String profileImgUrl;
+
+    private String introduce;
 
     @Enumerated(EnumType.STRING)
     private Status status;

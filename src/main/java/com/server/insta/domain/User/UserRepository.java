@@ -1,7 +1,6 @@
-package com.server.insta.repository;
+package com.server.insta.domain.User;
 
 import com.server.insta.config.Entity.Status;
-import com.server.insta.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

@@ -1,4 +1,4 @@
-package com.server.insta.dto;
+package com.server.insta.dto.response;
 
 import lombok.Data;
 

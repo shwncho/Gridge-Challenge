@@ -2,10 +2,10 @@ package com.server.insta.controller;
 
 import com.server.insta.config.response.ResponseService;
 import com.server.insta.config.response.result.SingleResult;
-import com.server.insta.dto.LogInRequestDto;
-import com.server.insta.dto.LogInResponseDto;
-import com.server.insta.dto.SignUpRequestDto;
-import com.server.insta.dto.SignUpResponseDto;
+import com.server.insta.dto.request.LogInRequestDto;
+import com.server.insta.dto.response.LogInResponseDto;
+import com.server.insta.dto.request.SignUpRequestDto;
+import com.server.insta.dto.response.SignUpResponseDto;
 import com.server.insta.service.AuthService;
 import io.swagger.annotations.ApiParam;
 import io.swagger.v3.oas.annotations.Operation;

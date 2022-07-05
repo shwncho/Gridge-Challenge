@@ -1,7 +1,7 @@
-package com.server.insta.dto;
+package com.server.insta.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.server.insta.entity.User;
+import com.server.insta.domain.User.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;

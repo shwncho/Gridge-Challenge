@@ -1,4 +1,4 @@
-package com.server.insta.dto;
+package com.server.insta.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
