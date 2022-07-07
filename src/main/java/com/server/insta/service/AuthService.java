@@ -29,11 +29,11 @@ public class AuthService {
             log.error("이미 존재하는 이메일 입니다.");
             throw new RuntimeException("이미 존재하는 이메일 입니다.");
         }
-        // 이걸 굳이 처리한 이유, 유저가 혹시 번호 양식에 맞게 입력해도 다르게 입력할 가능성을 생각해서
-        if (userRepository.findByEmailAndStatus(dto.getPhoneNumber(), Status.ACTIVE).isPresent()){
-            log.error("이미 존재하는 번호 입니다.");
-            throw new RuntimeException("이미 존재하는 번호 입니다.");
-        }
+        // 이걸 굳이 처리한 이유, 유저가 혹시 번호 양식에 맞게 입력해도 다르게 입력할 가능성을 생각해서 -> 회원가입에서 번호 제외
+//        if (userRepository.findByEmailAndStatus(dto.getPhoneNumber(), Status.ACTIVE).isPresent()){
+//            log.error("이미 존재하는 번호 입니다.");
+//            throw new RuntimeException("이미 존재하는 번호 입니다.");
+//        }
 
         dto.setPassword(passwordEncoder.encode(dto.getPassword()));
         User savedUser = userRepository.save(dto.toEntity());

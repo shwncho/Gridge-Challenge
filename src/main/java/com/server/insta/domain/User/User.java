@@ -1,12 +1,16 @@
 package com.server.insta.domain.User;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.server.insta.config.Entity.BaseTimeEntity;
 import com.server.insta.config.Entity.Status;
 import com.server.insta.domain.Authority;
+import com.server.insta.domain.Post.Post;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Getter
@@ -21,7 +25,7 @@ public class User extends BaseTimeEntity {
 
     private String email;
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)  // 패스워드는 응답값에 포함하지 않는다.
     private String password;
 
     private String nickName;
@@ -35,19 +39,23 @@ public class User extends BaseTimeEntity {
 
     private String introduce;
 
+    @OneToMany(mappedBy = "user")
+    private List<Post> posts = new ArrayList<>();
+
     @Enumerated(EnumType.STRING)
     private Status status;
 
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
+
+
     @Builder
-    public User(String email, String password, String nickName, String phoneNumber, String profileImgUrl) {
+    public User(String email, String name, String nickName, String password) {
         this.email = email;
+        this.name = name;
         this.password = password;
         this.nickName = nickName;
-        this.phoneNumber = phoneNumber;
-        this.profileImgUrl = profileImgUrl;
         this.status = Status.ACTIVE;
         this.authority = Authority.ROLE_USER;
     }

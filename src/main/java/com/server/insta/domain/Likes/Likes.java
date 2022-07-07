@@ -1,4 +1,4 @@
-package com.server.insta.domain.Like;
+package com.server.insta.domain.Likes;
 
 import com.server.insta.config.Entity.BaseTimeEntity;
 import com.server.insta.domain.Post.Post;
@@ -12,9 +12,9 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Like extends BaseTimeEntity {
+public class Likes extends BaseTimeEntity {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "like_id")
     private Long id;
 
