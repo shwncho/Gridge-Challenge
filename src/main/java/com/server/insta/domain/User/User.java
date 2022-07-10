@@ -30,7 +30,7 @@ public class User extends BaseTimeEntity {
 
     private String nickName;
 
-    private String name;
+    private String username;
 
     private String phoneNumber;
 
@@ -51,11 +51,11 @@ public class User extends BaseTimeEntity {
 
 
     @Builder
-    public User(String email, String name, String nickName, String password) {
+    public User(String email, String username, String nickname, String password) {
         this.email = email;
-        this.name = name;
+        this.username = username;
         this.password = password;
-        this.nickName = nickName;
+        this.nickName = nickname;
         this.status = Status.ACTIVE;
         this.authority = Authority.ROLE_USER;
     }

@@ -1,4 +1,4 @@
-package com.server.insta.config.jwt;
+package com.server.insta.config.security.jwt;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;

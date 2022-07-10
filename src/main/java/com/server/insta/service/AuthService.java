@@ -1,7 +1,7 @@
 package com.server.insta.service;
 
 import com.server.insta.config.Entity.Status;
-import com.server.insta.config.jwt.JwtProvider;
+import com.server.insta.config.security.jwt.JwtProvider;
 import com.server.insta.dto.request.LogInRequestDto;
 import com.server.insta.dto.response.LogInResponseDto;
 import com.server.insta.dto.request.SignUpRequestDto;
@@ -11,6 +11,9 @@ import com.server.insta.domain.User.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +21,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class AuthService {
-
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
@@ -37,11 +40,8 @@ public class AuthService {
 
         dto.setPassword(passwordEncoder.encode(dto.getPassword()));
         User savedUser = userRepository.save(dto.toEntity());
-        UsernamePasswordAuthenticationToken authenticationToken = dto.toAuthentication();
-        SignUpResponseDto signUpResponseDto = new SignUpResponseDto(savedUser);
-        signUpResponseDto.setAccess_token(jwtProvider.createToken(authenticationToken));
 
-        return signUpResponseDto;
+        return new SignUpResponseDto(savedUser);
     }
 
     //로그인
@@ -54,7 +54,9 @@ public class AuthService {
         }
 
         UsernamePasswordAuthenticationToken authenticationToken = dto.toAuthentication();
-        String token = jwtProvider.createToken(authenticationToken);
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String token = jwtProvider.createToken(authentication);
 
         return new LogInResponseDto(user.getId(), token);
 

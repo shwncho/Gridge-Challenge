@@ -1,4 +1,4 @@
-package com.server.insta.config;
+package com.server.insta.config.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

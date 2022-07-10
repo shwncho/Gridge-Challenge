@@ -19,10 +19,10 @@ public class SignUpRequestDto {
     private String email;
 
     @Schema(description = "유저 실명")
-    private String name;
+    private String username;
 
     @Schema(description = "유저 닉네임")
-    private String nickName;
+    private String nickname;
     
     @Schema(description = "유저 비밀번호")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
@@ -39,9 +39,9 @@ public class SignUpRequestDto {
     public User toEntity(){
         return User.builder()
                 .email(this.email)
-                .name(this.name)
+                .username(this.username)
                 .password(this.password)
-                .nickName(this.nickName)
+                .nickname(this.nickname)
                 .build();
     }
 }

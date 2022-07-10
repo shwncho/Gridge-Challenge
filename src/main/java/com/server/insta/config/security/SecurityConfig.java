@@ -1,9 +1,10 @@
-package com.server.insta.config;
+package com.server.insta.config.security;
 
-import com.server.insta.config.jwt.JwtSecurityConfig;
-import com.server.insta.config.jwt.JwtAccessDeniedHandler;
-import com.server.insta.config.jwt.JwtAuthenticationEntryPoint;
-import com.server.insta.config.jwt.JwtProvider;
+import com.server.insta.config.security.jwt.JwtSecurityConfig;
+import com.server.insta.config.security.jwt.JwtAccessDeniedHandler;
+import com.server.insta.config.security.jwt.JwtAuthenticationEntryPoint;
+import com.server.insta.config.security.jwt.JwtProvider;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,23 +18,14 @@ import org.springframework.web.filter.CorsFilter;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
     private final JwtProvider jwtProvider;
     private final CorsFilter corsFilter;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
-    public SecurityConfig(
-            JwtProvider jwtProvider,
-            CorsFilter corsFilter,
-            JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
-            JwtAccessDeniedHandler jwtAccessDeniedHandler
-    ) {
-        this.jwtProvider = jwtProvider;
-        this.corsFilter = corsFilter;
-        this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
-        this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
-    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -43,7 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity
+        httpSecurity.httpBasic().disable()
                 // token을 사용하는 방식이기 때문에 csrf를 disable합니다.
                 .csrf().disable()
 
@@ -53,7 +45,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .accessDeniedHandler(jwtAccessDeniedHandler)
 
-                // enable h2-console
                 .and()
                 .headers()
                 .frameOptions()
@@ -66,8 +57,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/auth/**").permitAll() //로그인 부분
-                .antMatchers("/v3/api-docs","/swagger*/**","/favicon.ico","/error,","/h2-console/**").permitAll()
+                .antMatchers("/api/auth/**","/h2-console/**").permitAll() //로그인 부분
+                .antMatchers("/v3/api-docs","/swagger*/**","/favicon.ico","/error,").permitAll()
 
                 .anyRequest().authenticated()
 
