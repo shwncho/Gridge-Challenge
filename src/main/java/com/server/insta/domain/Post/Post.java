@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +23,7 @@ public class Post extends BaseTimeEntity {
     @Column(name = "post_id")
     private Long id;
 
+    @NotNull
     private String caption; // 게시물 설명
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
@@ -30,10 +32,12 @@ public class Post extends BaseTimeEntity {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Likes> likes = new ArrayList<>();
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
+    @NotNull
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Media> medias= new ArrayList<>();
 

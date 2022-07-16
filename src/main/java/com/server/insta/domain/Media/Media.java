@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Getter
@@ -17,10 +18,12 @@ public class Media extends BaseTimeEntity{
     @Column(name = "media_id")
     private Long id;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @Column(name = "post_id")
+    @JoinColumn(name = "post_id")
     private Post post;
 
+    @NotNull
     @Column(columnDefinition = "TEXT")
     private String media;
 

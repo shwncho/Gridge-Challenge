@@ -9,6 +9,7 @@ import com.server.insta.domain.Post.Post;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,15 +24,19 @@ public class User extends BaseTimeEntity {
     @Column(name = "user_id")
     private Long id;
 
+    @NotNull
     private String email;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)  // 패스워드는 응답값에 포함하지 않는다.
     private String password;
 
+    @NotNull
     private String nickName;
 
+    @NotNull
     private String username;
 
+    @NotNull
     private String phoneNumber;
 
     @Column(columnDefinition = "TEXT")
