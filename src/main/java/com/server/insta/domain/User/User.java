@@ -36,7 +36,6 @@ public class User extends BaseTimeEntity {
     @NotNull
     private String username;
 
-    @NotNull
     private String phoneNumber;
 
     @Column(columnDefinition = "TEXT")
