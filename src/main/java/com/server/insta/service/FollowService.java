@@ -2,6 +2,7 @@ package com.server.insta.service;
 
 import com.server.insta.config.Entity.Status;
 import com.server.insta.domain.Follow;
+import com.server.insta.dto.response.FollowerResponseDto;
 import com.server.insta.dto.response.FollowingResponseDto;
 import com.server.insta.repository.FollowRepository;
 import com.server.insta.domain.User;
@@ -63,14 +64,26 @@ public class FollowService {
     }
 
     @Transactional
-    public List<FollowingResponseDto> getFollowing(String email){
-        User fromUser = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
+    public List<FollowingResponseDto> getFollowing(Long id){
+        User fromUser = userRepository.findByIdAndStatus(id, Status.ACTIVE)
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 유저 입니다."));
 
         return followRepository.findAllByFromUser(fromUser)
-                .stream().map(Follow::getToUser).
-                collect(Collectors.toList())
+                .stream().map(Follow::getToUser)
+                .collect(Collectors.toList())
                 .stream().map(User::toFollowing)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public List<FollowerResponseDto> getFollower(Long id){
+        User toUser = userRepository.findByIdAndStatus(id, Status.ACTIVE)
+                .orElseThrow(() -> new RuntimeException("존재하지 않는 유저 입니다."));
+
+        return followRepository.findAllByToUser(toUser)
+                .stream().map(Follow::getFromUser)
+                .collect(Collectors.toList())
+                .stream().map(User::toFollower)
                 .collect(Collectors.toList());
     }
 }

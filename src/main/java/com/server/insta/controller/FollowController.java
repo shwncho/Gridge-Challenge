@@ -3,6 +3,7 @@ package com.server.insta.controller;
 import com.server.insta.config.response.ResponseService;
 import com.server.insta.config.response.result.CommonResult;
 import com.server.insta.config.response.result.MultipleResult;
+import com.server.insta.dto.response.FollowerResponseDto;
 import com.server.insta.dto.response.FollowingResponseDto;
 import com.server.insta.service.FollowService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -42,11 +43,19 @@ public class FollowController {
     }
 
     @Operation(summary = "팔로잉 유저들 조회")
-    @GetMapping("/following")
+    @GetMapping("/following/{id}")
     public MultipleResult<FollowingResponseDto> getFollowing(
-            @AuthenticationPrincipal UserDetails userDetails
+            @PathVariable Long id
     ){
-        return responseService.getMultipleResult(followService.getFollowing(userDetails.getUsername()));
+        return responseService.getMultipleResult(followService.getFollowing(id));
+    }
+
+    @Operation(summary = "팔로워들 조회")
+    @GetMapping("/follower/{id}")
+    public MultipleResult<FollowerResponseDto> getFollower(
+            @PathVariable Long id
+    ){
+        return responseService.getMultipleResult(followService.getFollower(id));
     }
 
 }

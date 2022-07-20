@@ -5,6 +5,7 @@ import com.server.insta.config.Entity.BaseTimeEntity;
 import com.server.insta.config.Entity.Status;
 import com.server.insta.domain.Authority;
 import com.server.insta.domain.Post;
+import com.server.insta.dto.response.FollowerResponseDto;
 import com.server.insta.dto.response.FollowingResponseDto;
 import lombok.*;
 
@@ -67,6 +68,15 @@ public class User extends BaseTimeEntity {
     @Builder
     public FollowingResponseDto toFollowing(){
         return FollowingResponseDto.builder()
+                .userId(id)
+                .profileImgUrl(profileImgUrl)
+                .introduce(introduce)
+                .build();
+    }
+
+    @Builder
+    public FollowerResponseDto toFollower(){
+        return FollowerResponseDto.builder()
                 .userId(id)
                 .profileImgUrl(profileImgUrl)
                 .introduce(introduce)
