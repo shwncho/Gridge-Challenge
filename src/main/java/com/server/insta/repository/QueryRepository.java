@@ -26,14 +26,6 @@ public class QueryRepository {
         return fetchFirst != null;
     }
 
-    public Follow findFollowByUser(User fromUser, User toUser){
-        return queryFactory
-                .selectFrom(follow)
-                .where(follow.fromUser.eq(fromUser),follow.toUser.eq(toUser))
-                .fetchOne();
-    }
-
-
 
 
 }

@@ -2,6 +2,7 @@ package com.server.insta.service;
 
 import com.server.insta.config.Entity.Status;
 import com.server.insta.domain.Follow;
+import com.server.insta.dto.response.FollowingResponseDto;
 import com.server.insta.repository.FollowRepository;
 import com.server.insta.domain.User;
 import com.server.insta.repository.QueryRepository;
@@ -10,6 +11,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -54,7 +58,19 @@ public class FollowService {
 
         //언팔했다가 팔로우 할경우 save를 통해 DB에 넣어주기 위해 status를 사용안함.
         //만약 status를 사용하면 언팔한 관계가 다시 팔로우할 때 조회를 한 이후 변환해야하므로 로직이 더 지저분해짐
-        followRepository.delete(queryRepository.findFollowByUser(fromUser,toUser));
+        followRepository.delete(followRepository.findByFromUserAndToUser(fromUser,toUser));
 
+    }
+
+    @Transactional
+    public List<FollowingResponseDto> getFollowing(String email){
+        User fromUser = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
+                .orElseThrow(() -> new RuntimeException("존재하지 않는 유저 입니다."));
+
+        return followRepository.findAllByFromUser(fromUser)
+                .stream().map(Follow::getToUser).
+                collect(Collectors.toList())
+                .stream().map(User::toFollowing)
+                .collect(Collectors.toList());
     }
 }
