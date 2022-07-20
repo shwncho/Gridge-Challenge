@@ -29,14 +29,11 @@ public class Follow extends BaseTimeEntity {
     @JoinColumn(name = "to_user_id")
     private User toUser;
 
-    @Enumerated(EnumType.STRING)
-    private Status status;
 
     @Builder
     public Follow(User fromUser, User toUser){
         this.fromUser = fromUser;
         this.toUser = toUser;
-        this.status = Status.ACTIVE;
     }
 
 }

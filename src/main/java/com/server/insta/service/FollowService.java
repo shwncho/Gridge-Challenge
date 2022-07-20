@@ -27,7 +27,7 @@ public class FollowService {
         User toUser = userRepository.findByIdAndStatus(toUserid, Status.ACTIVE)
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 유저 입니다."));
 
-        if(queryRepository.existFollowByUserId(fromUser, toUser)){
+        if(queryRepository.existFollowByUser(fromUser, toUser)){
             throw new RuntimeException("이미 팔로우한 유저 입니다.");
         }
 
@@ -38,6 +38,23 @@ public class FollowService {
 
         followRepository.save(follow);
 
+
+    }
+
+    @Transactional
+    public void unFollow(String email, Long toUserid){
+        User fromUser = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
+                .orElseThrow(() -> new RuntimeException("존재하지 않는 유저 입니다."));
+        User toUser = userRepository.findByIdAndStatus(toUserid, Status.ACTIVE)
+                .orElseThrow(() -> new RuntimeException("존재하지 않는 유저 입니다."));
+
+        if(!queryRepository.existFollowByUser(fromUser, toUser)){
+            throw new RuntimeException("이미 팔로우 관계가 아닙니다.");
+        }
+
+        //언팔했다가 팔로우 할경우 save를 통해 DB에 넣어주기 위해 status를 사용안함.
+        //만약 status를 사용하면 언팔한 관계가 다시 팔로우할 때 조회를 한 이후 변환해야하므로 로직이 더 지저분해짐
+        followRepository.delete(queryRepository.findFollowByUser(fromUser,toUser));
 
     }
 }

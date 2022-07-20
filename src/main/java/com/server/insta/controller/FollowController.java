@@ -8,10 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name="follow", description = "Follow API")
 @RestController
@@ -29,6 +26,16 @@ public class FollowController {
             @PathVariable Long toUserid
     ){
         followService.follow(userDetails.getUsername(), toUserid);
+        return responseService.getSuccessResult();
+    }
+
+    @Operation(summary = "팔로우끊기")
+    @DeleteMapping("/{toUserid}")
+    public CommonResult unFollow(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Long toUserid
+    ){
+        followService.unFollow(userDetails.getUsername(), toUserid);
         return responseService.getSuccessResult();
     }
 
