@@ -1,9 +1,7 @@
-package com.server.insta.domain.Media;
+package com.server.insta.domain;
 
 import com.server.insta.config.Entity.BaseTimeEntity;
-import com.server.insta.domain.Post.Post;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -19,7 +17,6 @@ public class Media extends BaseTimeEntity{
     @Column(name = "media_id")
     private Long id;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Post post;
@@ -28,17 +25,19 @@ public class Media extends BaseTimeEntity{
     @Column(columnDefinition = "TEXT")
     private String media;
 
-    @Builder
-    public Media(Post post, String media) {
+    public Media(String media) {
+        this.media = media;
+    }
+
+    public Media(String media, Post post) {
         this.post = post;
         this.media = media;
     }
 
     public void setPost(Post post) {
         this.post = post;
+        post.getMedias().add(this);
+
     }
 
-    public void setMedia(String media) {
-        this.media = media;
-    }
 }

@@ -1,11 +1,10 @@
-package com.server.insta.domain.User;
+package com.server.insta.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.server.insta.config.Entity.BaseTimeEntity;
 import com.server.insta.config.Entity.Status;
 import com.server.insta.domain.Authority;
-import com.server.insta.domain.Post.Post;
+import com.server.insta.domain.Post;
 import lombok.*;
 
 import javax.persistence.*;

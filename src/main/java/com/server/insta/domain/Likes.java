@@ -1,8 +1,6 @@
-package com.server.insta.domain.Likes;
+package com.server.insta.domain;
 
 import com.server.insta.config.Entity.BaseTimeEntity;
-import com.server.insta.domain.Post.Post;
-import com.server.insta.domain.User.User;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,8 +1,9 @@
-package com.server.insta.domain.Follow;
+package com.server.insta.domain;
 
 import com.server.insta.config.Entity.BaseTimeEntity;
-import com.server.insta.domain.User.User;
+import com.server.insta.config.Entity.Status;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -27,5 +28,15 @@ public class Follow extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "to_user_id")
     private User toUser;
+
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
+    @Builder
+    public Follow(User fromUser, User toUser){
+        this.fromUser = fromUser;
+        this.toUser = toUser;
+        this.status = Status.ACTIVE;
+    }
 
 }

@@ -1,10 +1,6 @@
-package com.server.insta.domain.Post;
+package com.server.insta.domain;
 
 import com.server.insta.config.Entity.BaseTimeEntity;
-import com.server.insta.domain.Likes.Likes;
-import com.server.insta.domain.Media.Media;
-import com.server.insta.domain.Tag.Tag;
-import com.server.insta.domain.User.User;
 import lombok.*;
 
 import javax.persistence.*;
@@ -25,7 +21,9 @@ public class Post extends BaseTimeEntity {
 
     private String caption; // 게시물 설명
 
-    //Post 생성과 동시에 태그를 추가하기 때문에 CascadeType.ALL 설정
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Media> medias = new ArrayList<>();
+
     @OneToMany(mappedBy = "post", orphanRemoval = true)
     private List<Tag> tags = new ArrayList<>();
 
@@ -37,6 +35,7 @@ public class Post extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
 
 
 }

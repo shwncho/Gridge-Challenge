@@ -1,9 +1,8 @@
 package com.server.insta.dto.request;
 
-import com.server.insta.domain.Post.Post;
-import com.server.insta.domain.User.User;
+import com.server.insta.domain.Post;
+import com.server.insta.domain.User;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;

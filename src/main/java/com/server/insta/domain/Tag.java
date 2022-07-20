@@ -1,7 +1,7 @@
-package com.server.insta.domain.Tag;
+package com.server.insta.domain;
 
 import com.server.insta.config.Entity.BaseTimeEntity;
-import com.server.insta.domain.Post.Post;
+import com.server.insta.domain.Post;
 import lombok.*;
 
 import javax.persistence.*;
@@ -19,7 +19,6 @@ public class Tag extends BaseTimeEntity {
     @NotNull
     private String content;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Post post;
@@ -30,10 +29,10 @@ public class Tag extends BaseTimeEntity {
         this.post = post;
     }
 
-
-    public void setContent(String content) {
+    public Tag(String content){
         this.content = content;
     }
+
 
     // == 연관관계 메서드 == //
     public void setPost(Post post) {
