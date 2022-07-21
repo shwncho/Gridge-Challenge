@@ -12,7 +12,7 @@ public class PostResponseDto {
 
     private String caption;
 
-    private List<String> medias = new ArrayList<>();
+    private List<String> medias;
 
-    private List<String> tags = new ArrayList<>();
+    private List<String> tags;
 }

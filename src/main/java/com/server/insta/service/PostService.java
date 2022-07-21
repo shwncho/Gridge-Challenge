@@ -4,6 +4,7 @@ import com.server.insta.config.Entity.Status;
 import com.server.insta.domain.Media;
 import com.server.insta.domain.Post;
 import com.server.insta.domain.Tag;
+import com.server.insta.dto.request.UpdatePostRequestDto;
 import com.server.insta.dto.response.PostResponseDto;
 import com.server.insta.repository.MediaRepository;
 import com.server.insta.repository.PostRepository;
@@ -39,23 +40,13 @@ public class PostService {
         Post post = dto.toEntity(user);
         postRepository.save(post);
 
+        mediaRepository.saveAll(dto.getMedias().stream()
+                .map(m -> new Media(m,post))
+                .collect(Collectors.toList()));
 
-        List<Media> medias = new ArrayList<>();
-        for (String media : dto.getMedias()) {
-            Media m = new Media(post,media);
-            medias.add(m);
-        }
-
-
-        mediaRepository.saveAll(medias);
-
-        List<Tag> tags = new ArrayList<>();
-        for (String tag : dto.getTags()) {
-            Tag t = new Tag(tag,post);
-            tags.add(t);
-        }
-
-        tagRepository.saveAll(tags);
+        tagRepository.saveAll(dto.getTags().stream()
+                .map(t -> new Tag(t,post))
+                .collect(Collectors.toList()));
     }
 
     @Transactional
@@ -67,7 +58,7 @@ public class PostService {
                 .caption(post.getCaption())
                 .medias(
                         post.getMedias().stream()
-                                .map(Media::getImage)
+                                .map(Media::getMedia)
                                 .collect(Collectors.toList())
                 )
                 .tags(
@@ -90,6 +81,42 @@ public class PostService {
         }
 
         post.deletePost();
+    }
+
+    @Transactional
+    public void updatePost(String email, Long id, UpdatePostRequestDto dto){
+        User user = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
+                .orElseThrow(() -> new RuntimeException("존재하지 않는 유저 입니다."));
+        Post post = postRepository.findByIdAndStatus(id, Status.ACTIVE)
+                .orElseThrow(() -> new RuntimeException("존재하지 않는 게시물 입니다."));
+
+
+        if(user.getId() != post.getUser().getId()){
+            throw new RuntimeException("게시물을 삭제할 권한이 없는 유저 입니다.");
+        }
+
+
+        post.setCaption(dto.getCaption());
+        post.getMedias().clear();
+        post.getTags().clear();
+
+        /**
+         * 게시글을 수정할 때 기존 이미지와 태그들을 새로운 값들과 매칭시키는 것보다 지우고 생성하는게 더 효율적이라 판단
+         * 이유: 몇 개의 값들이 지워지고 추가될지를 판단할 수 없으므로
+         */
+
+        mediaRepository.deleteAll(mediaRepository.findAllByPost(post));
+        tagRepository.deleteAll(tagRepository.findAllByPost(post));
+
+        List<Media> medias=dto.getMedias().stream().map(m -> new Media(m,post)).collect(Collectors.toList());
+        post.getMedias().addAll(medias);
+        mediaRepository.saveAll(medias);
+
+
+        List<Tag> tags = dto.getTags().stream().map(t -> new Tag(t,post)).collect(Collectors.toList());
+        post.getTags().addAll(tags);
+        tagRepository.saveAll(tags);
+
     }
 
 

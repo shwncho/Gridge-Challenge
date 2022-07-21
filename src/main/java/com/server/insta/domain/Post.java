@@ -2,6 +2,7 @@ package com.server.insta.domain;
 
 import com.server.insta.config.Entity.BaseTimeEntity;
 import com.server.insta.config.Entity.Status;
+import com.server.insta.dto.request.UpdatePostRequestDto;
 import com.server.insta.dto.response.PostResponseDto;
 import lombok.*;
 
@@ -22,13 +23,13 @@ public class Post extends BaseTimeEntity {
 
     private String caption; // 게시물 설명
 
-    @OneToMany(mappedBy = "post",orphanRemoval = true)
+    @OneToMany(mappedBy = "post")
     private List<Media> medias = new ArrayList<>();
 
-    @OneToMany(mappedBy = "post",orphanRemoval = true)
+    @OneToMany(mappedBy = "post")
     private List<Tag> tags = new ArrayList<>();
 
-    @OneToMany(mappedBy = "post",orphanRemoval = true)
+    @OneToMany(mappedBy = "post")
     private List<Likes> likes = new ArrayList<>();
 
 
@@ -51,6 +52,20 @@ public class Post extends BaseTimeEntity {
         this.status = Status.DELETED;
     }
 
+    public void setCaption(String caption) {
+        this.caption = caption;
+    }
+
+    public void changePost(UpdatePostRequestDto dto){
+        this.caption = dto.getCaption();
+        this.tags = dto.getTags().stream().map(tag -> new Tag(tag,this)).collect(Collectors.toList());
+        this.medias = dto.getMedias().stream().map(media -> new Media(media, this)).collect(Collectors.toList());
+//        this.tags.clear();
+//        this.tags.addAll(dto.getTags().stream().map(tag -> new Tag(tag,this)).collect(Collectors.toList()));
+//        this.medias.clear();
+//        this.medias.addAll(dto.getMedias().stream().map(media -> new Media(media,this)).collect(Collectors.toList()));
+
+    }
 
 
 

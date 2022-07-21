@@ -15,7 +15,6 @@ import java.util.List;
 
 @Getter
 @Entity
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseTimeEntity {
 
@@ -63,7 +62,6 @@ public class User extends BaseTimeEntity {
         this.authority = Authority.ROLE_USER;
     }
 
-    @Builder
     public FollowingResponseDto toFollowing(){
         return FollowingResponseDto.builder()
                 .userId(id)
@@ -72,7 +70,6 @@ public class User extends BaseTimeEntity {
                 .build();
     }
 
-    @Builder
     public FollowerResponseDto toFollower(){
         return FollowerResponseDto.builder()
                 .userId(id)

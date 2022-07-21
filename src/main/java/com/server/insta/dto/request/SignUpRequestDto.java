@@ -29,13 +29,6 @@ public class SignUpRequestDto {
     private String password;
     
 
-
-    public UsernamePasswordAuthenticationToken toAuthentication(){
-        return new UsernamePasswordAuthenticationToken(email,password);
-    }
-
-    // parameter 없으므로 @NoArgsConstructor 생성
-    @Builder
     public User toEntity(){
         return User.builder()
                 .email(this.email)

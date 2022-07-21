@@ -18,22 +18,28 @@ public class Media extends BaseTimeEntity{
     @Column(name = "media_id")
     private Long id;
 
+
+    @NotNull
+    @Column(columnDefinition = "TEXT")
+    private String media;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Post post;
 
-    @NotNull
-    @Column(columnDefinition = "TEXT")
-    private String image;
-
-    public Media(String image) {
-        this.image = image;
+    public Media(String media) {
+        this.media = media;
     }
 
     @Builder
-    public Media(Post post, String image) {
+    public Media(String media, Post post) {
         this.post = post;
-        this.image = image;
+        this.media = media;
+        post.getMedias().add(this);
+    }
+
+    public void setMedia(String media) {
+        this.media = media;
     }
 
     public void setPost(Post post) {

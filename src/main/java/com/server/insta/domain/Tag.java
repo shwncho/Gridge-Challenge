@@ -32,6 +32,9 @@ public class Tag extends BaseTimeEntity {
         this.content = content;
     }
 
+    public void setContent(String content) {
+        this.content = content;
+    }
 
     // == 연관관계 메서드 == //
     public void setPost(Post post) {
