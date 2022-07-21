@@ -63,7 +63,7 @@ public class FollowService {
 
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<FollowingResponseDto> getFollowing(Long id){
         User fromUser = userRepository.findByIdAndStatus(id, Status.ACTIVE)
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 유저 입니다."));
@@ -75,7 +75,7 @@ public class FollowService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<FollowerResponseDto> getFollower(Long id){
         User toUser = userRepository.findByIdAndStatus(id, Status.ACTIVE)
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 유저 입니다."));

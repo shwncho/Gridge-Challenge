@@ -2,16 +2,15 @@ package com.server.insta.controller;
 
 import com.server.insta.config.response.ResponseService;
 import com.server.insta.config.response.result.CommonResult;
+import com.server.insta.config.response.result.SingleResult;
 import com.server.insta.dto.request.PostRequestDto;
+import com.server.insta.dto.response.PostResponseDto;
 import com.server.insta.service.PostService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -25,13 +24,30 @@ public class PostController {
     private final ResponseService responseService;
 
     @PostMapping("")
-    public CommonResult postUpload(
+    public CommonResult savePost(
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestBody @Valid PostRequestDto dto
 
     ){
-        String email = userDetails.getUsername();
-        postService.postUpload(email,dto);
+        postService.savePost(userDetails.getUsername(), dto);
         return responseService.getSuccessResult();
     }
+
+    @GetMapping("/{postId}")
+    public SingleResult<PostResponseDto> getPost(
+            @PathVariable Long postId
+    ){
+        return responseService.getSingleResult(postService.getPost(postId));
+    }
+
+    @PatchMapping("/{postId}")
+    public CommonResult deletePost(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Long postId
+    ){
+        postService.deletePost(userDetails.getUsername(),postId);
+        return responseService.getSuccessResult();
+    }
+
+
 }

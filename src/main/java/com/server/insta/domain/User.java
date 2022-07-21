@@ -3,8 +3,6 @@ package com.server.insta.domain;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.server.insta.config.Entity.BaseTimeEntity;
 import com.server.insta.config.Entity.Status;
-import com.server.insta.domain.Authority;
-import com.server.insta.domain.Post;
 import com.server.insta.dto.response.FollowerResponseDto;
 import com.server.insta.dto.response.FollowingResponseDto;
 import lombok.*;

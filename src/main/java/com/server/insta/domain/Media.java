@@ -2,6 +2,7 @@ package com.server.insta.domain;
 
 import com.server.insta.config.Entity.BaseTimeEntity;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,15 +24,16 @@ public class Media extends BaseTimeEntity{
 
     @NotNull
     @Column(columnDefinition = "TEXT")
-    private String media;
+    private String image;
 
-    public Media(String media) {
-        this.media = media;
+    public Media(String image) {
+        this.image = image;
     }
 
-    public Media(String media, Post post) {
+    @Builder
+    public Media(Post post, String image) {
         this.post = post;
-        this.media = media;
+        this.image = image;
     }
 
     public void setPost(Post post) {

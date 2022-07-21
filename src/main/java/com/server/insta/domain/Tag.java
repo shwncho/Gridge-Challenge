@@ -1,7 +1,6 @@
 package com.server.insta.domain;
 
 import com.server.insta.config.Entity.BaseTimeEntity;
-import com.server.insta.domain.Post;
 import lombok.*;
 
 import javax.persistence.*;
