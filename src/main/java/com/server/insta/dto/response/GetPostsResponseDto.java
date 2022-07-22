@@ -8,7 +8,7 @@ import java.util.List;
 
 @Data
 @Builder
-public class GetPostResponseDto {
+public class GetPostsResponseDto {
 
     @Schema(description = "조회한 게시물 설명")
     private String caption;

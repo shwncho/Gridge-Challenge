@@ -5,13 +5,13 @@ import com.server.insta.domain.Media;
 import com.server.insta.domain.Post;
 import com.server.insta.domain.Tag;
 import com.server.insta.dto.request.UpdatePostRequestDto;
-import com.server.insta.dto.response.GetPostResponseDto;
+import com.server.insta.dto.response.GetPostsResponseDto;
 import com.server.insta.repository.MediaRepository;
 import com.server.insta.repository.PostRepository;
 import com.server.insta.repository.TagRepository;
 import com.server.insta.domain.User;
 import com.server.insta.repository.UserRepository;
-import com.server.insta.dto.request.SavePostRequestDto;
+import com.server.insta.dto.request.CreatePostRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -31,7 +31,7 @@ public class PostService {
     private final MediaRepository mediaRepository;
 
     @Transactional
-    public void savePost(String email, SavePostRequestDto dto){
+    public void createPost(String email, CreatePostRequestDto dto){
         User user = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 유저 입니다."));
 
@@ -48,11 +48,11 @@ public class PostService {
     }
 
     @Transactional
-    public GetPostResponseDto getPost(Long id){
+    public GetPostsResponseDto getPost(Long id){
         Post post = postRepository.findByIdAndStatus(id,Status.ACTIVE)
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 게시물 입니다."));
 
-        return GetPostResponseDto.builder()
+        return GetPostsResponseDto.builder()
                 .caption(post.getCaption())
                 .medias(
                         post.getMedias().stream()

@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class SavePostRequestDto {
+public class CreatePostRequestDto {
 
     @NotNull
     @Schema(description = "게시물 설명")

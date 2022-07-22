@@ -3,9 +3,9 @@ package com.server.insta.controller;
 import com.server.insta.config.response.ResponseService;
 import com.server.insta.config.response.result.CommonResult;
 import com.server.insta.config.response.result.SingleResult;
-import com.server.insta.dto.request.SavePostRequestDto;
+import com.server.insta.dto.request.CreatePostRequestDto;
 import com.server.insta.dto.request.UpdatePostRequestDto;
-import com.server.insta.dto.response.GetPostResponseDto;
+import com.server.insta.dto.response.GetPostsResponseDto;
 import com.server.insta.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -27,18 +27,18 @@ public class PostController {
 
     @Operation(summary = "게시물 저장")
     @PostMapping("")
-    public CommonResult savePost(
+    public CommonResult createPost(
             @AuthenticationPrincipal UserDetails userDetails,
-            @RequestBody @Valid SavePostRequestDto dto
+            @RequestBody @Valid CreatePostRequestDto dto
 
     ){
-        postService.savePost(userDetails.getUsername(), dto);
+        postService.createPost(userDetails.getUsername(), dto);
         return responseService.getSuccessResult();
     }
 
     @Operation(summary = "게시물 조회")
     @GetMapping("/{postId}")
-    public SingleResult<GetPostResponseDto> getPost(
+    public SingleResult<GetPostsResponseDto> getPost(
             @PathVariable Long postId
     ){
         return responseService.getSingleResult(postService.getPost(postId));

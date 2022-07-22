@@ -1,7 +1,9 @@
 package com.server.insta.domain;
 
 import com.server.insta.config.Entity.BaseTimeEntity;
+import com.server.insta.config.Entity.Status;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -32,6 +34,9 @@ public class Comment extends BaseTimeEntity {
     @NotNull
     private String content;
 
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
     private Comment parent;
@@ -39,5 +44,13 @@ public class Comment extends BaseTimeEntity {
     @OneToMany(mappedBy = "parent", orphanRemoval = true)
     private List<Comment> child = new ArrayList<>();
 
+    @Builder
+    public Comment(User user, Post post, String content, Comment parent){
+        this.user = user;
+        this.post = post;
+        this.content = content;
+        this.parent = parent;
+        this.status = Status.ACTIVE;
+    }
 
 }
