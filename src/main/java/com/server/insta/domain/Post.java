@@ -2,15 +2,12 @@ package com.server.insta.domain;
 
 import com.server.insta.config.Entity.BaseTimeEntity;
 import com.server.insta.config.Entity.Status;
-import com.server.insta.dto.request.UpdatePostRequestDto;
-import com.server.insta.dto.response.PostResponseDto;
 import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -55,18 +52,6 @@ public class Post extends BaseTimeEntity {
     public void setCaption(String caption) {
         this.caption = caption;
     }
-
-    public void changePost(UpdatePostRequestDto dto){
-        this.caption = dto.getCaption();
-        this.tags = dto.getTags().stream().map(tag -> new Tag(tag,this)).collect(Collectors.toList());
-        this.medias = dto.getMedias().stream().map(media -> new Media(media, this)).collect(Collectors.toList());
-//        this.tags.clear();
-//        this.tags.addAll(dto.getTags().stream().map(tag -> new Tag(tag,this)).collect(Collectors.toList()));
-//        this.medias.clear();
-//        this.medias.addAll(dto.getMedias().stream().map(media -> new Media(media,this)).collect(Collectors.toList()));
-
-    }
-
 
 
 }

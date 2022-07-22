@@ -5,19 +5,18 @@ import com.server.insta.domain.Media;
 import com.server.insta.domain.Post;
 import com.server.insta.domain.Tag;
 import com.server.insta.dto.request.UpdatePostRequestDto;
-import com.server.insta.dto.response.PostResponseDto;
+import com.server.insta.dto.response.GetPostResponseDto;
 import com.server.insta.repository.MediaRepository;
 import com.server.insta.repository.PostRepository;
 import com.server.insta.repository.TagRepository;
 import com.server.insta.domain.User;
 import com.server.insta.repository.UserRepository;
-import com.server.insta.dto.request.PostRequestDto;
+import com.server.insta.dto.request.SavePostRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,13 +31,12 @@ public class PostService {
     private final MediaRepository mediaRepository;
 
     @Transactional
-    public void savePost(String email, PostRequestDto dto){
+    public void savePost(String email, SavePostRequestDto dto){
         User user = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 유저 입니다."));
 
 
-        Post post = dto.toEntity(user);
-        postRepository.save(post);
+        Post post = postRepository.save(dto.toEntity(user));
 
         mediaRepository.saveAll(dto.getMedias().stream()
                 .map(m -> new Media(m,post))
@@ -50,11 +48,11 @@ public class PostService {
     }
 
     @Transactional
-    public PostResponseDto getPost(Long id){
+    public GetPostResponseDto getPost(Long id){
         Post post = postRepository.findByIdAndStatus(id,Status.ACTIVE)
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 게시물 입니다."));
 
-        return PostResponseDto.builder()
+        return GetPostResponseDto.builder()
                 .caption(post.getCaption())
                 .medias(
                         post.getMedias().stream()
@@ -105,6 +103,8 @@ public class PostService {
          * 이유: 몇 개의 값들이 지워지고 추가될지를 판단할 수 없으므로
          */
 
+        //caption은 변경감지를 이용하여 바꾸고
+        //tags,medias는 병합방식을 이용하여 이미지와 태그를 새로 갈아끼운다.
         mediaRepository.deleteAll(mediaRepository.findAllByPost(post));
         tagRepository.deleteAll(tagRepository.findAllByPost(post));
 

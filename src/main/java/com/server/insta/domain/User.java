@@ -3,8 +3,8 @@ package com.server.insta.domain;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.server.insta.config.Entity.BaseTimeEntity;
 import com.server.insta.config.Entity.Status;
-import com.server.insta.dto.response.FollowerResponseDto;
-import com.server.insta.dto.response.FollowingResponseDto;
+import com.server.insta.dto.response.GetFollowerResponseDto;
+import com.server.insta.dto.response.GetFollowingResponseDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -62,16 +62,16 @@ public class User extends BaseTimeEntity {
         this.authority = Authority.ROLE_USER;
     }
 
-    public FollowingResponseDto toFollowing(){
-        return FollowingResponseDto.builder()
+    public GetFollowingResponseDto toFollowing(){
+        return GetFollowingResponseDto.builder()
                 .userId(id)
                 .profileImgUrl(profileImgUrl)
                 .introduce(introduce)
                 .build();
     }
 
-    public FollowerResponseDto toFollower(){
-        return FollowerResponseDto.builder()
+    public GetFollowerResponseDto toFollower(){
+        return GetFollowerResponseDto.builder()
                 .userId(id)
                 .profileImgUrl(profileImgUrl)
                 .introduce(introduce)
