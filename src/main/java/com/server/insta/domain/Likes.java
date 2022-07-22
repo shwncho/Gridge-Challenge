@@ -2,6 +2,7 @@ package com.server.insta.domain;
 
 import com.server.insta.config.Entity.BaseTimeEntity;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -28,4 +29,10 @@ public class Likes extends BaseTimeEntity {
     private Post post;
 
 
+    @Builder
+    public Likes(User user, Post post){
+        this.user = user;
+        this.post = post;
+        post.getLikes().add(this);
+    }
 }

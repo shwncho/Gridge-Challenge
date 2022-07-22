@@ -65,6 +65,7 @@ public class User extends BaseTimeEntity {
     public GetFollowingResponseDto toFollowing(){
         return GetFollowingResponseDto.builder()
                 .userId(id)
+                .nickName(nickName)
                 .profileImgUrl(profileImgUrl)
                 .introduce(introduce)
                 .build();
@@ -73,6 +74,7 @@ public class User extends BaseTimeEntity {
     public GetFollowerResponseDto toFollower(){
         return GetFollowerResponseDto.builder()
                 .userId(id)
+                .nickName(nickName)
                 .profileImgUrl(profileImgUrl)
                 .introduce(introduce)
                 .build();
