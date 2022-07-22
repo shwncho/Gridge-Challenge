@@ -4,6 +4,7 @@ import com.server.insta.config.response.ResponseService;
 import com.server.insta.config.response.result.CommonResult;
 import com.server.insta.config.response.result.MultipleResult;
 import com.server.insta.dto.request.CreateCommentRequestDto;
+import com.server.insta.dto.response.GetCommentsResponseDto;
 import com.server.insta.service.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -34,4 +35,11 @@ public class CommentController {
         return responseService.getSuccessResult();
     }
 
+    @Operation(summary = "해당 게시글의 전체 댓글 조회")
+    @GetMapping("/{postId}")
+    public MultipleResult<GetCommentsResponseDto> getComments(
+            @PathVariable Long postId
+    ){
+        return responseService.getMultipleResult(commentService.getComments(postId));
+    }
 }

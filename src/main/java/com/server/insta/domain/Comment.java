@@ -2,6 +2,7 @@ package com.server.insta.domain;
 
 import com.server.insta.config.Entity.BaseTimeEntity;
 import com.server.insta.config.Entity.Status;
+import com.server.insta.dto.response.GetCommentsResponseDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -51,6 +52,16 @@ public class Comment extends BaseTimeEntity {
         this.content = content;
         this.parent = parent;
         this.status = Status.ACTIVE;
+    }
+
+    public GetCommentsResponseDto toCommentsDto(){
+        return GetCommentsResponseDto.builder()
+                .commentId(id)
+                .content(content)
+                .userId(user.getId())
+                .nickName(user.getNickName())
+                .profileImgUrl(user.getProfileImgUrl())
+                .build();
     }
 
 }

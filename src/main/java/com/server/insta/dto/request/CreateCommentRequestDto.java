@@ -9,6 +9,6 @@ public class CreateCommentRequestDto {
     @Schema(description = "댓글 내용")
     private String content;
 
-    @Schema(description = "최상위 댓글, parentId있으면 넣어주고, 없으면 최상위 댓글이라는 의미 이므로 null로 넘겨주시면 됩니다.")
+    @Schema(description = "최상위 댓글이면 null로, 대댓글이면 어떤 댓글에 달고 싶은지 id값을 넘겨주세요.")
     private Long parentId;
 }
