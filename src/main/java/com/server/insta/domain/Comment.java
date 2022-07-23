@@ -64,4 +64,8 @@ public class Comment extends BaseTimeEntity {
                 .build();
     }
 
+    public void deleteComment(){
+        this.status = Status.DELETED;
+    }
+
 }

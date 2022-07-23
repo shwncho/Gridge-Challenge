@@ -1,5 +1,6 @@
 package com.server.insta.repository;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.server.insta.config.Entity.Status;
 import com.server.insta.domain.Comment;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.server.insta.domain.QFollow.follow;
 import static com.server.insta.domain.QLikes.likes;
@@ -52,6 +54,14 @@ public class QueryRepository {
                         comment.parent.id.asc().nullsFirst(),
                         comment.createdAt.asc()
                 ).fetch();
+    }
+
+    public Optional<Comment> findCommentByIdWithParent(Long id){
+        return Optional.ofNullable(queryFactory.selectFrom(comment)
+                .leftJoin(comment.parent)
+                .fetchJoin()
+                .where(comment.id.eq(id), comment.status.eq(Status.ACTIVE))
+                .fetchOne());
     }
 
 

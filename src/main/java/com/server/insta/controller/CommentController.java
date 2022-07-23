@@ -42,4 +42,14 @@ public class CommentController {
     ){
         return responseService.getMultipleResult(commentService.getComments(postId));
     }
+
+    @Operation(summary = "댓글 삭제")
+    @PatchMapping("/{commentId}")
+    public CommonResult deleteComment(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Long commentId
+    ){
+        commentService.deletePost(userDetails.getUsername(), commentId);
+        return responseService.getSuccessResult();
+    }
 }

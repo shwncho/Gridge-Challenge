@@ -46,6 +46,7 @@ public class CommentService {
 
     }
 
+
     @Transactional(readOnly = true)
     public List<GetCommentsResponseDto> getComments(Long id){
         Post post = postRepository.findByIdAndStatus(id, Status.ACTIVE)
@@ -64,5 +65,29 @@ public class CommentService {
 
         return result;
 
+    }
+
+    @Transactional
+    public void deletePost(String email, Long id){
+        User user = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
+                .orElseThrow(()->new RuntimeException("존재하지 않는 유저 입니다."));
+
+        Comment comment = queryRepository.findCommentByIdWithParent(id)
+                .orElseThrow(()-> new RuntimeException("존재하지 않는 댓글 입니다."));
+
+        if(user.getId() != comment.getUser().getId()){
+            throw new RuntimeException("다른 유저의 댓글을 삭제할 수 없습니다.");
+        }
+
+        if(comment.getChild().size() != 0)  comment.deleteComment();
+        else    commentRepository.delete(getDeletableAncestorComment(comment));
+
+
+    }
+
+    private Comment getDeletableAncestorComment(Comment comment){
+        Comment parent = comment.getParent();
+        if(parent != null && parent.getChild().size() ==1 && parent.getStatus() == Status.DELETED)  return  getDeletableAncestorComment(parent);
+        return comment;
     }
 }
