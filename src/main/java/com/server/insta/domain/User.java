@@ -5,6 +5,7 @@ import com.server.insta.config.Entity.BaseTimeEntity;
 import com.server.insta.config.Entity.Status;
 import com.server.insta.dto.response.GetFollowerResponseDto;
 import com.server.insta.dto.response.GetFollowingResponseDto;
+import com.server.insta.dto.response.GetLikeUsersResponseDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -73,6 +74,15 @@ public class User extends BaseTimeEntity {
 
     public GetFollowerResponseDto toFollower(){
         return GetFollowerResponseDto.builder()
+                .userId(id)
+                .nickName(nickName)
+                .profileImgUrl(profileImgUrl)
+                .introduce(introduce)
+                .build();
+    }
+
+    public GetLikeUsersResponseDto toLikeUsers(){
+        return GetLikeUsersResponseDto.builder()
                 .userId(id)
                 .nickName(nickName)
                 .profileImgUrl(profileImgUrl)

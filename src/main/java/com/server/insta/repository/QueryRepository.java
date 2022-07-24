@@ -75,7 +75,7 @@ public class QueryRepository {
                         JPAExpressions
                                 .select(follow.toUser)
                                 .from(follow)
-                                .where(follow.fromUser.eq(user))
+                                .where(follow.fromUser.eq(user),follow.toUser.status.eq(Status.ACTIVE))
                 ).or(post.user.eq(user)).and(post.status.eq(Status.ACTIVE)))
                 .orderBy(post.id.desc())
                 .limit(size)

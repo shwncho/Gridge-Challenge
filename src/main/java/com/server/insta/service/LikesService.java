@@ -4,12 +4,16 @@ import com.server.insta.config.Entity.Status;
 import com.server.insta.domain.Likes;
 import com.server.insta.domain.Post;
 import com.server.insta.domain.User;
+import com.server.insta.dto.response.GetLikeUsersResponseDto;
 import com.server.insta.repository.LikesRepository;
 import com.server.insta.repository.PostRepository;
 import com.server.insta.repository.QueryRepository;
 import com.server.insta.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -48,5 +52,20 @@ public class LikesService {
         }
 
         likesRepository.delete(likesRepository.findByUserAndPost(user,post));
+    }
+
+    public List<GetLikeUsersResponseDto> getLikeUsers(Long id){
+        Post post = postRepository.findByIdAndStatus(id,Status.ACTIVE)
+                .orElseThrow(() -> new RuntimeException("존재하지 않는 게시물 입니다."));
+
+        List<User> users = likesRepository.findAllByPost(post).stream()
+                .map(Likes::getUser).collect(Collectors.toList());
+
+        return users.stream()
+                .map(User::toLikeUsers)
+                .collect(Collectors.toList());
+
+
+
     }
 }
