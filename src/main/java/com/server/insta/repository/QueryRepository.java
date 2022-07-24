@@ -1,5 +1,6 @@
 package com.server.insta.repository;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.server.insta.config.Entity.Status;
@@ -66,20 +67,26 @@ public class QueryRepository {
     }
 
     //feed 조회 페이징
-    public List<Post> findAllPost(User user, int size){
+    public List<Post> findAllPost(User user, Long lastPostId, int size){
         return queryFactory.selectDistinct(post)
                 .from(post)
                 .join(media1).on(media1.post.eq(post))
                 .leftJoin(tag).on(tag.post.eq(post))
-                .where(post.user.eq(
+                .where(ltPostId(lastPostId),
+                        post.user.eq(
                         JPAExpressions
                                 .select(follow.toUser)
                                 .from(follow)
                                 .where(follow.fromUser.eq(user),follow.toUser.status.eq(Status.ACTIVE))
-                ).or(post.user.eq(user)).and(post.status.eq(Status.ACTIVE)))
+                ).or(post.user.eq(user)), (post.status.eq(Status.ACTIVE)))
                 .orderBy(post.id.desc())
                 .limit(size)
                 .fetch();
+    }
+
+    private BooleanExpression ltPostId(Long postId){
+        if(postId == null)  return null;
+        return post.id.lt(postId);
     }
 
 

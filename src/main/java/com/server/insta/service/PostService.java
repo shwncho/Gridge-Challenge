@@ -80,14 +80,15 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public List<GetFeedResponseDto> getFeed(String email, int pageSize){
+    public List<GetFeedResponseDto> getFeed(String email, Long lastPostId, int pageSize){
         User user = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 유저 입니다."));
-        List<Post> pagePost = queryRepository.findAllPost(user,pageSize);
+        List<Post> pagePost = queryRepository.findAllPost(user, lastPostId, pageSize);
 
         List<GetFeedResponseDto> result = new ArrayList<>();
 
         pagePost.forEach(post ->{
+            Long postId = post.getId();
             int likeCount = likesRepository.countByPost(post);
             int commentCount = commentRepository.countByPost(post);
 
@@ -108,6 +109,7 @@ public class PostService {
                     .build();
 
             result.add(GetFeedResponseDto.builder()
+                    .postId(postId)
                     .likeCount(likeCount)
                     .commentCount(commentCount)
                     .getPostResponseDto(dto)

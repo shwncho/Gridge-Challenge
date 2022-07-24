@@ -53,9 +53,10 @@ public class PostController {
     @GetMapping("/feed")
     public MultipleResult<GetFeedResponseDto> getFeed(
             @AuthenticationPrincipal UserDetails userDetails,
+            @RequestParam (required = false) Long lastPostId,
             @RequestParam("size") int pageSize
     ){
-        return responseService.getMultipleResult(postService.getFeed(userDetails.getUsername(), pageSize));
+        return responseService.getMultipleResult(postService.getFeed(userDetails.getUsername(), lastPostId,pageSize));
     }
 
     @Operation(summary = "게시물 삭제")

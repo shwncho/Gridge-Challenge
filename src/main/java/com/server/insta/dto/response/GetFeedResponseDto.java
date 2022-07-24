@@ -10,6 +10,9 @@ import java.util.List;
 @Builder
 public class GetFeedResponseDto {
 
+    @Schema(description = "게시물 db id")
+    private Long postId;
+
     @Schema(description = "게시물의 좋아요 개수")
     private int likeCount;
 
