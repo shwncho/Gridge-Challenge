@@ -8,4 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface LikesRepository extends JpaRepository<Likes,Long> {
 
     Likes findByUserAndPost(User user, Post post);
+
+    int countByPost(Post post);
 }

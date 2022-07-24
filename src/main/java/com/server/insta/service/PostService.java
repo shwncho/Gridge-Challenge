@@ -5,18 +5,19 @@ import com.server.insta.domain.Media;
 import com.server.insta.domain.Post;
 import com.server.insta.domain.Tag;
 import com.server.insta.dto.request.UpdatePostRequestDto;
-import com.server.insta.dto.response.GetPostsResponseDto;
-import com.server.insta.repository.MediaRepository;
-import com.server.insta.repository.PostRepository;
-import com.server.insta.repository.TagRepository;
+import com.server.insta.dto.response.GetFeedResponseDto;
+import com.server.insta.dto.response.GetPostResponseDto;
+import com.server.insta.repository.*;
 import com.server.insta.domain.User;
-import com.server.insta.repository.UserRepository;
 import com.server.insta.dto.request.CreatePostRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,6 +30,10 @@ public class PostService {
     private final UserRepository userRepository;
     private final TagRepository tagRepository;
     private final MediaRepository mediaRepository;
+    private final LikesRepository likesRepository;
+    private final CommentRepository commentRepository;
+    private final QueryRepository queryRepository;
+
 
     @Transactional
     public void createPost(String email, CreatePostRequestDto dto){
@@ -48,12 +53,19 @@ public class PostService {
     }
 
     @Transactional
-    public GetPostsResponseDto getPost(Long id){
+    public GetPostResponseDto getPost(Long id){
         Post post = postRepository.findByIdAndStatus(id,Status.ACTIVE)
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 게시물 입니다."));
 
-        return GetPostsResponseDto.builder()
+        int likeCount = likesRepository.countByPost(post);
+        int commentCount = commentRepository.countByPost(post);
+
+        return GetPostResponseDto.builder()
+                .nickName(post.getUser().getNickName())
+                .profileImgUrl(post.getUser().getProfileImgUrl())
                 .caption(post.getCaption())
+                .likeCount(likeCount)
+                .commentCount(commentCount)
                 .medias(
                         post.getMedias().stream()
                                 .map(Media::getMedia)
@@ -65,6 +77,47 @@ public class PostService {
                                 .collect(Collectors.toList())
                 )
                 .build();
+    }
+
+    @Transactional(readOnly = true)
+    public List<GetFeedResponseDto> getFeed(String email, int pageSize){
+        User user = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
+                .orElseThrow(() -> new RuntimeException("존재하지 않는 유저 입니다."));
+        List<Post> pagePost = queryRepository.findAllPost(user,pageSize);
+
+        List<GetFeedResponseDto> result = new ArrayList<>();
+
+        pagePost.forEach(post ->{
+            int likeCount = likesRepository.countByPost(post);
+            int commentCount = commentRepository.countByPost(post);
+
+            GetPostResponseDto dto = GetPostResponseDto.builder()
+                    .nickName(post.getUser().getNickName())
+                    .profileImgUrl(post.getUser().getProfileImgUrl())
+                    .caption(post.getCaption())
+                    .medias(
+                            post.getMedias().stream()
+                                    .map(Media::getMedia)
+                                    .collect(Collectors.toList())
+                    )
+                    .tags(
+                            post.getTags().stream()
+                                    .map(Tag::getContent)
+                                    .collect(Collectors.toList())
+                    )
+                    .build();
+
+            result.add(GetFeedResponseDto.builder()
+                    .likeCount(likeCount)
+                    .commentCount(commentCount)
+                    .getPostResponseDto(dto)
+                    .build());
+
+        });
+
+        return result;
+
+
     }
 
     @Transactional

@@ -1,10 +1,9 @@
 package com.server.insta.repository;
 
-import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.server.insta.config.Entity.Status;
 import com.server.insta.domain.Comment;
-import com.server.insta.domain.Follow;
 import com.server.insta.domain.Post;
 import com.server.insta.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +16,8 @@ import static com.server.insta.domain.QFollow.follow;
 import static com.server.insta.domain.QLikes.likes;
 import static com.server.insta.domain.QComment.comment;
 import static com.server.insta.domain.QPost.post;
+import static com.server.insta.domain.QMedia.media1;
+import static com.server.insta.domain.QTag.tag;
 
 @Repository
 @RequiredArgsConstructor
@@ -62,6 +63,23 @@ public class QueryRepository {
                 .fetchJoin()
                 .where(comment.id.eq(id), comment.status.eq(Status.ACTIVE))
                 .fetchOne());
+    }
+
+    //feed 조회 페이징
+    public List<Post> findAllPost(User user, int size){
+        return queryFactory.selectDistinct(post)
+                .from(post)
+                .join(media1).on(media1.post.eq(post))
+                .leftJoin(tag).on(tag.post.eq(post))
+                .where(post.user.eq(
+                        JPAExpressions
+                                .select(follow.toUser)
+                                .from(follow)
+                                .where(follow.fromUser.eq(user))
+                ).or(post.user.eq(user)).and(post.status.eq(Status.ACTIVE)))
+                .orderBy(post.id.desc())
+                .limit(size)
+                .fetch();
     }
 
 

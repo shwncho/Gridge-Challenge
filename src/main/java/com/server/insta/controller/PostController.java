@@ -2,14 +2,19 @@ package com.server.insta.controller;
 
 import com.server.insta.config.response.ResponseService;
 import com.server.insta.config.response.result.CommonResult;
+import com.server.insta.config.response.result.MultipleResult;
 import com.server.insta.config.response.result.SingleResult;
 import com.server.insta.dto.request.CreatePostRequestDto;
 import com.server.insta.dto.request.UpdatePostRequestDto;
-import com.server.insta.dto.response.GetPostsResponseDto;
+import com.server.insta.dto.response.GetPostResponseDto;
+import com.server.insta.dto.response.GetFeedResponseDto;
 import com.server.insta.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -36,12 +41,21 @@ public class PostController {
         return responseService.getSuccessResult();
     }
 
-    @Operation(summary = "게시물 조회")
+    @Operation(summary = "게시물 단건 조회")
     @GetMapping("/{postId}")
-    public SingleResult<GetPostsResponseDto> getPost(
+    public SingleResult<GetPostResponseDto> getPost(
             @PathVariable Long postId
     ){
         return responseService.getSingleResult(postService.getPost(postId));
+    }
+
+    @Operation(summary = "피드 조회", description = "Query Parameter로 페이지 사이즈 필수로 넣어줘야 합니다.")
+    @GetMapping("/feed")
+    public MultipleResult<GetFeedResponseDto> getFeed(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestParam("size") int pageSize
+    ){
+        return responseService.getMultipleResult(postService.getFeed(userDetails.getUsername(), pageSize));
     }
 
     @Operation(summary = "게시물 삭제")
