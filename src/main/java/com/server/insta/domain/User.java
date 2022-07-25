@@ -11,6 +11,7 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -24,7 +25,7 @@ public class User extends BaseTimeEntity {
     private Long id;
 
     @NotNull
-    private String email;
+    private String email;   //이메일을 기준으로 하되, 전화번호, 그냥 아이디 등 자유 형식
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)  // 패스워드는 응답값에 포함하지 않는다.
     private String password;
@@ -42,6 +43,13 @@ public class User extends BaseTimeEntity {
 
     private String introduce;
 
+    private String website;
+
+    @Enumerated(EnumType.STRING)
+    private Provider provider; //kakao,google,facebook,normal
+
+    private Date birth;
+
     @OneToMany(mappedBy = "user")
     private List<Post> posts = new ArrayList<>();
 
@@ -54,11 +62,14 @@ public class User extends BaseTimeEntity {
 
 
     @Builder
-    public User(String email, String username, String nickname, String password) {
+    public User(String email, String username, String nickname, String password, String phoneNumber, Date birth) {
         this.email = email;
         this.username = username;
         this.password = password;
         this.nickName = nickname;
+        this.phoneNumber = phoneNumber;
+        this.birth = birth;
+        this.provider = Provider.NORMAL;
         this.status = Status.ACTIVE;
         this.authority = Authority.ROLE_USER;
     }
