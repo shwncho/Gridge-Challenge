@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.io.IOException;
+
 @RestControllerAdvice
 @RequiredArgsConstructor
 public class ExceptionAdvisor {
@@ -43,10 +45,14 @@ public class ExceptionAdvisor {
         return responseService.getFailResult(e.getMessage());
     }
 
+
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public CommonResult commonException() {
         return responseService.getFailResult("서버와의 연결에 실패하였습니다.");
     }
+
+    @ExceptionHandler(Exception.class)
+    public CommonResult allException(Exception e)  {return responseService.getFailResult(e.getMessage());}
 
 }

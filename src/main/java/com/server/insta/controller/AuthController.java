@@ -2,10 +2,12 @@ package com.server.insta.controller;
 
 import com.server.insta.config.response.ResponseService;
 import com.server.insta.config.response.result.SingleResult;
-import com.server.insta.dto.request.LogInRequestDto;
-import com.server.insta.dto.response.LogInResponseDto;
+import com.server.insta.dto.request.SignInRequestDto;
+import com.server.insta.dto.request.SnsSignInRequestDto;
+import com.server.insta.dto.response.SignInResponseDto;
 import com.server.insta.dto.request.SignUpRequestDto;
 import com.server.insta.dto.response.SignUpResponseDto;
+import com.server.insta.dto.response.SnsSignInResponseDto;
 import com.server.insta.service.AuthService;
 import io.swagger.annotations.ApiParam;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,7 +30,7 @@ public class AuthController {
     private final ResponseService responseService;
 
     @Operation(summary="회원가입")
-    @PostMapping("/sign-up")
+    @PostMapping("/signup")
     public SingleResult<SignUpResponseDto> signUp(
             @ApiParam(value="회원 가입에 필요한 정보")
             @RequestBody @Valid SignUpRequestDto dto){
@@ -36,9 +38,15 @@ public class AuthController {
     }
 
     @Operation(summary="로그인")
-    @PostMapping("/sign-in")
-    public SingleResult<LogInResponseDto> signIn(@RequestBody @Valid LogInRequestDto dto){
+    @PostMapping("/signin")
+    public SingleResult<SignInResponseDto> signIn(@RequestBody @Valid SignInRequestDto dto){
         return responseService.getSingleResult(authService.signIn(dto));
+    }
+
+    @Operation(summary = "SNS 로그인")
+    @PostMapping("/sns-signin")
+    public SingleResult<SnsSignInResponseDto> snsSignIn(@RequestBody @Valid SnsSignInRequestDto dto){
+        return responseService.getSingleResult(authService.snsSignIn(dto));
     }
 
 

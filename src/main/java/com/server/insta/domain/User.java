@@ -1,7 +1,9 @@
 package com.server.insta.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.server.insta.config.Entity.Authority;
 import com.server.insta.config.Entity.BaseTimeEntity;
+import com.server.insta.config.Entity.Provider;
 import com.server.insta.config.Entity.Status;
 import com.server.insta.dto.response.GetFollowerResponseDto;
 import com.server.insta.dto.response.GetFollowingResponseDto;

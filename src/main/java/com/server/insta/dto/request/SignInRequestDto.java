@@ -8,7 +8,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import javax.validation.constraints.Email;
 
 @Data
-public class LogInRequestDto {
+public class SignInRequestDto {
 
     @Email
     @Schema(description = "유저 이메일")

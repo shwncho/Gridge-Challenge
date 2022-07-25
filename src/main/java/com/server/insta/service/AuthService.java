@@ -1,12 +1,16 @@
 package com.server.insta.service;
 
 import com.server.insta.config.Entity.Status;
+import com.server.insta.config.oAuth.CreateKaKaoUser;
 import com.server.insta.config.security.jwt.JwtProvider;
-import com.server.insta.dto.request.LogInRequestDto;
-import com.server.insta.dto.response.LogInResponseDto;
+import com.server.insta.config.Entity.Provider;
+import com.server.insta.dto.request.SignInRequestDto;
+import com.server.insta.dto.request.SnsSignInRequestDto;
+import com.server.insta.dto.response.SignInResponseDto;
 import com.server.insta.dto.request.SignUpRequestDto;
 import com.server.insta.dto.response.SignUpResponseDto;
 import com.server.insta.domain.User;
+import com.server.insta.dto.response.SnsSignInResponseDto;
 import com.server.insta.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,9 +49,9 @@ public class AuthService {
     }
 
     //로그인
-    public LogInResponseDto signIn(LogInRequestDto dto){
+    public SignInResponseDto signIn(SignInRequestDto dto){
         User user = userRepository.findByEmailAndStatus(dto.getEmail(), Status.ACTIVE)
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 이메일 입니다."));
+                .orElseThrow(() -> new RuntimeException("존재하지 않는 유저 입니다."));
 
         if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
             throw new RuntimeException("비밀번호가 일치하지 않습니다.");
@@ -58,7 +62,26 @@ public class AuthService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = jwtProvider.createToken(authentication);
 
-        return new LogInResponseDto(user.getId(), token);
+        return new SignInResponseDto(user.getId(), token);
+
+
+
+    }
+
+    public SnsSignInResponseDto snsSignIn(SnsSignInRequestDto dto){
+        SnsSignInResponseDto user;
+        if(dto.getProvider().equals(Provider.KAKAO)) {
+            user =CreateKaKaoUser.createKaKaoUserInfo(dto.getToken());
+        }
+//        다른 소셜 로그인도 구현할 경우의 로직
+//        else if(dto.getProvider().equals(Provider.NAVER))   user=CreateNaverUser.createNaverUserInfo(dto.getToken());
+//        else if(dto.getProvider().equals(Provider.GOOGLE))  user=CreateGoogleUser.createGoogleUserInfo(dto.getToken());
+//        else if(dto.getProvider().equals(Provider.FACEBOOK))    user=CreateFacebookUser.createFacebookUserInfo(dto.getToken());
+        else{
+            throw new RuntimeException("지원하지 않는 oAuth Provider 입니다.");
+        }
+
+        return user;
 
 
 
