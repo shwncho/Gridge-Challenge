@@ -1,6 +1,7 @@
 package com.server.insta.service;
 
 import com.server.insta.config.Entity.Status;
+import com.server.insta.config.exception.BusinessException;
 import com.server.insta.domain.Follow;
 import com.server.insta.dto.response.GetFollowerResponseDto;
 import com.server.insta.dto.response.GetFollowingResponseDto;
@@ -16,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.server.insta.config.exception.BusinessExceptionStatus.*;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -28,12 +31,12 @@ public class FollowService {
     @Transactional
     public void follow(String email, Long toUserid){
         User fromUser = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 유저 입니다."));
+                .orElseThrow(() -> new BusinessException(USER_NOT_EXIST));
         User toUser = userRepository.findByIdAndStatus(toUserid, Status.ACTIVE)
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 유저 입니다."));
+                .orElseThrow(() -> new BusinessException(USER_NOT_EXIST));
 
         if(queryRepository.existFollowByUser(fromUser, toUser)){
-            throw new RuntimeException("이미 팔로우한 유저 입니다.");
+            throw new BusinessException(FOLLOW_EXIST_RELATIONSHIP);
         }
 
         Follow follow = Follow.builder()
@@ -49,12 +52,12 @@ public class FollowService {
     @Transactional
     public void unFollow(String email, Long toUserid){
         User fromUser = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 유저 입니다."));
+                .orElseThrow(() -> new BusinessException(USER_NOT_EXIST));
         User toUser = userRepository.findByIdAndStatus(toUserid, Status.ACTIVE)
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 유저 입니다."));
+                .orElseThrow(() -> new BusinessException(USER_NOT_EXIST));
 
         if(!queryRepository.existFollowByUser(fromUser, toUser)){
-            throw new RuntimeException("이미 팔로우 관계가 아닙니다.");
+            throw new BusinessException(FOLLOW_NOT_EXIST_RELATIONSHIP);
         }
 
         //언팔했다가 팔로우 할경우 save를 통해 DB에 넣어주기 위해 status를 사용안함.
@@ -66,7 +69,7 @@ public class FollowService {
     @Transactional(readOnly = true)
     public List<GetFollowingResponseDto> getFollowing(Long id){
         User fromUser = userRepository.findByIdAndStatus(id, Status.ACTIVE)
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 유저 입니다."));
+                .orElseThrow(() -> new BusinessException(USER_NOT_EXIST));
 
         return followRepository.findAllByFromUser(fromUser)
                 .stream().map(Follow::getToUser)
@@ -78,7 +81,7 @@ public class FollowService {
     @Transactional(readOnly = true)
     public List<GetFollowerResponseDto> getFollower(Long id){
         User toUser = userRepository.findByIdAndStatus(id, Status.ACTIVE)
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 유저 입니다."));
+                .orElseThrow(() -> new BusinessException(USER_NOT_EXIST));
 
         return followRepository.findAllByToUser(toUser)
                 .stream().map(Follow::getFromUser)

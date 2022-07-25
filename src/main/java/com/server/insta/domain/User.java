@@ -9,6 +9,7 @@ import com.server.insta.dto.response.GetFollowerResponseDto;
 import com.server.insta.dto.response.GetFollowingResponseDto;
 import com.server.insta.dto.response.GetLikeUsersResponseDto;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -50,6 +51,7 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Provider provider; //kakao,google,facebook,normal
 
+    @Temporal(TemporalType.DATE)
     private Date birth;
 
     @OneToMany(mappedBy = "user")

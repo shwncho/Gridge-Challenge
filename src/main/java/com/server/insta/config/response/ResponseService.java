@@ -1,5 +1,6 @@
 package com.server.insta.config.response;
 
+import com.server.insta.config.exception.BusinessExceptionStatus;
 import com.server.insta.config.response.result.CommonResult;
 import com.server.insta.config.response.result.MultipleResult;
 import com.server.insta.config.response.result.SingleResult;
@@ -13,13 +14,15 @@ public class ResponseService {
 
     @Getter
     public enum CommonResponse {
-        SUCCESS( "응답 성공"),
-        FAIL("응답 실패");
+        SUCCESS( "SUCCESS","응답 성공"),
+        FAIL("FAIL","응답 실패");
 
+        String code;
         String message;
 
-        CommonResponse(String message) {
-            this.message = message;
+        CommonResponse(String code, String message){
+            this.code=code;
+            this.message=message;
         }
     }
 
@@ -47,22 +50,35 @@ public class ResponseService {
     }
 
     // 실패 결과만 처리
-    public CommonResult getFailResult(String message) {
+    public CommonResult getFailResult(BusinessExceptionStatus status) {
         CommonResult result = new CommonResult();
-        result.setSuccess(false);
-        setFailResult(result, message);
+        setFailResult(result,status);
+        return result;
+    }
+
+    public CommonResult getFailResult(String code, String message){
+        CommonResult result = new CommonResult();
+        setFailResult(result,code,message);
         return result;
     }
 
     // API 요청 성공 시 응답 모델을 성공 데이터로 세팅
     private void setSuccessResult(CommonResult result) {
         result.setSuccess(true);
+        result.setCode(CommonResponse.SUCCESS.getCode());
         result.setMessage(CommonResponse.SUCCESS.getMessage());
     }
 
     // API 요청 실패 시 응답 모델을 실패 데이터로 세팅
-    private void setFailResult(CommonResult result, String message) {
+    private void setFailResult(CommonResult result, BusinessExceptionStatus status) {
         result.setSuccess(false);
+        result.setCode(status.getCode());
+        result.setMessage(status.getMessage());
+    }
+
+    private void setFailResult(CommonResult result, String code, String message) {
+        result.setSuccess(false);
+        result.setCode(code);
         result.setMessage(message);
     }
 }

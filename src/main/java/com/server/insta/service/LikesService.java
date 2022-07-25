@@ -1,6 +1,7 @@
 package com.server.insta.service;
 
 import com.server.insta.config.Entity.Status;
+import com.server.insta.config.exception.BusinessException;
 import com.server.insta.domain.Likes;
 import com.server.insta.domain.Post;
 import com.server.insta.domain.User;
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.server.insta.config.exception.BusinessExceptionStatus.*;
+
 @Service
 @RequiredArgsConstructor
 public class LikesService {
@@ -26,12 +29,12 @@ public class LikesService {
 
     public void saveLike(String email, Long id){
         User user = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 유저 입니다."));
+                .orElseThrow(() -> new BusinessException(USER_NOT_EXIST));
         Post post = postRepository.findByIdAndStatus(id,Status.ACTIVE)
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 게시물 입니다."));
+                .orElseThrow(() -> new BusinessException(POST_NOT_EXIST));
 
         if(queryRepository.existLikeByUserAndPost(user,post)){
-            throw new RuntimeException("이미 좋아요한 게시물 입니다.");
+            throw new BusinessException(LIKE_EXIST_POST);
         }
 
 
@@ -43,12 +46,12 @@ public class LikesService {
 
     public void deleteLike(String email, Long id){
         User user = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 유저 입니다."));
+                .orElseThrow(() -> new BusinessException(USER_NOT_EXIST));
         Post post = postRepository.findByIdAndStatus(id,Status.ACTIVE)
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 게시물 입니다."));
+                .orElseThrow(() -> new BusinessException(POST_NOT_EXIST));
 
         if(!queryRepository.existLikeByUserAndPost(user,post)){
-            throw new RuntimeException("좋아요를 하지 않은 게시물 입니다.");
+            throw new BusinessException(LIKE_NOT_EXIST_POST);
         }
 
         likesRepository.delete(likesRepository.findByUserAndPost(user,post));
@@ -56,7 +59,7 @@ public class LikesService {
 
     public List<GetLikeUsersResponseDto> getLikeUsers(Long id){
         Post post = postRepository.findByIdAndStatus(id,Status.ACTIVE)
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 게시물 입니다."));
+                .orElseThrow(() -> new BusinessException(POST_NOT_EXIST));
 
         List<User> users = likesRepository.findAllByPost(post).stream()
                 .map(Likes::getUser).collect(Collectors.toList());

@@ -11,6 +11,9 @@ public class CommonResult {
     @Schema(description= "응답 성공 여부: T/F")
     private boolean success;
 
+    @Schema(description = "응답 코드 번호")
+    private String code;
+
     @Schema(description = "응답 메시지")
     private String message;
 }

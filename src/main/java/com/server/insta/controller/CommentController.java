@@ -31,7 +31,7 @@ public class CommentController {
             @PathVariable Long postId,
             @RequestBody @Valid CreateCommentRequestDto dto
             ){
-        commentService.createPost(userDetails.getUsername(), postId, dto);
+        commentService.createComment(userDetails.getUsername(), postId, dto);
         return responseService.getSuccessResult();
     }
 

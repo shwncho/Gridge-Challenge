@@ -1,6 +1,7 @@
 package com.server.insta.service;
 
 import com.server.insta.config.Entity.Status;
+import com.server.insta.config.exception.BusinessException;
 import com.server.insta.domain.Media;
 import com.server.insta.domain.Post;
 import com.server.insta.domain.Tag;
@@ -21,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.server.insta.config.exception.BusinessExceptionStatus.*;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -38,7 +41,7 @@ public class PostService {
     @Transactional
     public void createPost(String email, CreatePostRequestDto dto){
         User user = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 유저 입니다."));
+                .orElseThrow(() -> new BusinessException(USER_NOT_EXIST));
 
 
         Post post = postRepository.save(dto.toEntity(user));
@@ -55,7 +58,7 @@ public class PostService {
     @Transactional
     public GetPostResponseDto getPost(Long id){
         Post post = postRepository.findByIdAndStatus(id,Status.ACTIVE)
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 게시물 입니다."));
+                .orElseThrow(() -> new BusinessException(POST_NOT_EXIST));
 
         int likeCount = likesRepository.countByPost(post);
         int commentCount = commentRepository.countByPost(post);
@@ -82,7 +85,7 @@ public class PostService {
     @Transactional(readOnly = true)
     public List<GetFeedResponseDto> getFeed(String email, Long lastPostId, int pageSize){
         User user = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 유저 입니다."));
+                .orElseThrow(() -> new BusinessException(USER_NOT_EXIST));
         List<Post> pagePost = queryRepository.findAllPost(user, lastPostId, pageSize);
 
         List<GetFeedResponseDto> result = new ArrayList<>();
@@ -125,12 +128,12 @@ public class PostService {
     @Transactional
     public void deletePost(String email, Long id){
         User user = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 유저 입니다."));
+                .orElseThrow(() -> new BusinessException(USER_NOT_EXIST));
         Post post = postRepository.findByIdAndStatus(id, Status.ACTIVE)
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 게시물 입니다."));
+                .orElseThrow(() -> new BusinessException(POST_NOT_EXIST));
 
         if(user.getId() != post.getUser().getId()){
-            throw new RuntimeException("게시물을 삭제할 권한이 없는 유저 입니다.");
+            throw new BusinessException(USER_NOT_INVALID);
         }
 
         post.deletePost();
@@ -139,13 +142,13 @@ public class PostService {
     @Transactional
     public void updatePost(String email, Long id, UpdatePostRequestDto dto){
         User user = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 유저 입니다."));
+                .orElseThrow(() -> new BusinessException(USER_NOT_EXIST));
         Post post = postRepository.findByIdAndStatus(id, Status.ACTIVE)
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 게시물 입니다."));
+                .orElseThrow(() -> new BusinessException(POST_NOT_EXIST));
 
 
         if(user.getId() != post.getUser().getId()){
-            throw new RuntimeException("게시물을 삭제할 권한이 없는 유저 입니다.");
+            throw new BusinessException(USER_NOT_INVALID);
         }
 
 

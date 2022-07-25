@@ -1,6 +1,7 @@
 package com.server.insta.service;
 
 import com.server.insta.config.Entity.Status;
+import com.server.insta.config.exception.BusinessException;
 import com.server.insta.domain.User;
 import com.server.insta.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 
+import static com.server.insta.config.exception.BusinessExceptionStatus.USER_NOT_EXIST;
+
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
@@ -22,7 +25,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) {
         return userRepository.findByEmailAndStatus(email, Status.ACTIVE)
                 .map(this::createUser)
-                .orElseThrow(() -> new UsernameNotFoundException(email + "->데이터베이스에서 찾을 수 없습니다."));
+                .orElseThrow(() -> new BusinessException(USER_NOT_EXIST));
     }
 
     private org.springframework.security.core.userdetails.User createUser(User user) {

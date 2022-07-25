@@ -9,10 +9,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.util.Date;
 
 @Data
@@ -35,8 +32,8 @@ public class SignUpRequestDto {
     @NotBlank
     @Schema(description = "유저 비밀번호")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @Pattern(regexp = "(?=.*\\W)(?=\\S+$).{6,20}\"",
-            message = "비밀번호는 특수문자가 적어도 1개 이상이 포함된 6자~20자의 비밀번호이어야 합니다.")
+    @Pattern(regexp = "([a-zA-Z0-9ㄱ-힣]).{6,20}$",
+            message = "비밀번호는 공백없이 특수문자가 적어도 1개 이상이 포함된 6자~20자의 비밀번호이어야 합니다.")
     private String password;
 
 
@@ -45,7 +42,7 @@ public class SignUpRequestDto {
     @Pattern(regexp = "^\\d{11}$", message = "휴대폰 번호는 11자리 이어야 합니다.")
     private String phoneNumber;
 
-    @NotBlank
+    @NotNull
     @Schema(description = "유저 생년월일")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birth;
