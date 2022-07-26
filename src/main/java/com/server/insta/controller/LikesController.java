@@ -5,6 +5,7 @@ import com.server.insta.config.response.result.CommonResult;
 import com.server.insta.config.response.result.MultipleResult;
 import com.server.insta.dto.response.GetLikeUsersResponseDto;
 import com.server.insta.service.LikesService;
+import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "like", description = "Like API")
+@Api(tags="Like API")
 @RestController
 @RequestMapping("/api/like")
 @RequiredArgsConstructor

@@ -9,6 +9,7 @@ import com.server.insta.dto.request.SignUpRequestDto;
 import com.server.insta.dto.response.SignUpResponseDto;
 import com.server.insta.dto.response.SnsSignInResponseDto;
 import com.server.insta.service.AuthService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
-@Tag(name="auth", description = "Auth API")
+@Api(tags="Auth API")
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor

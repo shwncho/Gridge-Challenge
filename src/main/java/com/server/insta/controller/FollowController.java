@@ -6,6 +6,7 @@ import com.server.insta.config.response.result.MultipleResult;
 import com.server.insta.dto.response.GetFollowerResponseDto;
 import com.server.insta.dto.response.GetFollowingResponseDto;
 import com.server.insta.service.FollowService;
+import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +14,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name="follow", description = "Follow API")
+@Api(tags="Follow API")
 @RestController
 @RequestMapping("/api/follow")
 @RequiredArgsConstructor

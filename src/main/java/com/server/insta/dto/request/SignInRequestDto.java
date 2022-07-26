@@ -10,8 +10,7 @@ import javax.validation.constraints.Email;
 @Data
 public class SignInRequestDto {
 
-    @Email
-    @Schema(description = "유저 이메일")
+    @Schema(description = "유저 계정")
     private String email;
 
     @Schema(description = "유저 비밀번호")

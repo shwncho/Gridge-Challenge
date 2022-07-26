@@ -9,6 +9,7 @@ import com.server.insta.dto.request.UpdatePostRequestDto;
 import com.server.insta.dto.response.GetPostResponseDto;
 import com.server.insta.dto.response.GetFeedResponseDto;
 import com.server.insta.service.PostService;
+import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-@Tag(name="post", description = "Post API")
+@Api(tags="Post API")
 @RestController
 @RequestMapping("/api/post")
 @RequiredArgsConstructor
@@ -49,12 +50,13 @@ public class PostController {
         return responseService.getSingleResult(postService.getPost(postId));
     }
 
-    @Operation(summary = "피드 조회", description = "Query Parameter로 페이지 사이즈 필수로 넣어줘야 합니다.")
+    @Operation(summary = "피드 조회", description = "한 페이지마다 10개의 피드가 구성됩니다."+
+    " 처음 10개의 피드를 리턴받고, 마지막 게시물의 postId값을 lastPostId에 넘겨주면 그 다음 페이지가 나오는 no offset 방식입니다.")
     @GetMapping("/feed")
     public MultipleResult<GetFeedResponseDto> getFeed(
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestParam (required = false) Long lastPostId,
-            @RequestParam("size") int pageSize
+            @RequestParam(value = "size",defaultValue = "10") int pageSize
     ){
         return responseService.getMultipleResult(postService.getFeed(userDetails.getUsername(), lastPostId,pageSize));
     }
