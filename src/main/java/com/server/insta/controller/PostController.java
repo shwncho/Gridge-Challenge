@@ -38,6 +38,7 @@ public class PostController {
             @RequestBody @Valid CreatePostRequestDto dto
 
     ){
+        if(dto.getMedias().isEmpty())   return responseService.getFailResult("VALID","이미지를 최소 1개이상 업로드 해야합니다.");
         postService.createPost(userDetails.getUsername(), dto);
         return responseService.getSuccessResult();
     }
@@ -76,8 +77,9 @@ public class PostController {
     public CommonResult updatePost(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long postId,
-            @RequestBody UpdatePostRequestDto dto
+            @RequestBody @Valid UpdatePostRequestDto dto
             ){
+        if(dto.getMedias().isEmpty())   return responseService.getFailResult("VALID","이미지를 최소 1개이상 업로드 해야합니다.");
         postService.updatePost(userDetails.getUsername(), postId, dto);
         return responseService.getSuccessResult();
     }

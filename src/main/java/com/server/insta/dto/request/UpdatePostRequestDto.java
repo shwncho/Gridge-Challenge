@@ -17,6 +17,5 @@ public class UpdatePostRequestDto {
     private List<String> tags = new ArrayList<>();
 
     @Schema(description = "수정한 뒤 새로 작성할 이미지, 수정할 것 없으면 변경 안해도 됨")
-    @NotNull(message = "이미지를 최소 1개이상 업로드 해야합니다.")
     private List<String> medias = new ArrayList<>();
 }
