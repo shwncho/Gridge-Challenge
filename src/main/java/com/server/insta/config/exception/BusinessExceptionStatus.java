@@ -10,6 +10,7 @@ public enum BusinessExceptionStatus {
     //Common
     SERVER_ERROR("SERVER","서버와의 연결에 실패했습니다."),
     METHOD_NOT_ALLOWED("METHOD","허용되지 않은 메서드입니다."),
+    KAKAO_LOGIN("KAKAO","카카오 로그인에 실패했습니다."),
 
 
     //User

@@ -49,6 +49,7 @@ public class ResponseService {
         return result;
     }
 
+
     // 실패 결과만 처리
     public CommonResult getFailResult(BusinessExceptionStatus status) {
         CommonResult result = new CommonResult();

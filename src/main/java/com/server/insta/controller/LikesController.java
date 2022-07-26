@@ -28,19 +28,10 @@ public class LikesController {
             @PathVariable Long postId
     ){
 
-        likesService.saveLike(userDetails.getUsername(), postId);
+        likesService.actLike(userDetails.getUsername(), postId);
         return responseService.getSuccessResult();
     }
 
-    @Operation(summary = "좋아요 취소")
-    @PatchMapping("/{postId}")
-    public CommonResult deleteLike(
-            @AuthenticationPrincipal UserDetails userDetails,
-            @PathVariable Long postId
-    ){
-        likesService.deleteLike(userDetails.getUsername(), postId);
-        return responseService.getSuccessResult();
-    }
 
     @Operation(summary = "게시물에 좋아요한 유저들 조회")
     @GetMapping("/{postId}")

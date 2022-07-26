@@ -2,6 +2,7 @@ package com.server.insta.config.oAuth;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import com.server.insta.config.exception.BusinessException;
 import com.server.insta.dto.response.SnsSignInResponseDto;
 
 import java.io.BufferedReader;
@@ -9,6 +10,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+
+import static com.server.insta.config.exception.BusinessExceptionStatus.KAKAO_LOGIN;
 
 public class CreateKaKaoUser {
 
@@ -61,7 +64,7 @@ public class CreateKaKaoUser {
                     .build();
 
         } catch(Exception e){
-            throw new RuntimeException((e.getMessage()));
+            throw new BusinessException(KAKAO_LOGIN);
         }
 
 

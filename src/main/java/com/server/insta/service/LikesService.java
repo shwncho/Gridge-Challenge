@@ -27,35 +27,26 @@ public class LikesService {
     private final PostRepository postRepository;
     private final QueryRepository queryRepository;
 
-    public void saveLike(String email, Long id){
+    public void actLike(String email, Long id){
         User user = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
                 .orElseThrow(() -> new BusinessException(USER_NOT_EXIST));
         Post post = postRepository.findByIdAndStatus(id,Status.ACTIVE)
                 .orElseThrow(() -> new BusinessException(POST_NOT_EXIST));
 
+        //좋아요가 이미 되어 있으면 -> 취소
         if(queryRepository.existLikeByUserAndPost(user,post)){
-            throw new BusinessException(LIKE_EXIST_POST);
+            likesRepository.delete(likesRepository.findByUserAndPost(user,post));
+        }
+        //좋아요가 되어있지 않으면 -> 좋아요
+        else{
+            likesRepository.save(Likes.builder()
+                    .user(user)
+                    .post(post)
+                    .build());
         }
 
-
-        likesRepository.save(Likes.builder()
-                .user(user)
-                .post(post)
-                .build());
     }
 
-    public void deleteLike(String email, Long id){
-        User user = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
-                .orElseThrow(() -> new BusinessException(USER_NOT_EXIST));
-        Post post = postRepository.findByIdAndStatus(id,Status.ACTIVE)
-                .orElseThrow(() -> new BusinessException(POST_NOT_EXIST));
-
-        if(!queryRepository.existLikeByUserAndPost(user,post)){
-            throw new BusinessException(LIKE_NOT_EXIST_POST);
-        }
-
-        likesRepository.delete(likesRepository.findByUserAndPost(user,post));
-    }
 
     public List<GetLikeUsersResponseDto> getLikeUsers(Long id){
         Post post = postRepository.findByIdAndStatus(id,Status.ACTIVE)
