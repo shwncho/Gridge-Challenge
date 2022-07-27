@@ -28,7 +28,7 @@ public class User extends BaseTimeEntity {
     private Long id;
 
     @NotNull
-    private String email;   //이메일을 기준으로 하되, 전화번호, 그냥 아이디 등 자유 형식
+    private String email;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)  // 패스워드는 응답값에 포함하지 않는다.
     private String password;
@@ -37,7 +37,7 @@ public class User extends BaseTimeEntity {
     private String nickName;
 
     @NotNull
-    private String username;
+    private String name;
 
     private String phoneNumber;
 
@@ -66,9 +66,9 @@ public class User extends BaseTimeEntity {
 
 
     @Builder
-    public User(String email, String username, String nickname, String password, String phoneNumber, Date birth) {
+    public User(String email, String name, String nickname, String password, String phoneNumber, Date birth) {
         this.email = email;
-        this.username = username;
+        this.name = name;
         this.password = password;
         this.nickName = nickname;
         this.phoneNumber = phoneNumber;

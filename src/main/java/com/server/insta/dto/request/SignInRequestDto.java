@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
-import javax.validation.constraints.Email;
 
 @Data
 public class SignInRequestDto {

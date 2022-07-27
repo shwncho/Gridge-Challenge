@@ -23,16 +23,19 @@ public class SignUpRequestDto {
 
     @NotBlank
     @Schema(description = "유저 실명")
-    private String username;
+    @Size(max=20)
+    private String name;
 
     @NotBlank
     @Schema(description = "유저 닉네임")
+    @Pattern(regexp = "^[a-z0-9_.]{1,20}$",
+            message = "사용자 이름은 소문자 영어, 숫자,'_', '.'만 20자 이내로 사용가능합니다.")
     private String nickname;
 
     @NotBlank
     @Schema(description = "유저 비밀번호")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @Pattern(regexp = "([a-zA-Z0-9ㄱ-힣]).{6,20}$",
+    @Pattern(regexp = "^(?=.*[@$!%*#?&])[A-Za-z\\dㄱ-힣@$!%*#?&]{6,20}$",
             message = "비밀번호는 공백없이 특수문자가 적어도 1개 이상이 포함된 6자~20자의 비밀번호이어야 합니다.")
     private String password;
 
@@ -51,7 +54,7 @@ public class SignUpRequestDto {
     public User toEntity(){
         return User.builder()
                 .email(this.email)
-                .username(this.username)
+                .name(this.name)
                 .password(this.password)
                 .nickname(this.nickname)
                 .phoneNumber(this.phoneNumber)
