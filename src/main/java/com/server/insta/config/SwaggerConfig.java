@@ -1,5 +1,6 @@
 package com.server.insta.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,10 +21,13 @@ import java.util.List;
 @EnableWebMvc
 public class SwaggerConfig {
 
+    @Value("${url.dev}")
+    private String dev;
+
     @Bean
     public Docket SwaggerApi() {
         Server serverLocal = new Server("local", "http://localhost:8080", "for local usages", Collections.emptyList(), Collections.emptyList());
-        Server devServer = new Server("test", "https://dev.umcsimple.shop", "for testing", Collections.emptyList(), Collections.emptyList());
+        Server devServer = new Server("test", dev, "for testing", Collections.emptyList(), Collections.emptyList());
         return new Docket(DocumentationType.OAS_30)
                 .servers(serverLocal,devServer)
                 .securityContexts(Arrays.asList(securityContext()))

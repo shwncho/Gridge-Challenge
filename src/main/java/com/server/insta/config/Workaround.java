@@ -2,6 +2,7 @@ package com.server.insta.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.servers.Server;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import springfox.documentation.oas.web.OpenApiTransformationContext;
 import springfox.documentation.oas.web.WebMvcOpenApiTransformationFilter;
@@ -13,6 +14,9 @@ import java.util.Arrays;
 @Component
 public class Workaround implements WebMvcOpenApiTransformationFilter {
 
+    @Value("${url.dev}")
+    private String dev;
+
     @Override
     public OpenAPI transform(OpenApiTransformationContext<HttpServletRequest> context) {
         OpenAPI openApi = context.getSpecification();
@@ -22,7 +26,7 @@ public class Workaround implements WebMvcOpenApiTransformationFilter {
 
         Server testServer = new Server();
         testServer.setDescription("dev");
-        testServer.setUrl("https://dev.umcsimple.shop");
+        testServer.setUrl(dev);
         openApi.setServers(Arrays.asList(localServer, testServer));
         return openApi;
     }
