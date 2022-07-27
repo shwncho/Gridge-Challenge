@@ -24,7 +24,7 @@ public class LikesController {
 
     @Operation(summary = "좋아요")
     @PostMapping("/{postId}")
-    public CommonResult saveLike(
+    public CommonResult actLike(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long postId
     ){

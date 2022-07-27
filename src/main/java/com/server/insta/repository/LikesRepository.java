@@ -1,5 +1,6 @@
 package com.server.insta.repository;
 
+import com.server.insta.config.Entity.Status;
 import com.server.insta.domain.Likes;
 import com.server.insta.domain.Post;
 import com.server.insta.domain.User;
@@ -14,4 +15,8 @@ public interface LikesRepository extends JpaRepository<Likes,Long> {
     List<Likes> findAllByPost(Post post);
 
     int countByPost(Post post);
+
+    boolean existsByUserAndPostAndStatus(User user, Post post, Status status);
+
+    boolean existsByUserAndPost(User user, Post post);
 }

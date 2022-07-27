@@ -12,6 +12,7 @@ import com.server.insta.repository.QueryRepository;
 import com.server.insta.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,29 +26,39 @@ public class LikesService {
     private final LikesRepository likesRepository;
     private final UserRepository userRepository;
     private final PostRepository postRepository;
-    private final QueryRepository queryRepository;
 
+    @Transactional
     public void actLike(String email, Long id){
         User user = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
                 .orElseThrow(() -> new BusinessException(USER_NOT_EXIST));
         Post post = postRepository.findByIdAndStatus(id,Status.ACTIVE)
                 .orElseThrow(() -> new BusinessException(POST_NOT_EXIST));
 
+
         //좋아요가 이미 되어 있으면 -> 취소
-        if(queryRepository.existLikeByUserAndPost(user,post)){
-            likesRepository.delete(likesRepository.findByUserAndPost(user,post));
+        if(likesRepository.existsByUserAndPostAndStatus(user,post,Status.ACTIVE)){
+            likesRepository.findByUserAndPost(user,post).deleteLikes();
         }
         //좋아요가 되어있지 않으면 -> 좋아요
         else{
-            likesRepository.save(Likes.builder()
-                    .user(user)
-                    .post(post)
-                    .build());
+            //DB에 존재하면
+            if(likesRepository.existsByUserAndPost(user,post)){
+                likesRepository.findByUserAndPost(user,post).changeStatus();
+            }
+
+            //DB에 존재하지 않으면
+            else {
+                likesRepository.save(Likes.builder()
+                        .user(user)
+                        .post(post)
+                        .build());
+            }
         }
 
     }
 
 
+    @Transactional(readOnly = true)
     public List<GetLikeUsersResponseDto> getLikeUsers(Long id){
         Post post = postRepository.findByIdAndStatus(id,Status.ACTIVE)
                 .orElseThrow(() -> new BusinessException(POST_NOT_EXIST));

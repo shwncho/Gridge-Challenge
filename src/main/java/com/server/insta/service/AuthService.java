@@ -22,6 +22,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import static com.server.insta.config.exception.BusinessExceptionStatus.*;
 
@@ -35,6 +36,7 @@ public class AuthService {
     private final JwtProvider jwtProvider;
 
     //회원가입
+    @Transactional
     public SignUpResponseDto signUp(SignUpRequestDto dto){
         if (userRepository.findByEmailAndStatus(dto.getEmail(), Status.ACTIVE).isPresent()) {
             log.error("이미 존재하는 계정 입니다.");
@@ -53,6 +55,7 @@ public class AuthService {
     }
 
     //로그인
+    @Transactional
     public SignInResponseDto signIn(SignInRequestDto dto){
         User user = userRepository.findByEmailAndStatus(dto.getEmail(), Status.ACTIVE)
                 .orElseThrow(() -> new BusinessException(USER_NOT_EXIST));
@@ -72,6 +75,7 @@ public class AuthService {
 
     }
 
+    @Transactional
     public SnsSignInResponseDto snsSignIn(SnsSignInRequestDto dto){
         SnsSignInResponseDto user;
         if(dto.getProvider().equals(Provider.KAKAO)) {

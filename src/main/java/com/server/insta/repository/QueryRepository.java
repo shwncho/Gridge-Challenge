@@ -41,7 +41,7 @@ public class QueryRepository {
         Integer fetchFirst = queryFactory
                 .selectOne()
                 .from(likes)
-                .where(likes.user.eq(user),likes.post.eq(post))
+                .where(likes.user.eq(user),likes.post.eq(post),likes.status.eq(Status.ACTIVE))
                 .fetchFirst();
 
         return fetchFirst != null;
