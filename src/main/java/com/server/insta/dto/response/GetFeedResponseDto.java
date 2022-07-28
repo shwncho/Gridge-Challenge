@@ -19,4 +19,6 @@ public class GetFeedResponseDto {
 
     @Schema(description = "게시물 상세정보")
     private GetPostResponseDto getPostResponseDto;
+
+
 }

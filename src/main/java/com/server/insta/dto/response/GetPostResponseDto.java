@@ -30,4 +30,7 @@ public class GetPostResponseDto {
 
     @Schema(description = "조회한 해시태그")
     private List<String> tags;
+
+    @Schema(description = "게시물 작성시간")
+    private String createdPost;
 }

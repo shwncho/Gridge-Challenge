@@ -46,7 +46,7 @@ public class SignUpRequestDto {
     private String phoneNumber;
 
     @NotNull
-    @Schema(description = "유저 생년월일")
+    @Schema(description = "유저 생년월일", example = "2000-01-01")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birth;
     

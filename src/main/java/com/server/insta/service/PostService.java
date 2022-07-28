@@ -18,6 +18,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -79,6 +81,7 @@ public class PostService {
                                 .map(Tag::getContent)
                                 .collect(Collectors.toList())
                 )
+                .createdPost(calculateCreatedPost(post.getCreatedAt()))
                 .build();
     }
 
@@ -109,6 +112,7 @@ public class PostService {
                                     .map(Tag::getContent)
                                     .collect(Collectors.toList())
                     )
+                    .createdPost(calculateCreatedPost(post.getCreatedAt()))
                     .build();
 
             result.add(GetFeedResponseDto.builder()
@@ -175,6 +179,24 @@ public class PostService {
         post.getTags().addAll(tags);
         tagRepository.saveAll(tags);
 
+    }
+
+    //게시물 작성시간 계산
+    private String calculateCreatedPost(LocalDateTime createdAt){
+        LocalDateTime now = LocalDateTime.now();
+
+        //1개월 이후
+        if(ChronoUnit.MONTHS.between(createdAt, now)>0) return createdAt.getMonthValue()+"월" + createdAt.getDayOfMonth()+"일";
+        //24시간 이후 ~ 1개월 이내
+        else if(ChronoUnit.DAYS.between(createdAt, now)>0)  return ChronoUnit.DAYS.between(createdAt, now) +"일 전";
+        //1시간 이후 ~ 24시간 이내
+        else if(ChronoUnit.HOURS.between(createdAt, now)>0) return ChronoUnit.HOURS.between(createdAt, now) + "시간 전";
+        //1시간 이내
+        else if(ChronoUnit.MINUTES.between(createdAt, now)>0)   return ChronoUnit.MINUTES.between(createdAt, now) + "분 전";
+        //1분 이내
+        else{
+            return ChronoUnit.SECONDS.between(createdAt, now) + "초 전";
+        }
     }
 
 
