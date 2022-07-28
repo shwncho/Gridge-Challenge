@@ -7,6 +7,8 @@ import com.server.insta.domain.Post;
 import com.server.insta.domain.User;
 import com.server.insta.dto.request.CreateCommentRequestDto;
 import com.server.insta.dto.response.GetCommentsResponseDto;
+import com.server.insta.dto.response.GetPostResponseDto;
+import com.server.insta.dto.response.PostMapToCommentsDto;
 import com.server.insta.repository.CommentRepository;
 import com.server.insta.repository.PostRepository;
 import com.server.insta.repository.QueryRepository;
@@ -15,6 +17,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -53,22 +57,30 @@ public class CommentService {
 
 
     @Transactional(readOnly = true)
-    public List<GetCommentsResponseDto> getComments(Long id){
+    public PostMapToCommentsDto getComments(Long id){
         Post post = postRepository.findByIdAndStatus(id, Status.ACTIVE)
                 .orElseThrow(()-> new BusinessException(POST_NOT_EXIST));
 
         List<Comment> comments = queryRepository.findCommentsByPost(post);
 
-        List<GetCommentsResponseDto> result = new ArrayList<>();
+        List<GetCommentsResponseDto> commentList = new ArrayList<>();
         Map<Long, GetCommentsResponseDto> map = new HashMap<>();
         comments.forEach(c -> {
             GetCommentsResponseDto dto = c.toCommentsDto();
+            dto.setCreatedComment(calculateCreatedTime(c.getCreatedAt()));
             map.put(dto.getCommentId(), dto);
             if(c.getParent() != null)   map.get(c.getParent().getId()).getChildren().add(dto);
-            else    result.add(dto);
+            else    commentList.add(dto);
         });
 
-        return result;
+        return PostMapToCommentsDto.builder()
+                .userId(post.getUser().getId())
+                .nickName(post.getUser().getNickName())
+                .profileImgUrl(post.getUser().getProfileImgUrl())
+                .caption(post.getCaption())
+                .createdPost(calculateCreatedTime(post.getCreatedAt()))
+                .getCommentsResponseDtoList(commentList)
+                .build();
 
     }
 
@@ -94,5 +106,23 @@ public class CommentService {
         Comment parent = comment.getParent();
         if(parent != null && parent.getChild().size() ==1 && parent.getStatus() == Status.DELETED)  return  getDeletableAncestorComment(parent);
         return comment;
+    }
+
+    //작성시간 계산
+    private String calculateCreatedTime(LocalDateTime createdAt){
+        LocalDateTime now = LocalDateTime.now();
+
+        //1개월 이후
+        if(ChronoUnit.MONTHS.between(createdAt, now)>0) return createdAt.getMonthValue()+"월" + createdAt.getDayOfMonth()+"일";
+            //24시간 이후 ~ 1개월 이내
+        else if(ChronoUnit.DAYS.between(createdAt, now)>0)  return ChronoUnit.DAYS.between(createdAt, now) +"일 전";
+            //1시간 이후 ~ 24시간 이내
+        else if(ChronoUnit.HOURS.between(createdAt, now)>0) return ChronoUnit.HOURS.between(createdAt, now) + "시간 전";
+            //1시간 이내
+        else if(ChronoUnit.MINUTES.between(createdAt, now)>0)   return ChronoUnit.MINUTES.between(createdAt, now) + "분 전";
+            //1분 이내
+        else{
+            return ChronoUnit.SECONDS.between(createdAt, now) + "초 전";
+        }
     }
 }

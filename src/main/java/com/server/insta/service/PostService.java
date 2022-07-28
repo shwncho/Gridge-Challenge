@@ -66,6 +66,7 @@ public class PostService {
         int commentCount = commentRepository.countByPost(post);
 
         return GetPostResponseDto.builder()
+                .userId(post.getUser().getId())
                 .nickName(post.getUser().getNickName())
                 .profileImgUrl(post.getUser().getProfileImgUrl())
                 .caption(post.getCaption())
@@ -81,7 +82,7 @@ public class PostService {
                                 .map(Tag::getContent)
                                 .collect(Collectors.toList())
                 )
-                .createdPost(calculateCreatedPost(post.getCreatedAt()))
+                .createdPost(calculateCreatedTime(post.getCreatedAt()))
                 .build();
     }
 
@@ -99,9 +100,12 @@ public class PostService {
             int commentCount = commentRepository.countByPost(post);
 
             GetPostResponseDto dto = GetPostResponseDto.builder()
+                    .userId(post.getUser().getId())
                     .nickName(post.getUser().getNickName())
                     .profileImgUrl(post.getUser().getProfileImgUrl())
                     .caption(post.getCaption())
+                    .likeCount(likeCount)
+                    .commentCount(commentCount)
                     .medias(
                             post.getMedias().stream()
                                     .map(Media::getMedia)
@@ -112,13 +116,11 @@ public class PostService {
                                     .map(Tag::getContent)
                                     .collect(Collectors.toList())
                     )
-                    .createdPost(calculateCreatedPost(post.getCreatedAt()))
+                    .createdPost(calculateCreatedTime(post.getCreatedAt()))
                     .build();
 
             result.add(GetFeedResponseDto.builder()
                     .postId(postId)
-                    .likeCount(likeCount)
-                    .commentCount(commentCount)
                     .getPostResponseDto(dto)
                     .build());
 
@@ -181,8 +183,8 @@ public class PostService {
 
     }
 
-    //게시물 작성시간 계산
-    private String calculateCreatedPost(LocalDateTime createdAt){
+    //작성시간 계산
+    private String calculateCreatedTime(LocalDateTime createdAt){
         LocalDateTime now = LocalDateTime.now();
 
         //1개월 이후

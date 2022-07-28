@@ -3,8 +3,10 @@ package com.server.insta.controller;
 import com.server.insta.config.response.ResponseService;
 import com.server.insta.config.response.result.CommonResult;
 import com.server.insta.config.response.result.MultipleResult;
+import com.server.insta.config.response.result.SingleResult;
 import com.server.insta.dto.request.CreateCommentRequestDto;
 import com.server.insta.dto.response.GetCommentsResponseDto;
+import com.server.insta.dto.response.PostMapToCommentsDto;
 import com.server.insta.service.CommentService;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,10 +41,10 @@ public class CommentController {
 
     @Operation(summary = "해당 게시글의 전체 댓글 조회")
     @GetMapping("/{postId}")
-    public MultipleResult<GetCommentsResponseDto> getComments(
+    public SingleResult<PostMapToCommentsDto> getComments(
             @PathVariable Long postId
     ){
-        return responseService.getMultipleResult(commentService.getComments(postId));
+        return responseService.getSingleResult(commentService.getComments(postId));
     }
 
     @Operation(summary = "댓글 삭제")
