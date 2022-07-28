@@ -52,7 +52,8 @@ public class PostController {
     }
 
     @Operation(summary = "피드 조회", description = "한 페이지마다 10개의 피드가 구성됩니다."+
-    " 처음 10개의 피드를 리턴받고, 마지막 게시물의 postId값(가장 작은 postId값)을 lastPostId에 넘겨주면 그 다음 페이지가 나오는 no offset 방식입니다.")
+            " 처음 lastPostId를 null로 넘겨서 최근 10개의 게시물을 리턴받고" +
+            " 마지막 게시물의 postId값(가장 작은 postId값)을 lastPostId에 넘겨주면 그 다음 페이지가 나오는 no offset 방식입니다.")
     @GetMapping("/feed")
     public MultipleResult<GetFeedResponseDto> getFeed(
             @AuthenticationPrincipal UserDetails userDetails,

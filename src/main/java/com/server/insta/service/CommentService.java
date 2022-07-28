@@ -57,11 +57,11 @@ public class CommentService {
 
 
     @Transactional(readOnly = true)
-    public PostMapToCommentsDto getComments(Long id){
-        Post post = postRepository.findByIdAndStatus(id, Status.ACTIVE)
+    public PostMapToCommentsDto getComments(Long postId, Long lastCommentId, int pageSize){
+        Post post = postRepository.findByIdAndStatus(postId, Status.ACTIVE)
                 .orElseThrow(()-> new BusinessException(POST_NOT_EXIST));
 
-        List<Comment> comments = queryRepository.findCommentsByPost(post);
+        List<Comment> comments = queryRepository.findCommentsByPost(post,lastCommentId,pageSize);
 
         List<GetCommentsResponseDto> commentList = new ArrayList<>();
         Map<Long, GetCommentsResponseDto> map = new HashMap<>();

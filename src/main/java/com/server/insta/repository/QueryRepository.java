@@ -47,16 +47,6 @@ public class QueryRepository {
         return fetchFirst != null;
     }
 
-    public List<Comment> findCommentsByPost(Post post){
-        return queryFactory.selectFrom(comment)
-                .leftJoin(comment.parent)
-                .fetchJoin()
-                .where(comment.post.eq(post), comment.status.eq(Status.ACTIVE))
-                .orderBy(
-                        comment.parent.id.asc().nullsFirst(),
-                        comment.createdAt.asc()
-                ).fetch();
-    }
 
     public Optional<Comment> findCommentByIdWithParent(Long id){
         return Optional.ofNullable(queryFactory.selectFrom(comment)
@@ -87,6 +77,25 @@ public class QueryRepository {
     private BooleanExpression ltPostId(Long postId){
         if(postId == null)  return null;
         return post.id.lt(postId);
+    }
+
+    public List<Comment> findCommentsByPost(Post post, Long lastCommentId, int size){
+        return queryFactory.selectFrom(comment)
+                .leftJoin(comment.parent)
+                .fetchJoin()
+                .where(ltCommentId(lastCommentId)
+                        ,comment.post.eq(post), comment.status.eq(Status.ACTIVE))
+                .orderBy(
+                        comment.parent.id.desc().nullsFirst(),
+                        comment.createdAt.desc()
+                )
+                .limit(size)
+                .fetch();
+    }
+
+    private BooleanExpression ltCommentId(Long commentId){
+        if(commentId == null)   return null;
+        return comment.id.lt(commentId);
     }
 
 

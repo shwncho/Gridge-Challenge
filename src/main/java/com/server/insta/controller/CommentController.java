@@ -39,12 +39,16 @@ public class CommentController {
         return responseService.getSuccessResult();
     }
 
-    @Operation(summary = "해당 게시글의 전체 댓글 조회")
+    @Operation(summary = "해당 게시글의 전체 댓글 조회", description = "한 페이지마다 10개의 댓글이 조회됩니다."+
+            "처음 lastCommentId를 null로 넘겨서 최근 10개의 댓글을 리턴받고 " +
+            "마지막 댓글의 commentId값(가장 작은 commentId값)을 lastCommentId에 넘겨주면 그 다음 페이지가 나오는 no offset 방식입니다.")
     @GetMapping("/{postId}")
     public SingleResult<PostMapToCommentsDto> getComments(
-            @PathVariable Long postId
+            @PathVariable Long postId,
+            @RequestParam (required = false) Long lastCommentId,
+            @RequestParam(value = "size",defaultValue = "10") int pageSize
     ){
-        return responseService.getSingleResult(commentService.getComments(postId));
+        return responseService.getSingleResult(commentService.getComments(postId,lastCommentId,pageSize));
     }
 
     @Operation(summary = "댓글 삭제")
