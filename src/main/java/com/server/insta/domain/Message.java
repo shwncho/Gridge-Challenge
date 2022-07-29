@@ -2,6 +2,7 @@ package com.server.insta.domain;
 
 import com.server.insta.config.Entity.BaseTimeEntity;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -31,4 +32,10 @@ public class Message extends BaseTimeEntity {
     private String content;
 
 
+    @Builder
+    public Message(User sender, User receiver, String content){
+        this.sender = sender;
+        this.receiver = receiver;
+        this.content = content;
+    }
 }
