@@ -1,6 +1,7 @@
 package com.server.insta.controller;
 
 import com.server.insta.config.response.ResponseService;
+import com.server.insta.config.response.result.CommonResult;
 import com.server.insta.config.response.result.SingleResult;
 import com.server.insta.dto.request.SignInRequestDto;
 import com.server.insta.dto.request.SnsSignInRequestDto;
@@ -14,6 +15,8 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -48,6 +51,13 @@ public class AuthController {
     }
 
 
-
+    @Operation(summary = "회원탈퇴")
+    @PatchMapping("/status")
+    public CommonResult deleteStatus(
+            @AuthenticationPrincipal UserDetails userDetails
+    ){
+        authService.deleteStatus(userDetails.getUsername());
+        return responseService.getSuccessResult();
+    }
 
 }
