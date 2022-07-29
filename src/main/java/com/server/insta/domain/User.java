@@ -63,6 +63,10 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
+    public void changePassword(String password){
+        this.password = password;
+    }
+
 
 
     @Builder

@@ -6,11 +6,13 @@ import com.server.insta.domain.Media;
 import com.server.insta.domain.Post;
 import com.server.insta.domain.Tag;
 import com.server.insta.domain.User;
+import com.server.insta.dto.request.ResetPasswordRequestDto;
 import com.server.insta.dto.response.GetFeedResponseDto;
 import com.server.insta.dto.response.GetPostResponseDto;
 import com.server.insta.dto.response.GetUserPageDto;
 import com.server.insta.repository.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +34,7 @@ public class UserService {
     private final LikesRepository likesRepository;
     private final CommentRepository commentRepository;
     private final QueryRepository queryRepository;
+    private final PasswordEncoder passwordEncoder;
 
 
     @Transactional(readOnly = true)
@@ -90,6 +93,15 @@ public class UserService {
                 .build();
 
     }
+
+    @Transactional
+    public void resetPassword(String email, ResetPasswordRequestDto dto){
+        User user = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
+                .orElseThrow(()-> new BusinessException(USER_NOT_EXIST));
+
+        user.changePassword(passwordEncoder.encode(dto.getPassword()));
+    }
+
 
 
 

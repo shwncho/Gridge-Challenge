@@ -24,26 +24,32 @@ public class Likes extends BaseTimeEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Post post;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "comment_id")
+    private Comment comment;
 
     @Enumerated(EnumType.STRING)
     private Status status;
 
 
     @Builder
-    public Likes(User user, Post post){
+    public Likes(User user, Post post, Comment comment){
         this.user = user;
         this.post = post;
+        this.comment= comment;
         this.status = Status.ACTIVE;
-        post.getLikes().add(this);
     }
+
+
 
     public void deleteLikes(){
         this.status = Status.DELETED;
     }
+
 
     public void changeStatus(){
         this.status = Status.ACTIVE;

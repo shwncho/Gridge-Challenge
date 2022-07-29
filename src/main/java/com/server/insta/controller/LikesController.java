@@ -22,14 +22,25 @@ public class LikesController {
     private final ResponseService responseService;
     private final LikesService likesService;
 
-    @Operation(summary = "좋아요")
-    @PostMapping("/{postId}")
+    @Operation(summary = "게시물 좋아요")
+    @PostMapping("/post/{postId}")
     public CommonResult actLike(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long postId
     ){
 
         likesService.actLike(userDetails.getUsername(), postId);
+        return responseService.getSuccessResult();
+    }
+
+    @Operation(summary = "댓글 좋아요")
+    @PostMapping("/comment/{commentId}")
+    public CommonResult actLikeToComment(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Long commentId
+    ){
+
+        likesService.actLikeToComment(userDetails.getUsername(), commentId);
         return responseService.getSuccessResult();
     }
 
