@@ -50,6 +50,14 @@ public class Comment extends BaseTimeEntity {
 
     private int reportCount; // 신고당한횟수
 
+    public void addReportCount(){
+        this.reportCount++;
+    }
+
+    public void hidePost(){
+        this.reportCount=0;
+        this.status=Status.INACTIVE;
+    }
 
     @Builder
     public Comment(User user, Post post, String content, Comment parent){

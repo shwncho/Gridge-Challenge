@@ -43,7 +43,8 @@ public enum BusinessExceptionStatus {
     MESSAGE_NOT_EXIST("DM001","해당 유저와 채팅한 이력이 없습니다."),
 
     //Report
-    REPORT_NOT_SELF("R001","본인 글은 신고할 수 없습니다.");
+    REPORT_NOT_POST_SELF("R001","본인 게시글은 신고할 수 없습니다."),
+    REPORT_NOT_COMMENT_SELF("R002","본인 댓글은 신고할 수 없습니다.");
 
 
 
