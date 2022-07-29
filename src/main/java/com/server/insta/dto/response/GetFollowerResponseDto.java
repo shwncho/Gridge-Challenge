@@ -11,8 +11,8 @@ public class GetFollowerResponseDto {
     @Schema(description = "유저 db id")
     private Long userId;
 
-    @Schema(description = "유저 닉네임")
-    private String nickName;
+    @Schema(description = "사용자 이름")
+    private String nickname;
 
     @Schema(description = "유저 프로필 이미지")
     private String profileImgUrl;

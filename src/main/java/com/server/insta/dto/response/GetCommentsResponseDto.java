@@ -19,8 +19,8 @@ public class GetCommentsResponseDto {
     @Schema(description = "댓글 작성자 db id")
     private Long userId;
 
-    @Schema(description = "댓글 작성자 닉네임")
-    private String nickName;
+    @Schema(description = "댓글 작성자 사용자 이름")
+    private String nickname;
 
     @Schema(description = "댓글 작성자 프로필 사진")
     private String profileImgUrl;
@@ -32,11 +32,11 @@ public class GetCommentsResponseDto {
     private String createdComment;
 
     @Builder
-    public GetCommentsResponseDto(Long commentId, String content, Long userId, String nickName, String profileImgUrl){
+    public GetCommentsResponseDto(Long commentId, String content, Long userId, String nickname, String profileImgUrl){
         this.commentId = commentId;
         this.content = content;
         this.userId = userId;
-        this.nickName = nickName;
+        this.nickname = nickname;
         this.profileImgUrl = profileImgUrl;
     }
 

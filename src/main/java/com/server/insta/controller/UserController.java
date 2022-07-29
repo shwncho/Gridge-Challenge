@@ -4,6 +4,7 @@ import com.server.insta.config.response.ResponseService;
 import com.server.insta.config.response.result.CommonResult;
 import com.server.insta.config.response.result.SingleResult;
 import com.server.insta.dto.request.ResetPasswordRequestDto;
+import com.server.insta.dto.request.UpdateProfileRequestDto;
 import com.server.insta.dto.response.GetUserPageDto;
 import com.server.insta.service.UserService;
 import io.swagger.annotations.Api;
@@ -38,12 +39,22 @@ public class UserController {
     }
 
     @Operation(summary = "비밀번호 재설정")
-    @PostMapping("/reset-password")
+    @PatchMapping("/reset-password")
     public CommonResult resetPassword(
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestBody @Valid ResetPasswordRequestDto dto
     ){
         userService.resetPassword(userDetails.getUsername(), dto);
+        return responseService.getSuccessResult();
+    }
+
+    @Operation(summary = "프로필 수정")
+    @PatchMapping("/profile")
+    public CommonResult updateProfile(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestBody @Valid UpdateProfileRequestDto dto
+    ){
+        userService.updateProfile(userDetails.getUsername(), dto);
         return responseService.getSuccessResult();
     }
 

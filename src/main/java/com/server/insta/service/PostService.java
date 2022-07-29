@@ -67,7 +67,7 @@ public class PostService {
 
         return GetPostResponseDto.builder()
                 .userId(post.getUser().getId())
-                .nickName(post.getUser().getNickName())
+                .nickname(post.getUser().getNickname())
                 .profileImgUrl(post.getUser().getProfileImgUrl())
                 .caption(post.getCaption())
                 .likeCount(likeCount)
@@ -101,7 +101,7 @@ public class PostService {
 
             GetPostResponseDto dto = GetPostResponseDto.builder()
                     .userId(post.getUser().getId())
-                    .nickName(post.getUser().getNickName())
+                    .nickname(post.getUser().getNickname())
                     .profileImgUrl(post.getUser().getProfileImgUrl())
                     .caption(post.getCaption())
                     .likeCount(likeCount)

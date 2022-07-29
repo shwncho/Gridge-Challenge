@@ -14,7 +14,7 @@ public class PostMapToCommentsDto {
     private Long userId;
 
     @Schema(description = "게시물 작성자 닉네임")
-    private String nickName;
+    private String nickname;
 
     @Schema(description = "게시물 작성자 프로필 사진")
     private String profileImgUrl;

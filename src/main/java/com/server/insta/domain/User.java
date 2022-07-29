@@ -34,7 +34,7 @@ public class User extends BaseTimeEntity {
     private String password;
 
     @NotNull
-    private String nickName;
+    private String nickname;
 
     @NotNull
     private String name;
@@ -67,26 +67,28 @@ public class User extends BaseTimeEntity {
         this.password = password;
     }
 
-
-
     @Builder
-    public User(String email, String name, String nickname, String password, String phoneNumber, Date birth, Provider provider) {
+    public User(String email, String password, String nickname, String name, String phoneNumber, String profileImgUrl,
+                String introduce, String website, Provider provider, Date birth) {
         this.email = email;
-        this.name = name;
         this.password = password;
-        this.nickName = nickname;
+        this.nickname = nickname;
+        this.name = name;
         this.phoneNumber = phoneNumber;
-        this.birth = birth;
+        this.profileImgUrl = profileImgUrl;
+        this.introduce = introduce;
+        this.website = website;
         this.provider = provider;
-        this.provider = Provider.NORMAL;
+        this.birth = birth;
         this.status = Status.ACTIVE;
         this.authority = Authority.ROLE_USER;
     }
 
+
     public GetFollowingResponseDto toFollowing(){
         return GetFollowingResponseDto.builder()
                 .userId(id)
-                .nickName(nickName)
+                .nickname(nickname)
                 .profileImgUrl(profileImgUrl)
                 .introduce(introduce)
                 .build();
@@ -95,7 +97,7 @@ public class User extends BaseTimeEntity {
     public GetFollowerResponseDto toFollower(){
         return GetFollowerResponseDto.builder()
                 .userId(id)
-                .nickName(nickName)
+                .nickname(nickname)
                 .profileImgUrl(profileImgUrl)
                 .introduce(introduce)
                 .build();
@@ -104,7 +106,7 @@ public class User extends BaseTimeEntity {
     public GetLikeUsersResponseDto toLikeUsers(){
         return GetLikeUsersResponseDto.builder()
                 .userId(id)
-                .nickName(nickName)
+                .nickname(nickname)
                 .profileImgUrl(profileImgUrl)
                 .introduce(introduce)
                 .build();

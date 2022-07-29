@@ -75,7 +75,7 @@ public class CommentService {
 
         return PostMapToCommentsDto.builder()
                 .userId(post.getUser().getId())
-                .nickName(post.getUser().getNickName())
+                .nickname(post.getUser().getNickname())
                 .profileImgUrl(post.getUser().getProfileImgUrl())
                 .caption(post.getCaption())
                 .createdPost(calculateCreatedTime(post.getCreatedAt()))

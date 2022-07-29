@@ -38,9 +38,12 @@ public class AuthService {
     //회원가입
     @Transactional
     public SignUpResponseDto signUp(SignUpRequestDto dto){
-        if (userRepository.findByEmailAndStatus(dto.getEmail(), Status.ACTIVE).isPresent()) {
-            log.error("이미 존재하는 계정 입니다.");
+        if (userRepository.existsByEmailAndStatus(dto.getEmail(), Status.ACTIVE)) {
             throw new BusinessException(USER_EXIST_ACCOUNT);
+        }
+
+        if(userRepository.existsByNickname(dto.getNickname())){
+            throw new BusinessException(USER_EXIST_NICKNAME);
         }
 
 

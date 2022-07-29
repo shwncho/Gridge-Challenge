@@ -7,6 +7,7 @@ import com.server.insta.domain.Post;
 import com.server.insta.domain.Tag;
 import com.server.insta.domain.User;
 import com.server.insta.dto.request.ResetPasswordRequestDto;
+import com.server.insta.dto.request.UpdateProfileRequestDto;
 import com.server.insta.dto.response.GetFeedResponseDto;
 import com.server.insta.dto.response.GetPostResponseDto;
 import com.server.insta.dto.response.GetUserPageDto;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.server.insta.config.exception.BusinessExceptionStatus.USER_EXIST_NICKNAME;
 import static com.server.insta.config.exception.BusinessExceptionStatus.USER_NOT_EXIST;
 
 @Service
@@ -57,7 +59,7 @@ public class UserService {
 
             GetPostResponseDto dto = GetPostResponseDto.builder()
                     .userId(post.getUser().getId())
-                    .nickName(post.getUser().getNickName())
+                    .nickname(post.getUser().getNickname())
                     .profileImgUrl(post.getUser().getProfileImgUrl())
                     .caption(post.getCaption())
                     .likeCount(likeCount)
@@ -83,7 +85,7 @@ public class UserService {
         });
 
         return GetUserPageDto.builder()
-                .nickname(user.getNickName())
+                .nickname(user.getNickname())
                 .profileImgUrl(user.getProfileImgUrl())
                 .name(user.getName())
                 .postCount(postCount)
@@ -100,6 +102,25 @@ public class UserService {
                 .orElseThrow(()-> new BusinessException(USER_NOT_EXIST));
 
         user.changePassword(passwordEncoder.encode(dto.getPassword()));
+    }
+
+    @Transactional
+    public void updateProfile(String email, UpdateProfileRequestDto dto){
+        User user = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
+                .orElseThrow(()->new BusinessException(USER_NOT_EXIST));
+
+        if(userRepository.existsByNickname(dto.getNickname())){
+            throw new BusinessException(USER_EXIST_NICKNAME);
+        }
+
+        userRepository.save(User.builder()
+                .profileImgUrl(user.getProfileImgUrl())
+                .name(user.getName())
+                .nickname(user.getNickname())
+                .website(user.getWebsite())
+                .introduce(user.getIntroduce())
+                .build());
+
     }
 
 
