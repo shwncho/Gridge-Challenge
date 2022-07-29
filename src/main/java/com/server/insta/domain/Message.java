@@ -38,4 +38,6 @@ public class Message extends BaseTimeEntity {
         this.receiver = receiver;
         this.content = content;
     }
+
+
 }

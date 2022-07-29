@@ -36,7 +36,11 @@ public enum BusinessExceptionStatus {
     LIKE_NOT_EXIST_POST("L002","좋아요를 하지 않은 게시물 입니다."),
 
     //Comment
-    COMMENT_NOT_EXIST("C001","존재하지 않는 댓글입니다.");
+    COMMENT_NOT_EXIST("C001","존재하지 않는 댓글입니다."),
+
+
+    //Message
+    MESSAGE_NOT_EXIST("DM001","해당 유저와 채팅한 이력이 없습니다.");
 
 
 

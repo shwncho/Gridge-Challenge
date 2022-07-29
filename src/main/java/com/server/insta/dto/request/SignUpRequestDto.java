@@ -1,6 +1,7 @@
 package com.server.insta.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.server.insta.config.Entity.Provider;
 import com.server.insta.domain.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
@@ -49,6 +50,10 @@ public class SignUpRequestDto {
     @Schema(description = "유저 생년월일", example = "2000-01-01")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birth;
+
+    @NotNull
+    @Schema(description = "oAuth Provider", example = "KAKAO,NAVER,GOOGLE,FACEBOOK,NORMAL")
+    private Provider provider;
     
 
     public User toEntity(){
@@ -59,6 +64,7 @@ public class SignUpRequestDto {
                 .nickname(this.nickname)
                 .phoneNumber(this.phoneNumber)
                 .birth(this.birth)
+                .provider(this.provider)
                 .build();
     }
 }

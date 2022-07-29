@@ -13,6 +13,6 @@ public class SnsSignInRequestDto {
     private String token;
 
     @NotBlank(message = "oAuth Provider를 넣어주세요" )
-    @Schema(description = "oAuth Provider", example = "KAKAO,NAVER,GOOGLE,FACEBOOK")
+    @Schema(description = "oAuth Provider", example = "KAKAO,NAVER,GOOGLE,FACEBOOK,NORMAL")
     private Provider provider;
 }

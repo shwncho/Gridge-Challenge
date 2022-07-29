@@ -5,6 +5,7 @@ import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.server.insta.config.Entity.Status;
 import com.server.insta.domain.Comment;
+import com.server.insta.domain.Message;
 import com.server.insta.domain.Post;
 import com.server.insta.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import static com.server.insta.domain.QComment.comment;
 import static com.server.insta.domain.QPost.post;
 import static com.server.insta.domain.QMedia.media1;
 import static com.server.insta.domain.QTag.tag;
+import static com.server.insta.domain.QMessage.message;
 
 @Repository
 @RequiredArgsConstructor
@@ -56,6 +58,14 @@ public class QueryRepository {
                 .fetchOne());
     }
 
+    public List<Message> findMessagesByUser(User user, User otherUser){
+        return queryFactory.selectFrom(message)
+                .where((message.sender.eq(user).and(message.receiver.eq(otherUser)))
+                        .or(message.sender.eq(otherUser).and(message.receiver.eq(user))))
+                .orderBy(message.id.desc())
+                .fetch();
+    }
+
     //feed 조회 페이징
     public List<Post> findAllPost(User user, Long lastPostId, int size){
         return queryFactory.selectDistinct(post)
@@ -91,6 +101,7 @@ public class QueryRepository {
         return post.id.lt(postId);
     }
 
+    //게시물의 댓글조회 페이징
     public List<Comment> findCommentsByPost(Post post, Long lastCommentId, int size){
         return queryFactory.selectFrom(comment)
                 .leftJoin(comment.parent)

@@ -2,7 +2,9 @@ package com.server.insta.controller;
 
 import com.server.insta.config.response.ResponseService;
 import com.server.insta.config.response.result.CommonResult;
+import com.server.insta.config.response.result.SingleResult;
 import com.server.insta.dto.request.SendMessageRequestDto;
+import com.server.insta.dto.response.GetChattingResponseDto;
 import com.server.insta.service.MessageService;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,5 +33,14 @@ public class MessageController {
     ){
         messageService.sendMessage(userDetails.getUsername(), receiverId, dto);
         return responseService.getSuccessResult();
+    }
+
+    @Operation(summary = "메세지 조회", description = "나와 채팅을 주고받은 유저의 id값을 넣어주면 됩니다.")
+    @GetMapping("/{userId}")
+    public SingleResult<GetChattingResponseDto> getChatting(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Long userId
+    ){
+        return responseService.getSingleResult(messageService.getChatting(userDetails.getUsername(), userId));
     }
 }
