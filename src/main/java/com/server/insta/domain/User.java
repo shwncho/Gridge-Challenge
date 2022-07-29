@@ -67,6 +67,10 @@ public class User extends BaseTimeEntity {
         this.password = password;
     }
 
+    public void openStatus(){
+        this.status = Status.ACTIVE;
+    }
+
     public void closeStatus(){
         this.status = Status.CLOSED;
     }
