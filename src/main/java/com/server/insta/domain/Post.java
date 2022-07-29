@@ -29,6 +29,8 @@ public class Post extends BaseTimeEntity {
     @OneToMany(mappedBy = "post")
     private List<Likes> likes = new ArrayList<>();
 
+    private int reportCount; // 신고당한횟수
+
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
@@ -37,6 +39,15 @@ public class Post extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     private Status status;
+
+    public void addReportCount(){
+        this.reportCount++;
+    }
+
+    public void hidePost(){
+        this.reportCount=0;
+        this.status=Status.INACTIVE;
+    }
 
     @Builder
     public Post(String caption, User user, Status status){

@@ -49,6 +49,14 @@ public class ResponseService {
         return result;
     }
 
+    //성공 결과에 별도로 메세지를 담을 경우
+    public CommonResult getSuccessResult(String message) {
+        CommonResult result = new CommonResult();
+        setSuccessResult(result,message);
+        return result;
+    }
+
+
 
     // 실패 결과만 처리
     public CommonResult getFailResult(BusinessExceptionStatus status) {
@@ -57,6 +65,7 @@ public class ResponseService {
         return result;
     }
 
+    //실패 결과에 메세지를 별도로 담을 경우
     public CommonResult getFailResult(String code, String message){
         CommonResult result = new CommonResult();
         setFailResult(result,code,message);
@@ -68,6 +77,12 @@ public class ResponseService {
         result.setSuccess(true);
         result.setCode(CommonResponse.SUCCESS.getCode());
         result.setMessage(CommonResponse.SUCCESS.getMessage());
+    }
+
+    private void setSuccessResult(CommonResult result,String message) {
+        result.setSuccess(true);
+        result.setCode(CommonResponse.SUCCESS.getCode());
+        result.setMessage(message);
     }
 
     // API 요청 실패 시 응답 모델을 실패 데이터로 세팅

@@ -48,6 +48,9 @@ public class Comment extends BaseTimeEntity {
     @OneToMany(mappedBy = "parent", orphanRemoval = true)
     private List<Comment> child = new ArrayList<>();
 
+    private int reportCount; // 신고당한횟수
+
+
     @Builder
     public Comment(User user, Post post, String content, Comment parent){
         this.user = user;
