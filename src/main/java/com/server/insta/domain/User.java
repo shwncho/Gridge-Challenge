@@ -67,6 +67,14 @@ public class User extends BaseTimeEntity {
         this.password = password;
     }
 
+    public void closeStatus(){
+        this.status = Status.CLOSED;
+    }
+
+    public void deleteStatus(){
+        this.status = Status.DELETED;
+    }
+
     @Builder
     public User(String email, String password, String nickname, String name, String phoneNumber, String profileImgUrl,
                 String introduce, String website, Provider provider, Date birth) {

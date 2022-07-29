@@ -123,6 +123,15 @@ public class UserService {
 
     }
 
+    @Transactional
+    public void updateStatus(String email){
+        User user = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
+                .orElseThrow(()->new BusinessException(USER_NOT_EXIST));
+
+        user.closeStatus();
+
+    }
+
 
 
 

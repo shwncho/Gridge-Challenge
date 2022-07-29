@@ -58,6 +58,15 @@ public class UserController {
         return responseService.getSuccessResult();
     }
 
+    @Operation(summary = "비공개 계정 전환")
+    @PatchMapping("/status")
+    public CommonResult updateStatus(
+            @AuthenticationPrincipal UserDetails userDetails
+    ){
+        userService.updateStatus(userDetails.getUsername());
+        return responseService.getSuccessResult();
+    }
+
 }
 
 
