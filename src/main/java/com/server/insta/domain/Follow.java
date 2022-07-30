@@ -58,4 +58,10 @@ public class Follow extends BaseTimeEntity {
         this.status = Status.ACTIVE;
     }
 
+    public void approveFollow(){
+        this.status = Status.ACTIVE;
+        this.followStatus = FollowStatus.COMPLETE;
+    }
+
+
 }

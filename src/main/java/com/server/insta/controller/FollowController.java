@@ -34,6 +34,26 @@ public class FollowController {
         return responseService.getSuccessResult();
     }
 
+    @Operation(summary = "팔로우 승인", description = "비공개 계정이 팔로우 요청을 승인")
+    @PostMapping("/approval/{fromUserId}")
+    public CommonResult approveFollow(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Long fromUserId
+    ){
+        followService.approveFollow(userDetails.getUsername(), fromUserId);
+        return responseService.getSuccessResult();
+    }
+
+    @Operation(summary = "팔로우 거부", description = "비공개 계정이 팔로우 요청을 거절")
+    @PostMapping("/denial/{fromUserId}")
+    public CommonResult denyFollow(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Long fromUserId
+    ){
+        followService.denyFollow(userDetails.getUsername(), fromUserId);
+        return responseService.getSuccessResult();
+    }
+
     @Operation(summary = "팔로잉 유저들 조회")
     @GetMapping("/following/{id}")
     public MultipleResult<GetFollowingResponseDto> getFollowing(

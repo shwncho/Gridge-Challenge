@@ -36,9 +36,17 @@ public class FollowService {
         User toUser = userRepository.findByIdAndStatus(id, Status.ACTIVE)
                 .orElseThrow(() -> new BusinessException(USER_NOT_EXIST));
 
+        if(fromUser.getId() == toUser.getId()){
+            throw new BusinessException(FOLLOW_NOT_SELF);
+        }
+
         //팔로우가 이미 되어있으면 -> 팔로우 취소
         if(followRepository.existsByFromUserAndToUserAndStatus(fromUser, toUser, Status.ACTIVE)){
             followRepository.findByFromUserAndToUser(fromUser, toUser).deleteFollow();
+        }
+        //팔로우 요청을 기다리는 상태에서 누르면 -> 요청 취소
+        else if(followRepository.existsByFromUserAndToUserAndStatus(fromUser, toUser, Status.INACTIVE)){
+            followRepository.delete(followRepository.findByFromUserAndToUser(fromUser, toUser));
         }
         //팔로우가 되어 있지 않으면 -> 팔로우
         else{
@@ -77,6 +85,35 @@ public class FollowService {
         }
 
 
+    }
+
+    @Transactional
+    public void approveFollow(String email, Long id){
+        User toUser = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
+                .orElseThrow(() -> new BusinessException(USER_NOT_EXIST));
+        User fromUser = userRepository.findByIdAndStatus(id, Status.ACTIVE)
+                .orElseThrow(() -> new BusinessException(USER_NOT_EXIST));
+
+        if(fromUser.getId() == toUser.getId()){
+            throw new BusinessException(FOLLOW_NOT_SELF);
+        }
+
+        followRepository.findByFromUserAndToUser(fromUser, toUser).approveFollow();
+
+    }
+
+    @Transactional
+    public void denyFollow(String email, Long id){
+        User toUser = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
+                .orElseThrow(() -> new BusinessException(USER_NOT_EXIST));
+        User fromUser = userRepository.findByIdAndStatus(id, Status.ACTIVE)
+                .orElseThrow(() -> new BusinessException(USER_NOT_EXIST));
+
+        if(fromUser.getId() == toUser.getId()){
+            throw new BusinessException(FOLLOW_NOT_SELF);
+        }
+
+        followRepository.delete(followRepository.findByFromUserAndToUser(fromUser, toUser));
     }
 
     @Transactional(readOnly = true)

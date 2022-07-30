@@ -30,8 +30,7 @@ public enum BusinessExceptionStatus {
     //Tag
 
     //Follow
-    FOLLOW_EXIST_RELATIONSHIP("F001","이미 팔로우한 관계입니다."),
-    FOLLOW_NOT_EXIST_RELATIONSHIP("F002","이미 팔로우관계가 아닙니다."),
+    FOLLOW_NOT_SELF("F001","본인에게 팔로우 할 수 없습니다."),
     //Likes
     LIKE_EXIST_POST("L001","이미 좋아요한 게시물 입니다."),
     LIKE_NOT_EXIST_POST("L002","좋아요를 하지 않은 게시물 입니다."),
