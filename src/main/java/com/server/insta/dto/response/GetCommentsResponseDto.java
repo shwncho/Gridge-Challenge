@@ -31,13 +31,17 @@ public class GetCommentsResponseDto {
     @Schema(description = "댓글 작성시간")
     private String createdComment;
 
+    @Schema(description = "댓글 좋아요 개수")
+    private int likeCount;
+
     @Builder
-    public GetCommentsResponseDto(Long commentId, String content, Long userId, String nickname, String profileImgUrl){
+    public GetCommentsResponseDto(Long commentId, String content, Long userId, String nickname, String profileImgUrl, int likeCount){
         this.commentId = commentId;
         this.content = content;
         this.userId = userId;
         this.nickname = nickname;
         this.profileImgUrl = profileImgUrl;
+        this.likeCount = likeCount;
     }
 
 

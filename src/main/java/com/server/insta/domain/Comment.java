@@ -68,13 +68,14 @@ public class Comment extends BaseTimeEntity {
         this.status = Status.ACTIVE;
     }
 
-    public GetCommentsResponseDto toCommentsDto(){
+    public GetCommentsResponseDto toCommentsDto(int likeCount){
         return GetCommentsResponseDto.builder()
                 .commentId(id)
                 .content(content)
                 .userId(user.getId())
                 .nickname(user.getNickname())
                 .profileImgUrl(user.getProfileImgUrl())
+                .likeCount(likeCount)
                 .build();
     }
 

@@ -57,7 +57,7 @@ public class CommentController {
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long commentId
     ){
-        commentService.deletePost(userDetails.getUsername(), commentId);
+        commentService.deleteComment(userDetails.getUsername(), commentId);
         return responseService.getSuccessResult();
     }
 }

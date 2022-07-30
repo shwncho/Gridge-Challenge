@@ -9,10 +9,7 @@ import com.server.insta.dto.request.CreateCommentRequestDto;
 import com.server.insta.dto.response.GetCommentsResponseDto;
 import com.server.insta.dto.response.GetPostResponseDto;
 import com.server.insta.dto.response.PostMapToCommentsDto;
-import com.server.insta.repository.CommentRepository;
-import com.server.insta.repository.PostRepository;
-import com.server.insta.repository.QueryRepository;
-import com.server.insta.repository.UserRepository;
+import com.server.insta.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +30,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final LikesRepository likesRepository;
     private final QueryRepository queryRepository;
 
     @Transactional
@@ -66,7 +64,8 @@ public class CommentService {
         List<GetCommentsResponseDto> commentList = new ArrayList<>();
         Map<Long, GetCommentsResponseDto> map = new HashMap<>();
         comments.forEach(c -> {
-            GetCommentsResponseDto dto = c.toCommentsDto();
+            int likeCount = likesRepository.countByComment(c);
+            GetCommentsResponseDto dto = c.toCommentsDto(likeCount);
             dto.setCreatedComment(calculateCreatedTime(c.getCreatedAt()));
             map.put(dto.getCommentId(), dto);
             if(c.getParent() != null)   map.get(c.getParent().getId()).getChildren().add(dto);
@@ -85,7 +84,7 @@ public class CommentService {
     }
 
     @Transactional
-    public void deletePost(String email, Long id){
+    public void deleteComment(String email, Long id){
         User user = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
                 .orElseThrow(()->new BusinessException(USER_NOT_EXIST));
 
