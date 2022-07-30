@@ -59,6 +59,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/api/auth/**","/h2-console/**").permitAll() //로그인 부분
                 .antMatchers("/v3/api-docs","/swagger*/**","/error,").permitAll()
+                .antMatchers("/api/admin").hasRole("ADMIN")
 
                 .anyRequest().authenticated()
 
