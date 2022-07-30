@@ -33,7 +33,6 @@ public class AuthController {
     @Operation(summary="회원가입")
     @PostMapping("/signup")
     public SingleResult<SignUpResponseDto> signUp(
-            @ApiParam(value="회원 가입에 필요한 정보")
             @RequestBody @Valid SignUpRequestDto dto){
         return responseService.getSingleResult(authService.signUp(dto));
     }

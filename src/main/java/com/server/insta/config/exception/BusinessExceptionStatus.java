@@ -15,7 +15,7 @@ public enum BusinessExceptionStatus {
 
     //User
     USER_NOT_EXIST("U001","존재하지 않는 유저입니다."),
-    USER_EXIST_ACCOUNT("U002","이미 존재하정 계정입니다."),
+    USER_EXIST_ACCOUNT("U002","이미 존재하는 계정입니다."),
     USER_INVALID_PASSWORD("U003","비밀번호가 일치하지 않습니다."),
     USER_INVALID_OAUTH("U004","지원하지않는 oAuth 로그인 형식입니다."),
     USER_NOT_INVALID("U005","권한이 없는 유저입니다."),

@@ -3,6 +3,7 @@ package com.server.insta.domain;
 import com.server.insta.config.Entity.Authority;
 import com.server.insta.config.Entity.BaseTimeEntity;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -27,4 +28,11 @@ public class Admin extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
+    @Builder
+    public Admin(String adminId, String password, String adminName) {
+        this.adminId = adminId;
+        this.password = password;
+        this.adminName = adminName;
+        this.authority = Authority.ROLE_ADMIN;
+    }
 }
