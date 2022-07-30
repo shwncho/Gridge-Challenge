@@ -1,5 +1,6 @@
 package com.server.insta.service;
 
+import com.server.insta.config.Entity.Provider;
 import com.server.insta.config.Entity.Status;
 import com.server.insta.config.exception.BusinessException;
 import com.server.insta.domain.Media;
@@ -23,8 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.server.insta.config.exception.BusinessExceptionStatus.USER_EXIST_NICKNAME;
-import static com.server.insta.config.exception.BusinessExceptionStatus.USER_NOT_EXIST;
+import static com.server.insta.config.exception.BusinessExceptionStatus.*;
 
 @Service
 @RequiredArgsConstructor
@@ -100,6 +100,10 @@ public class UserService {
     public void resetPassword(String email, ResetPasswordRequestDto dto){
         User user = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
                 .orElseThrow(()-> new BusinessException(USER_NOT_EXIST));
+
+        if(user.getProvider()!= Provider.NORMAL){
+            throw new BusinessException(USER_NOT_CHANGE_PASSWORD);
+        }
 
         user.changePassword(passwordEncoder.encode(dto.getPassword()));
     }

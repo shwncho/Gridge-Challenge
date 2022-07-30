@@ -21,6 +21,7 @@ public enum BusinessExceptionStatus {
     USER_NOT_INVALID("U005","권한이 없는 유저입니다."),
     USER_NOT_SEND_SELF("U006","본인에게는 메세지를 보낼 수 없습니다."),
     USER_EXIST_NICKNAME("U007","이미 존재하는 사용자 이름입니다."),
+    USER_NOT_CHANGE_PASSWORD("U008","소셜 로그인 유저는 비밀번호를 변경할 수 없습니다."),
 
     //Post
     POST_NOT_EXIST("P001","존재하지 않는 게시물입니다."),
