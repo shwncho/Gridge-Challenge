@@ -73,7 +73,7 @@ public class LikesService {
         }
         //좋아요가 되어있지 않으면 -> 좋아요
         else{
-            //DB에 존재하면
+            //DB에 존재하면(=이전에 좋아요한 기록이 있다면)
             if(likesRepository.existsByUserAndComment(user,comment)){
                 likesRepository.findByUserAndComment(user,comment).changeStatus();
             }

@@ -1,5 +1,6 @@
 package com.server.insta.repository;
 
+import com.server.insta.config.Entity.Status;
 import com.server.insta.domain.Follow;
 import com.server.insta.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,4 +18,8 @@ public interface FollowRepository extends JpaRepository<Follow,Long> {
     int countByFromUser(User fromUser);
 
     int countByToUser(User toUser);
+
+    boolean existsByFromUserAndToUserAndStatus(User fromUser, User toUser, Status status);
+
+    boolean existsByFromUserAndToUser(User fromUser, User toUser);
 }

@@ -21,12 +21,14 @@ import static com.server.insta.domain.QPost.post;
 import static com.server.insta.domain.QMedia.media1;
 import static com.server.insta.domain.QTag.tag;
 import static com.server.insta.domain.QMessage.message;
+import static com.server.insta.domain.QUser.user;
 
 @Repository
 @RequiredArgsConstructor
 public class QueryRepository {
 
     private final JPAQueryFactory queryFactory;
+
 
 
     public boolean existFollowByUser(User fromUser, User toUser){

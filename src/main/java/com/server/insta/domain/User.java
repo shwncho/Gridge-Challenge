@@ -63,17 +63,21 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
+    //공개/비공개 계정
+    public boolean isPublic;
+
     public void changePassword(String password){
         this.password = password;
     }
 
-    public void openStatus(){
-        this.status = Status.ACTIVE;
+    public void openPublic(){
+        this.isPublic = true;
     }
 
-    public void closeStatus(){
-        this.status = Status.CLOSED;
+    public void closePublic(){
+        this.isPublic = false;
     }
+
 
     public void deleteStatus(){
         this.status = Status.DELETED;
@@ -81,7 +85,7 @@ public class User extends BaseTimeEntity {
 
     @Builder
     public User(String email, String password, String nickname, String name, String phoneNumber, String profileImgUrl,
-                String introduce, String website, Provider provider, Date birth) {
+                String introduce, String website, Provider provider, Date birth, boolean isPublic) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
@@ -92,6 +96,7 @@ public class User extends BaseTimeEntity {
         this.website = website;
         this.provider = provider;
         this.birth = birth;
+        this.isPublic = true;
         this.status = Status.ACTIVE;
         this.authority = Authority.ROLE_USER;
     }

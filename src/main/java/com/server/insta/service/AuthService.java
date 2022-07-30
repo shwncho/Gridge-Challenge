@@ -13,6 +13,7 @@ import com.server.insta.dto.request.SignUpRequestDto;
 import com.server.insta.dto.response.SignUpResponseDto;
 import com.server.insta.domain.User;
 import com.server.insta.dto.response.SnsSignInResponseDto;
+import com.server.insta.repository.QueryRepository;
 import com.server.insta.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +35,7 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
+    private final QueryRepository queryRepository;
 
     //회원가입
     @Transactional

@@ -1,6 +1,7 @@
 package com.server.insta.domain;
 
 import com.server.insta.config.Entity.BaseTimeEntity;
+import com.server.insta.config.Entity.FollowStatus;
 import com.server.insta.config.Entity.Status;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -32,15 +33,29 @@ public class Follow extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    @Enumerated(EnumType.STRING)
+    private FollowStatus followStatus;
+
 
     @Builder
-    public Follow(User fromUser, User toUser){
+    public Follow(User fromUser, User toUser, Status status, FollowStatus followStatus){
         this.fromUser = fromUser;
         this.toUser = toUser;
+        this.status = status;
+        this.followStatus = followStatus;
     }
 
     public void deleteFollow(){
         this.status = Status.DELETED;
+    }
+
+    public void changeStatusByClose(){
+        this.status = Status.INACTIVE;
+        this.followStatus = FollowStatus.WAIT;
+    }
+
+    public void changeStatusByOpen(){
+        this.status = Status.ACTIVE;
     }
 
 }

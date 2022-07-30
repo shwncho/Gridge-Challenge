@@ -1,5 +1,6 @@
 package com.server.insta.service;
 
+import com.server.insta.config.Entity.FollowStatus;
 import com.server.insta.config.Entity.Status;
 import com.server.insta.config.exception.BusinessException;
 import com.server.insta.domain.Follow;
@@ -26,43 +27,55 @@ public class FollowService {
 
     private final UserRepository userRepository;
     private final FollowRepository followRepository;
-    private final QueryRepository queryRepository;
+
 
     @Transactional
-    public void follow(String email, Long toUserid){
+    public void actFollow(String email, Long id){
         User fromUser = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
                 .orElseThrow(() -> new BusinessException(USER_NOT_EXIST));
-        User toUser = userRepository.findByIdAndStatus(toUserid, Status.ACTIVE)
+        User toUser = userRepository.findByIdAndStatus(id, Status.ACTIVE)
                 .orElseThrow(() -> new BusinessException(USER_NOT_EXIST));
 
-        if(queryRepository.existFollowByUser(fromUser, toUser)){
-            throw new BusinessException(FOLLOW_EXIST_RELATIONSHIP);
+        //팔로우가 이미 되어있으면 -> 팔로우 취소
+        if(followRepository.existsByFromUserAndToUserAndStatus(fromUser, toUser, Status.ACTIVE)){
+            followRepository.findByFromUserAndToUser(fromUser, toUser).deleteFollow();
+        }
+        //팔로우가 되어 있지 않으면 -> 팔로우
+        else{
+            //DB에 존재하면(=이전에 팔로우 관계였다면)
+            if(followRepository.existsByFromUserAndToUser(fromUser, toUser)){
+                //팔로우 요청하려는 대상이 비공개 계정일 경우
+                if(!toUser.isPublic){
+                    followRepository.findByFromUserAndToUser(fromUser,toUser).changeStatusByClose();
+                }
+                //팔로우 요청하려는 대상이 공개 계정일 경우
+                else{
+                    followRepository.findByFromUserAndToUser(fromUser, toUser).changeStatusByOpen();
+                }
+            }
+            //DB에 존재하지 않는다면
+            else{
+                //팔로우 요청하려는 대상이 비공개 계정일 경우
+                if(!toUser.isPublic){
+                    followRepository.save(Follow.builder()
+                            .fromUser(fromUser)
+                            .toUser(toUser)
+                            .status(Status.INACTIVE)
+                            .followStatus(FollowStatus.WAIT)
+                            .build());
+                }
+                //팔로우 요청하려는 대상이 공개 계정일 경우
+                else{
+                    followRepository.save(Follow.builder()
+                            .fromUser(fromUser)
+                            .toUser(toUser)
+                            .status(Status.ACTIVE)
+                            .followStatus(FollowStatus.COMPLETE)
+                            .build());
+                }
+            }
         }
 
-        Follow follow = Follow.builder()
-                .fromUser(fromUser)
-                .toUser(toUser)
-                .build();
-
-        followRepository.save(follow);
-
-
-    }
-
-    @Transactional
-    public void unFollow(String email, Long toUserid){
-        User fromUser = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
-                .orElseThrow(() -> new BusinessException(USER_NOT_EXIST));
-        User toUser = userRepository.findByIdAndStatus(toUserid, Status.ACTIVE)
-                .orElseThrow(() -> new BusinessException(USER_NOT_EXIST));
-
-        if(!queryRepository.existFollowByUser(fromUser, toUser)){
-            throw new BusinessException(FOLLOW_NOT_EXIST_RELATIONSHIP);
-        }
-
-        //언팔했다가 팔로우 할경우 save를 통해 DB에 넣어주기 위해 status를 사용안함.
-        //만약 status를 사용하면 언팔한 관계가 다시 팔로우할 때 조회를 한 이후 변환해야하므로 로직이 더 지저분해짐
-        followRepository.delete(followRepository.findByFromUserAndToUser(fromUser,toUser));
 
     }
 

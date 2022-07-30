@@ -23,23 +23,14 @@ public class FollowController {
     private final FollowService followService;
     private final ResponseService responseService;
 
-    @Operation(summary = "팔로우", description = "팔로우 하고싶은 유저의 id값을 넣어주면 된다.")
-    @PostMapping("/{toUserid}")
-    public CommonResult follow(
-            @AuthenticationPrincipal UserDetails userDetails,
-            @PathVariable Long toUserid
-    ){
-        followService.follow(userDetails.getUsername(), toUserid);
-        return responseService.getSuccessResult();
-    }
 
-    @Operation(summary = "팔로우끊기", description = "팔로우를 끊고 싶은 유저의 id값을 넣어주면 된다.")
-    @DeleteMapping("/{toUserid}")
-    public CommonResult unFollow(
+    @Operation(summary = "팔로우/팔로우 취소")
+    @PostMapping("/{toUserId}")
+    public CommonResult actFollow(
             @AuthenticationPrincipal UserDetails userDetails,
-            @PathVariable Long toUserid
+            @PathVariable Long toUserId
     ){
-        followService.unFollow(userDetails.getUsername(), toUserid);
+        followService.actFollow(userDetails.getUsername(), toUserId);
         return responseService.getSuccessResult();
     }
 

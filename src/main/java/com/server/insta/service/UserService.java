@@ -125,11 +125,11 @@ public class UserService {
 
     @Transactional
     public void updateStatus(String email){
-        User user = userRepository.findByEmailAndStatusOrStatus(email, Status.ACTIVE, Status.CLOSED)
+        User user = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
                 .orElseThrow(()->new BusinessException(USER_NOT_EXIST));
 
-        if(user.getStatus()==Status.ACTIVE)    user.closeStatus();
-        else    user.openStatus();
+        if(user.isPublic)    user.closePublic();
+        else    user.openPublic();
 
 
     }

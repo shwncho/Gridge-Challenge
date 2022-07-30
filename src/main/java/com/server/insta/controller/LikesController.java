@@ -22,7 +22,7 @@ public class LikesController {
     private final ResponseService responseService;
     private final LikesService likesService;
 
-    @Operation(summary = "게시물 좋아요")
+    @Operation(summary = "게시물 좋아요/좋아요 취소")
     @PostMapping("/post/{postId}")
     public CommonResult actLike(
             @AuthenticationPrincipal UserDetails userDetails,
@@ -33,7 +33,7 @@ public class LikesController {
         return responseService.getSuccessResult();
     }
 
-    @Operation(summary = "댓글 좋아요")
+    @Operation(summary = "댓글 좋아요/좋아요 취소")
     @PostMapping("/comment/{commentId}")
     public CommonResult actLikeToComment(
             @AuthenticationPrincipal UserDetails userDetails,

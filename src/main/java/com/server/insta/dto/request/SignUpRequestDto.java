@@ -65,6 +65,7 @@ public class SignUpRequestDto {
                 .phoneNumber(this.phoneNumber)
                 .birth(this.birth)
                 .provider(this.provider)
+                .isPublic(true)
                 .build();
     }
 }
