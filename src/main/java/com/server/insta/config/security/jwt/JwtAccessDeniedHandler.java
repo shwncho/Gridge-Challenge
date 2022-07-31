@@ -24,6 +24,7 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
 
         JSONObject responseJson = new JSONObject();
         responseJson.put("success", "false");
+        responseJson.put("code", "FORBIDDEN");
         responseJson.put("message", "권한이 없는 유저입니다.");
 
         response.getWriter().print(responseJson);

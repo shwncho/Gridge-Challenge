@@ -3,11 +3,12 @@ package com.server.insta.service;
 import com.server.insta.config.Entity.Status;
 import com.server.insta.config.exception.BusinessException;
 import com.server.insta.config.oAuth.CreateKaKaoUser;
-import com.server.insta.config.response.ResponseService;
 import com.server.insta.config.security.jwt.JwtProvider;
 import com.server.insta.config.Entity.Provider;
+import com.server.insta.dto.request.AdminStatusRequestDto;
 import com.server.insta.dto.request.SignInRequestDto;
 import com.server.insta.dto.request.SnsSignInRequestDto;
+import com.server.insta.dto.response.AdminStatusResponseDto;
 import com.server.insta.dto.response.SignInResponseDto;
 import com.server.insta.dto.request.SignUpRequestDto;
 import com.server.insta.dto.response.SignUpResponseDto;
@@ -17,6 +18,7 @@ import com.server.insta.repository.QueryRepository;
 import com.server.insta.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -36,6 +38,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
     private final QueryRepository queryRepository;
+
 
     //회원가입
     @Transactional
@@ -102,6 +105,27 @@ public class AuthService {
                 .orElseThrow(()->new BusinessException(USER_NOT_EXIST));
 
         user.deleteStatus();
+    }
+
+    @Transactional
+    public AdminStatusResponseDto adminStatus(AdminStatusRequestDto dto){
+
+        User admin = userRepository.findByEmailAndStatus(dto.getAdminId(), Status.ACTIVE)
+                .orElseThrow(() -> new BusinessException(USER_NOT_EXIST));
+
+        if (!passwordEncoder.matches(dto.getPassword(), admin.getPassword())) {
+            throw new BusinessException(USER_INVALID_PASSWORD);
+        }
+
+        admin.changeAuthority();
+
+        UsernamePasswordAuthenticationToken authenticationToken = dto.toAuthentication();
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String token = jwtProvider.createToken(authentication);
+
+        return new AdminStatusResponseDto(token);
+
     }
 
 }

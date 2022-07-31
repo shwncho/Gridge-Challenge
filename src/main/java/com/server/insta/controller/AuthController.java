@@ -3,17 +3,17 @@ package com.server.insta.controller;
 import com.server.insta.config.response.ResponseService;
 import com.server.insta.config.response.result.CommonResult;
 import com.server.insta.config.response.result.SingleResult;
+import com.server.insta.dto.request.AdminStatusRequestDto;
 import com.server.insta.dto.request.SignInRequestDto;
 import com.server.insta.dto.request.SnsSignInRequestDto;
+import com.server.insta.dto.response.AdminStatusResponseDto;
 import com.server.insta.dto.response.SignInResponseDto;
 import com.server.insta.dto.request.SignUpRequestDto;
 import com.server.insta.dto.response.SignUpResponseDto;
 import com.server.insta.dto.response.SnsSignInResponseDto;
 import com.server.insta.service.AuthService;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiParam;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -58,5 +58,15 @@ public class AuthController {
         authService.deleteStatus(userDetails.getUsername());
         return responseService.getSuccessResult();
     }
+
+    @Operation(summary = "관리자 권한부여")
+    @PostMapping("/admin")
+    public SingleResult<AdminStatusResponseDto> adminStatus(
+            @RequestBody AdminStatusRequestDto dto
+    ){
+
+        return responseService.getSingleResult(authService.adminStatus(dto));
+    }
+
 
 }

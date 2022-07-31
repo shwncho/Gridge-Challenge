@@ -1,33 +1,33 @@
 package com.server.insta.service;
 
+import com.server.insta.config.Entity.Authority;
+import com.server.insta.config.Entity.Status;
 import com.server.insta.config.exception.BusinessException;
-import com.server.insta.config.security.jwt.JwtProvider;
-import com.server.insta.dto.request.AdminSignUpRequestDto;
-import com.server.insta.repository.AdminRepository;
+import com.server.insta.domain.User;
+import com.server.insta.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import static com.server.insta.config.exception.BusinessExceptionStatus.USER_EXIST_ACCOUNT;
+import static com.server.insta.config.exception.BusinessExceptionStatus.USER_NOT_ADMIN;
+import static com.server.insta.config.exception.BusinessExceptionStatus.USER_NOT_EXIST;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class AdminService {
 
-    private final PasswordEncoder passwordEncoder;
-    private final JwtProvider jwtProvider;
-    private final AdminRepository adminRepository;
+    private final UserRepository userRepository;
 
-    @Transactional
-    public void signUp(AdminSignUpRequestDto dto){
-        if(adminRepository.existsByAdminId(dto.getAdminId())){
-            throw new BusinessException(USER_EXIST_ACCOUNT);
+    public void test(String email){
+        User admin = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
+                .orElseThrow(()->new BusinessException(USER_NOT_EXIST));
+
+        if(!admin.getAuthority().equals(Authority.ROLE_ADMIN)){
+            throw new BusinessException(USER_NOT_ADMIN);
         }
-
-        dto.setPassword(passwordEncoder.encode(dto.getPassword()));
-        adminRepository.save(dto.toEntity());
     }
+
+
+
 }

@@ -6,6 +6,7 @@ import com.server.insta.config.security.jwt.JwtAuthenticationEntryPoint;
 import com.server.insta.config.security.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -59,7 +60,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/api/auth/**","/h2-console/**").permitAll() //로그인 부분
                 .antMatchers("/v3/api-docs","/swagger*/**","/error,").permitAll()
-                .antMatchers("/api/admin").hasRole("ADMIN")
 
                 .anyRequest().authenticated()
 

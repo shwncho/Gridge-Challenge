@@ -26,6 +26,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
         JSONObject responseJson = new JSONObject();
         responseJson.put("success", "false");
+        responseJson.put("code", "UNAUTHORIZED");
         responseJson.put("message", "유효하지않은 JWT 입니다.");
 
         response.getWriter().print(responseJson);

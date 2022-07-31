@@ -33,10 +33,8 @@ public class User extends BaseTimeEntity {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)  // 패스워드는 응답값에 포함하지 않는다.
     private String password;
 
-    @NotNull
     private String nickname;
 
-    @NotNull
     private String name;
 
     private String phoneNumber;
@@ -83,6 +81,10 @@ public class User extends BaseTimeEntity {
         this.status = Status.DELETED;
     }
 
+    public void changeAuthority(){
+        this.authority = Authority.ROLE_ADMIN;
+    }
+
     @Builder
     public User(String email, String password, String nickname, String name, String phoneNumber, String profileImgUrl,
                 String introduce, String website, Provider provider, Date birth, boolean isPublic) {
@@ -100,6 +102,7 @@ public class User extends BaseTimeEntity {
         this.status = Status.ACTIVE;
         this.authority = Authority.ROLE_USER;
     }
+
 
 
     public GetFollowingResponseDto toFollowing(){
