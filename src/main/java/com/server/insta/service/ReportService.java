@@ -45,10 +45,10 @@ public class ReportService {
                 .reason(dto.getReason())
                 .build());
 
-        if(post.getReportCount()==10){
+        if(post.getReportCount()==1){
             //게시물을 비활성화로 바꿈과 동시에 신고 카운트를 초기화시키고, 관리자가 게시글 삭제 여부를 판단
             post.hidePost();
-            return 10;
+            return 1;
         }
 
         return post.getReportCount();
@@ -68,14 +68,15 @@ public class ReportService {
         comment.addReportCount();
 
         reportRepository.save(Report.builder()
+                .post(comment.getPost())
                 .comment(comment)
                 .reason(dto.getReason())
                 .build());
 
-        if(comment.getReportCount()==10){
+        if(comment.getReportCount()==1){
             //댓글을 비활성화로 바꿈과 동시에 신고 카운트를 초기화시키고, 관리자가 게시글 삭제 여부를 판단
             comment.hidePost();
-            return 10;
+            return 1;
         }
 
         return comment.getReportCount();

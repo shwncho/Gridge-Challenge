@@ -1,12 +1,14 @@
 package com.server.insta.domain;
 
 import com.server.insta.config.Entity.BaseTimeEntity;
+import com.server.insta.dto.response.GetReportsResponseDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -34,4 +36,15 @@ public class Report extends BaseTimeEntity {
         this.post = post;
         this.comment = comment;
     }
+
+    public GetReportsResponseDto toReport(LocalDateTime createdAt){
+        return GetReportsResponseDto.builder()
+                .postId(post.getId())
+                .commentId(comment!=null ? comment.getId() : null)
+                .reason(reason)
+                .createdAt(createdAt)
+                .build();
+    }
+
+
 }

@@ -59,7 +59,7 @@ public class AuthController {
         return responseService.getSuccessResult();
     }
 
-    @Operation(summary = "관리자 권한부여")
+    @Operation(summary = "관리자 권한부여 및 관리자 로그인", description = "관리자 테스트를 원활히 할 수 있도록 만든 API입니다.")
     @PostMapping("/admin")
     public SingleResult<AdminStatusResponseDto> adminStatus(
             @RequestBody AdminStatusRequestDto dto

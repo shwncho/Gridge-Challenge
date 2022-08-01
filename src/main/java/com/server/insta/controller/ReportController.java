@@ -31,7 +31,7 @@ public class ReportController {
             @RequestBody @Valid ReportRequestDto dto
     ){
         int reportCount = reportService.reportPost(userDetails.getUsername(), postId, dto);
-        if(reportCount==10) return responseService.getSuccessResult("신고횟수가 10회 누적되었으므로 게시글을 비공개합니다.");
+        if(reportCount==1) return responseService.getSuccessResult("신고횟수가 10회 누적되었으므로 게시글을 비공개합니다.");
         return responseService.getSuccessResult();
     }
 
@@ -44,7 +44,7 @@ public class ReportController {
             @RequestBody @Valid ReportRequestDto dto
     ){
         int reportCount = reportService.reportComment(userDetails.getUsername(), commentId, dto);
-        if(reportCount==10) return responseService.getSuccessResult("신고횟수가 10회 누적되었으므로 댓글을 비공개합니다.");
+        if(reportCount==1) return responseService.getSuccessResult("신고횟수가 10회 누적되었으므로 댓글을 비공개합니다.");
         return responseService.getSuccessResult();
     }
 }
