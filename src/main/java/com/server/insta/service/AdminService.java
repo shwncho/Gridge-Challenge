@@ -3,9 +3,11 @@ package com.server.insta.service;
 import com.server.insta.config.Entity.Authority;
 import com.server.insta.config.Entity.Status;
 import com.server.insta.config.exception.BusinessException;
+import com.server.insta.domain.Post;
 import com.server.insta.domain.Report;
 import com.server.insta.domain.User;
 import com.server.insta.dto.response.GetReportsResponseDto;
+import com.server.insta.repository.PostRepository;
 import com.server.insta.repository.ReportRepository;
 import com.server.insta.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +28,7 @@ public class AdminService {
 
     private final UserRepository userRepository;
     private final ReportRepository reportRepository;
+    private final PostRepository postRepository;
 
 
     @Transactional
@@ -58,6 +61,22 @@ public class AdminService {
 
 
         reportRepository.delete(report);
+
+    }
+
+    @Transactional
+    public void deletePost(String email, Long id){
+        User admin = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
+                .orElseThrow(()->new BusinessException(USER_NOT_EXIST));
+
+        if(!admin.getAuthority().equals(Authority.ROLE_ADMIN)){
+            throw new BusinessException(USER_NOT_ADMIN);
+        }
+
+        Post post = postRepository.findByIdAndStatus(id, Status.INACTIVE)
+                .orElseThrow(()-> new BusinessException(POST_NOT_EXIST));
+
+        post.deletePost();
 
     }
 

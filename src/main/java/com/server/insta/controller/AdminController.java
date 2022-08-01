@@ -41,5 +41,15 @@ public class AdminController {
         return responseService.getSuccessResult();
     }
 
+    @Operation(summary = "신고된 게시물 삭제")
+    @PatchMapping("/report/{postId}")
+    public CommonResult deletePost(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Long postId
+    ){
+        adminService.deletePost(userDetails.getUsername(), postId);
+        return responseService.getSuccessResult();
+    }
+
 
 }
