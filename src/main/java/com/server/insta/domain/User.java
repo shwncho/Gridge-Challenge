@@ -13,6 +13,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -66,6 +67,9 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
+    //개인정보동의 1년주기 체크용도
+    private LocalDateTime scheduler;
+
     //공개/비공개 계정
     public boolean isPublic;
 
@@ -88,6 +92,10 @@ public class User extends BaseTimeEntity {
 
     public void changeAuthority(){
         this.authority = Authority.ROLE_ADMIN;
+    }
+
+    public void resetScheduler(){
+        this.scheduler = LocalDateTime.now();
     }
 
     @Builder

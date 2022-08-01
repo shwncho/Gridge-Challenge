@@ -27,6 +27,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+
 import static com.server.insta.config.exception.BusinessExceptionStatus.*;
 
 @Slf4j
@@ -66,6 +69,12 @@ public class AuthService {
 
         if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
             throw new BusinessException(USER_INVALID_PASSWORD);
+        }
+
+        //1년 주기로 개인정보동의 받기
+        if(ChronoUnit.YEARS.between(user.getScheduler(), LocalDateTime.now())>0){
+            user.resetScheduler();
+            throw new BusinessException(USER_AGREE_PRIVACY);
         }
 
         UsernamePasswordAuthenticationToken authenticationToken = dto.toAuthentication();
