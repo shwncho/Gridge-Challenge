@@ -33,6 +33,7 @@ public class Comment extends BaseTimeEntity {
     private Post post;
 
     @NotNull
+    @Column(length = 200)
     private String content;
 
     @Enumerated(EnumType.STRING)
@@ -56,8 +57,14 @@ public class Comment extends BaseTimeEntity {
 
     public void hidePost(){
         this.reportCount=0;
-        this.status=Status.INACTIVE;
+        this.status=Status.BLOCK;
     }
+
+    public void deleteComment(){
+        this.status = Status.DELETED;
+    }
+    public void restoreComment() { this.status = Status.ACTIVE; }
+
 
     @Builder
     public Comment(User user, Post post, String content, Comment parent){
@@ -79,8 +86,5 @@ public class Comment extends BaseTimeEntity {
                 .build();
     }
 
-    public void deleteComment(){
-        this.status = Status.DELETED;
-    }
 
 }

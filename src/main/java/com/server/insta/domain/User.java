@@ -28,15 +28,20 @@ public class User extends BaseTimeEntity {
     private Long id;
 
     @NotNull
+    @Column(length = 20)
     private String email;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)  // 패스워드는 응답값에 포함하지 않는다.
+    @Column(length = 20)
     private String password;
 
+    @Column(length = 20)
     private String nickname;
 
+    @Column(length = 20)
     private String name;
 
+    @Column(length = 11)
     private String phoneNumber;
 
     @Column(columnDefinition = "TEXT")

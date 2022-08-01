@@ -3,10 +3,12 @@ package com.server.insta.service;
 import com.server.insta.config.Entity.Authority;
 import com.server.insta.config.Entity.Status;
 import com.server.insta.config.exception.BusinessException;
+import com.server.insta.domain.Comment;
 import com.server.insta.domain.Post;
 import com.server.insta.domain.Report;
 import com.server.insta.domain.User;
 import com.server.insta.dto.response.GetReportsResponseDto;
+import com.server.insta.repository.CommentRepository;
 import com.server.insta.repository.PostRepository;
 import com.server.insta.repository.ReportRepository;
 import com.server.insta.repository.UserRepository;
@@ -29,6 +31,7 @@ public class AdminService {
     private final UserRepository userRepository;
     private final ReportRepository reportRepository;
     private final PostRepository postRepository;
+    private final CommentRepository commentRepository;
 
 
     @Transactional
@@ -73,10 +76,58 @@ public class AdminService {
             throw new BusinessException(USER_NOT_ADMIN);
         }
 
-        Post post = postRepository.findByIdAndStatus(id, Status.INACTIVE)
+        Post post = postRepository.findByIdAndStatus(id, Status.BLOCK)
                 .orElseThrow(()-> new BusinessException(POST_NOT_EXIST));
 
         post.deletePost();
+
+    }
+
+    @Transactional
+    public void restorePost(String email, Long id){
+        User admin = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
+                .orElseThrow(()->new BusinessException(USER_NOT_EXIST));
+
+        if(!admin.getAuthority().equals(Authority.ROLE_ADMIN)){
+            throw new BusinessException(USER_NOT_ADMIN);
+        }
+
+        Post post = postRepository.findByIdAndStatus(id, Status.BLOCK)
+                .orElseThrow(()-> new BusinessException(POST_NOT_EXIST));
+
+        post.restorePost();
+
+    }
+
+    @Transactional
+    public void deleteComment(String email, Long id){
+        User admin = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
+                .orElseThrow(()->new BusinessException(USER_NOT_EXIST));
+
+        if(!admin.getAuthority().equals(Authority.ROLE_ADMIN)){
+            throw new BusinessException(USER_NOT_ADMIN);
+        }
+
+        Comment comment = commentRepository.findByIdAndStatus(id, Status.BLOCK)
+                .orElseThrow(()-> new BusinessException(COMMENT_NOT_EXIST));
+
+        comment.deleteComment();
+
+    }
+
+    @Transactional
+    public void restoreComment(String email, Long id){
+        User admin = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
+                .orElseThrow(()->new BusinessException(USER_NOT_EXIST));
+
+        if(!admin.getAuthority().equals(Authority.ROLE_ADMIN)){
+            throw new BusinessException(USER_NOT_ADMIN);
+        }
+
+        Comment comment = commentRepository.findByIdAndStatus(id, Status.BLOCK)
+                .orElseThrow(()-> new BusinessException(COMMENT_NOT_EXIST));
+
+        comment.restoreComment();
 
     }
 

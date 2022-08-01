@@ -18,6 +18,7 @@ public class Post extends BaseTimeEntity {
     @Column(name = "post_id")
     private Long id;
 
+    @Column(length = 1000)
     private String caption; // 게시물 설명
 
     @OneToMany(mappedBy = "post")
@@ -46,7 +47,7 @@ public class Post extends BaseTimeEntity {
 
     public void hidePost(){
         this.reportCount=0;
-        this.status=Status.INACTIVE;
+        this.status=Status.BLOCK;
     }
 
     @Builder
@@ -59,6 +60,8 @@ public class Post extends BaseTimeEntity {
     public void deletePost(){
         this.status = Status.DELETED;
     }
+
+    public void restorePost(){this.status = Status.ACTIVE;}
 
     public void setCaption(String caption) {
         this.caption = caption;

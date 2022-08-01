@@ -29,6 +29,7 @@ public class Message extends BaseTimeEntity {
     private User receiver;
 
     @NotNull
+    @Column(length = 200)
     private String content;
 
 
