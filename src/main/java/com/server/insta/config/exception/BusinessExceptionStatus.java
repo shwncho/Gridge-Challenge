@@ -46,7 +46,8 @@ public enum BusinessExceptionStatus {
 
     //Report
     REPORT_NOT_POST_SELF("R001","본인 게시글은 신고할 수 없습니다."),
-    REPORT_NOT_COMMENT_SELF("R002","본인 댓글은 신고할 수 없습니다.");
+    REPORT_NOT_COMMENT_SELF("R002","본인 댓글은 신고할 수 없습니다."),
+    REPORT_NOT_EXIST("R003","존재하지 않는 신고입니다.");
 
 
 

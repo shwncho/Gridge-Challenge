@@ -17,8 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.server.insta.config.exception.BusinessExceptionStatus.USER_NOT_ADMIN;
-import static com.server.insta.config.exception.BusinessExceptionStatus.USER_NOT_EXIST;
+import static com.server.insta.config.exception.BusinessExceptionStatus.*;
 
 @Slf4j
 @Service
@@ -28,14 +27,6 @@ public class AdminService {
     private final UserRepository userRepository;
     private final ReportRepository reportRepository;
 
-    public void test(String email){
-        User admin = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
-                .orElseThrow(()->new BusinessException(USER_NOT_EXIST));
-
-        if(!admin.getAuthority().equals(Authority.ROLE_ADMIN)){
-            throw new BusinessException(USER_NOT_ADMIN);
-        }
-    }
 
     @Transactional
     public List<GetReportsResponseDto> getReports(String email){
@@ -51,6 +42,23 @@ public class AdminService {
         return reports.stream()
                 .map(r -> r.toReport(r.getCreatedAt()))
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void deleteReport(String email, Long id){
+        User admin = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
+                .orElseThrow(()->new BusinessException(USER_NOT_EXIST));
+
+        if(!admin.getAuthority().equals(Authority.ROLE_ADMIN)){
+            throw new BusinessException(USER_NOT_ADMIN);
+        }
+
+        Report report = reportRepository.findById(id)
+                .orElseThrow(()->new BusinessException(REPORT_NOT_EXIST));
+
+
+        reportRepository.delete(report);
+
     }
 
 }

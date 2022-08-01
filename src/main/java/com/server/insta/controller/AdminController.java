@@ -23,19 +23,22 @@ public class AdminController {
     private final AdminService adminService;
 
 
-    @GetMapping("/test")
-    public CommonResult test(@AuthenticationPrincipal UserDetails userDetails)
-    {
-        adminService.test(userDetails.getUsername());
-        return responseService.getSuccessResult();
-    }
-
     @Operation(summary = "신고조회")
     @GetMapping("/report")
     public MultipleResult<GetReportsResponseDto> getReports(
             @AuthenticationPrincipal UserDetails userDetails
     ){
         return responseService.getMultipleResult(adminService.getReports(userDetails.getUsername()));
+    }
+
+    @Operation(summary = "신고삭제")
+    @DeleteMapping("/report/{reportId}")
+    public CommonResult deleteReport(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Long reportId
+    ){
+        adminService.deleteReport(userDetails.getUsername(), reportId);
+        return responseService.getSuccessResult();
     }
 
 
