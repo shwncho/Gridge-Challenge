@@ -30,8 +30,8 @@ public class MessageService {
     private final QueryRepository queryRepository;
 
     @Transactional
-    public void sendMessage(String email, Long id, SendMessageRequestDto dto){
-        User sender = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
+    public void sendMessage(String username, Long id, SendMessageRequestDto dto){
+        User sender = userRepository.findByUsernameAndStatus(username, Status.ACTIVE)
                 .orElseThrow(()-> new BusinessException(USER_NOT_EXIST));
 
         User receiver = userRepository.findByIdAndStatus(id, Status.ACTIVE)
@@ -49,8 +49,8 @@ public class MessageService {
     }
 
     @Transactional(readOnly = true)
-    public GetChattingResponseDto getChatting(String email, Long id){
-        User user = userRepository.findByEmailAndStatus(email,Status.ACTIVE)
+    public GetChattingResponseDto getChatting(String username, Long id){
+        User user = userRepository.findByUsernameAndStatus(username,Status.ACTIVE)
                 .orElseThrow(()->new BusinessException(USER_NOT_EXIST));
         User otherUser = userRepository.findByIdAndStatus(id, Status.ACTIVE)
                 .orElseThrow(()->new BusinessException(USER_NOT_EXIST));

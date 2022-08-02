@@ -22,7 +22,7 @@ public class UpdateProfileRequestDto {
     @Schema(description = "사용자 이름")
     @Pattern(regexp = "^[a-z0-9_.]{1,20}$",
             message = "사용자 이름은 소문자 영어, 숫자,'_', '.'만 20자 이내로 사용가능합니다.")
-    private String nickname;
+    private String username;
 
     @Schema(description = "웹사이트")
     private String website;

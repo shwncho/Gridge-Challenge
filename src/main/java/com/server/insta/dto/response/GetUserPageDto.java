@@ -11,7 +11,7 @@ import java.util.List;
 public class GetUserPageDto {
 
     @Schema(description = "사용자 이름")
-    private String nickname;
+    private String username;
 
     @Schema(description = "프로필 사진")
     private String profileImgUrl;

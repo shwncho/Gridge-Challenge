@@ -59,7 +59,7 @@ public class UserService {
 
             GetPostResponseDto dto = GetPostResponseDto.builder()
                     .userId(post.getUser().getId())
-                    .nickname(post.getUser().getNickname())
+                    .username(post.getUser().getUsername())
                     .profileImgUrl(post.getUser().getProfileImgUrl())
                     .caption(post.getCaption())
                     .likeCount(likeCount)
@@ -85,7 +85,7 @@ public class UserService {
         });
 
         return GetUserPageDto.builder()
-                .nickname(user.getNickname())
+                .username(user.getUsername())
                 .profileImgUrl(user.getProfileImgUrl())
                 .name(user.getName())
                 .postCount(postCount)
@@ -97,8 +97,8 @@ public class UserService {
     }
 
     @Transactional
-    public void resetPassword(String email, ResetPasswordRequestDto dto){
-        User user = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
+    public void resetPassword(String username, ResetPasswordRequestDto dto){
+        User user = userRepository.findByUsernameAndStatus(username, Status.ACTIVE)
                 .orElseThrow(()-> new BusinessException(USER_NOT_EXIST));
 
         if(user.getProvider()!= Provider.NORMAL){
@@ -109,18 +109,18 @@ public class UserService {
     }
 
     @Transactional
-    public void updateProfile(String email, UpdateProfileRequestDto dto){
-        User user = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
+    public void updateProfile(String username, UpdateProfileRequestDto dto){
+        User user = userRepository.findByUsernameAndStatus(username, Status.ACTIVE)
                 .orElseThrow(()->new BusinessException(USER_NOT_EXIST));
 
-        if(userRepository.existsByNickname(dto.getNickname())){
-            throw new BusinessException(USER_EXIST_NICKNAME);
+        if(userRepository.existsByUsername(dto.getUsername())){
+            throw new BusinessException(USER_EXIST_USERNAME);
         }
 
         userRepository.save(User.builder()
                 .profileImgUrl(user.getProfileImgUrl())
                 .name(user.getName())
-                .nickname(user.getNickname())
+                .username(user.getUsername())
                 .website(user.getWebsite())
                 .introduce(user.getIntroduce())
                 .build());
@@ -128,8 +128,8 @@ public class UserService {
     }
 
     @Transactional
-    public void updateStatus(String email){
-        User user = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
+    public void updateStatus(String username){
+        User user = userRepository.findByUsernameAndStatus(username, Status.ACTIVE)
                 .orElseThrow(()->new BusinessException(USER_NOT_EXIST));
 
         if(user.isPublic)    user.closePublic();

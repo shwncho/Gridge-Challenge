@@ -12,7 +12,7 @@ public class GetFollowingResponseDto {
     private Long userId;
 
     @Schema(description = "사용자 이름")
-    private String nickname;
+    private String username;
 
     @Schema(description = "유저 프로필 이미지")
     private String profileImgUrl;

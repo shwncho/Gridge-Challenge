@@ -15,15 +15,14 @@ public enum BusinessExceptionStatus {
 
     //User
     USER_NOT_EXIST("U001","존재하지 않는 유저입니다."),
-    USER_EXIST_ACCOUNT("U002","이미 존재하는 계정입니다."),
+    USER_EXIST_USERNAME("U002","이미 존재하는 사용자 이름입니다."),
     USER_INVALID_PASSWORD("U003","비밀번호가 일치하지 않습니다."),
     USER_INVALID_OAUTH("U004","지원하지않는 oAuth 로그인 형식입니다."),
     USER_NOT_INVALID("U005","권한이 없는 유저입니다."),
     USER_NOT_SEND_SELF("U006","본인에게는 메세지를 보낼 수 없습니다."),
-    USER_EXIST_NICKNAME("U007","이미 존재하는 사용자 이름입니다."),
-    USER_NOT_CHANGE_PASSWORD("U008","소셜 로그인 유저는 비밀번호를 변경할 수 없습니다."),
-    USER_NOT_ADMIN("U009","관리자 계정이 아닙니다."),
-    USER_AGREE_PRIVACY("U010","개인정보처리동의를 다시 받아야 합니다."),
+    USER_NOT_CHANGE_PASSWORD("U007","소셜 로그인 유저는 비밀번호를 변경할 수 없습니다."),
+    USER_NOT_ADMIN("U008","관리자 계정이 아닙니다."),
+    USER_AGREE_PRIVACY("U009","개인정보처리동의를 다시 받아야 합니다."),
 
     //Post
     POST_NOT_EXIST("P001","존재하지 않는 게시물입니다."),

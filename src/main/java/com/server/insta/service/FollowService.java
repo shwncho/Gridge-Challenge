@@ -30,8 +30,8 @@ public class FollowService {
 
 
     @Transactional
-    public void actFollow(String email, Long id){
-        User fromUser = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
+    public void actFollow(String username, Long id){
+        User fromUser = userRepository.findByUsernameAndStatus(username, Status.ACTIVE)
                 .orElseThrow(() -> new BusinessException(USER_NOT_EXIST));
         User toUser = userRepository.findByIdAndStatus(id, Status.ACTIVE)
                 .orElseThrow(() -> new BusinessException(USER_NOT_EXIST));
@@ -88,8 +88,8 @@ public class FollowService {
     }
 
     @Transactional
-    public void approveFollow(String email, Long id){
-        User toUser = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
+    public void approveFollow(String username, Long id){
+        User toUser = userRepository.findByUsernameAndStatus(username, Status.ACTIVE)
                 .orElseThrow(() -> new BusinessException(USER_NOT_EXIST));
         User fromUser = userRepository.findByIdAndStatus(id, Status.ACTIVE)
                 .orElseThrow(() -> new BusinessException(USER_NOT_EXIST));
@@ -103,8 +103,8 @@ public class FollowService {
     }
 
     @Transactional
-    public void denyFollow(String email, Long id){
-        User toUser = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
+    public void denyFollow(String username, Long id){
+        User toUser = userRepository.findByUsernameAndStatus(username, Status.ACTIVE)
                 .orElseThrow(() -> new BusinessException(USER_NOT_EXIST));
         User fromUser = userRepository.findByIdAndStatus(id, Status.ACTIVE)
                 .orElseThrow(() -> new BusinessException(USER_NOT_EXIST));

@@ -46,13 +46,12 @@ public class AuthService {
     //회원가입
     @Transactional
     public SignUpResponseDto signUp(SignUpRequestDto dto){
-        if (userRepository.existsByEmailAndStatus(dto.getEmail(), Status.ACTIVE)) {
-            throw new BusinessException(USER_EXIST_ACCOUNT);
+
+        //삭제 및 차단된 계정의 username도 사용못하는 조건으로 설계 -> status와 상관없이 존재여부로 판단.
+        if(userRepository.existsByUsername(dto.getUsername())){
+            throw new BusinessException(USER_EXIST_USERNAME);
         }
 
-        if(userRepository.existsByNickname(dto.getNickname())){
-            throw new BusinessException(USER_EXIST_NICKNAME);
-        }
 
 
         dto.setPassword(passwordEncoder.encode(dto.getPassword()));
@@ -64,18 +63,27 @@ public class AuthService {
     //로그인
     @Transactional
     public SignInResponseDto signIn(SignInRequestDto dto){
-        User user = userRepository.findByEmailAndStatus(dto.getEmail(), Status.ACTIVE)
+
+        //소셜 로그인 일경우 email이 null이 아님
+        if(dto.getEmail()!=null){
+            User oAuthUser = userRepository.findByEmailAndStatus(dto.getEmail(),Status.ACTIVE)
+                    .orElseThrow(()->new BusinessException(USER_NOT_EXIST));
+            dto.setUsername(oAuthUser.getUsername());
+        }
+        User user = userRepository.findByUsernameAndStatus(dto.getUsername(), Status.ACTIVE)
                 .orElseThrow(() -> new BusinessException(USER_NOT_EXIST));
 
         if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
             throw new BusinessException(USER_INVALID_PASSWORD);
         }
 
-        //1년 주기로 개인정보동의 받기
+        //1년 주기로 개인정보동의 받기(가입시 필수 동의를 거쳐야 가입이 되므로 가입날을 기준)
         if(ChronoUnit.YEARS.between(user.getScheduler(), LocalDateTime.now())>0){
             user.resetScheduler();
             throw new BusinessException(USER_AGREE_PRIVACY);
         }
+
+
 
         UsernamePasswordAuthenticationToken authenticationToken = dto.toAuthentication();
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
@@ -109,8 +117,8 @@ public class AuthService {
     }
 
     @Transactional
-    public void deleteStatus(String email){
-        User user = userRepository.findByEmailAndStatus(email ,Status.ACTIVE)
+    public void deleteStatus(String username){
+        User user = userRepository.findByUsernameAndStatus(username ,Status.ACTIVE)
                 .orElseThrow(()->new BusinessException(USER_NOT_EXIST));
 
         user.deleteStatus();
@@ -119,7 +127,7 @@ public class AuthService {
     @Transactional
     public AdminStatusResponseDto adminStatus(AdminStatusRequestDto dto){
 
-        User admin = userRepository.findByEmailAndStatus(dto.getAdminId(), Status.ACTIVE)
+        User admin = userRepository.findByUsernameAndStatus(dto.getAdminId(), Status.ACTIVE)
                 .orElseThrow(() -> new BusinessException(USER_NOT_EXIST));
 
         if (!passwordEncoder.matches(dto.getPassword(), admin.getPassword())) {

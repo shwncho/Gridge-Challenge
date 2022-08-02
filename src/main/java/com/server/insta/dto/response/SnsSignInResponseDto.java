@@ -9,7 +9,7 @@ import lombok.Data;
 @Builder
 public class SnsSignInResponseDto {
 
-    @Schema(description = "oAuth 유저 이메일 정보")
+    @Schema(description = "oAuth email")
     private String email;
 
     @Schema(description = "oAuth 유저 고유 id 정보")

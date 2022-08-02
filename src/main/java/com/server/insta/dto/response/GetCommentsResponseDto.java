@@ -20,7 +20,7 @@ public class GetCommentsResponseDto {
     private Long userId;
 
     @Schema(description = "댓글 작성자 사용자 이름")
-    private String nickname;
+    private String username;
 
     @Schema(description = "댓글 작성자 프로필 사진")
     private String profileImgUrl;
@@ -35,11 +35,11 @@ public class GetCommentsResponseDto {
     private int likeCount;
 
     @Builder
-    public GetCommentsResponseDto(Long commentId, String content, Long userId, String nickname, String profileImgUrl, int likeCount){
+    public GetCommentsResponseDto(Long commentId, String content, Long userId, String username, String profileImgUrl, int likeCount){
         this.commentId = commentId;
         this.content = content;
         this.userId = userId;
-        this.nickname = nickname;
+        this.username = username;
         this.profileImgUrl = profileImgUrl;
         this.likeCount = likeCount;
     }

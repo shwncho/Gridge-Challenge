@@ -35,8 +35,8 @@ public class AdminService {
 
 
     @Transactional
-    public List<GetReportsResponseDto> getReports(String email){
-        User admin = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
+    public List<GetReportsResponseDto> getReports(String username){
+        User admin = userRepository.findByUsernameAndStatus(username, Status.ACTIVE)
                 .orElseThrow(()->new BusinessException(USER_NOT_EXIST));
 
         if(!admin.getAuthority().equals(Authority.ROLE_ADMIN)){
@@ -51,8 +51,8 @@ public class AdminService {
     }
 
     @Transactional
-    public void deleteReport(String email, Long id){
-        User admin = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
+    public void deleteReport(String username, Long id){
+        User admin = userRepository.findByUsernameAndStatus(username, Status.ACTIVE)
                 .orElseThrow(()->new BusinessException(USER_NOT_EXIST));
 
         if(!admin.getAuthority().equals(Authority.ROLE_ADMIN)){
@@ -68,8 +68,8 @@ public class AdminService {
     }
 
     @Transactional
-    public void deletePost(String email, Long id){
-        User admin = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
+    public void deletePost(String username, Long id){
+        User admin = userRepository.findByUsernameAndStatus(username, Status.ACTIVE)
                 .orElseThrow(()->new BusinessException(USER_NOT_EXIST));
 
         if(!admin.getAuthority().equals(Authority.ROLE_ADMIN)){
@@ -84,8 +84,8 @@ public class AdminService {
     }
 
     @Transactional
-    public void restorePost(String email, Long id){
-        User admin = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
+    public void restorePost(String username, Long id){
+        User admin = userRepository.findByUsernameAndStatus(username, Status.ACTIVE)
                 .orElseThrow(()->new BusinessException(USER_NOT_EXIST));
 
         if(!admin.getAuthority().equals(Authority.ROLE_ADMIN)){
@@ -100,8 +100,8 @@ public class AdminService {
     }
 
     @Transactional
-    public void deleteComment(String email, Long id){
-        User admin = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
+    public void deleteComment(String username, Long id){
+        User admin = userRepository.findByUsernameAndStatus(username, Status.ACTIVE)
                 .orElseThrow(()->new BusinessException(USER_NOT_EXIST));
 
         if(!admin.getAuthority().equals(Authority.ROLE_ADMIN)){
@@ -116,8 +116,8 @@ public class AdminService {
     }
 
     @Transactional
-    public void restoreComment(String email, Long id){
-        User admin = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
+    public void restoreComment(String username, Long id){
+        User admin = userRepository.findByUsernameAndStatus(username, Status.ACTIVE)
                 .orElseThrow(()->new BusinessException(USER_NOT_EXIST));
 
         if(!admin.getAuthority().equals(Authority.ROLE_ADMIN)){

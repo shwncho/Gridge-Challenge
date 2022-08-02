@@ -27,8 +27,8 @@ public class ReportService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
 
-    public int reportPost(String email, Long id, ReportRequestDto dto){
-        User user = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
+    public int reportPost(String username, Long id, ReportRequestDto dto){
+        User user = userRepository.findByUsernameAndStatus(username, Status.ACTIVE)
                 .orElseThrow(()->new BusinessException(USER_NOT_EXIST));
 
         Post post = postRepository.findByIdAndStatus(id,Status.ACTIVE)
@@ -54,8 +54,8 @@ public class ReportService {
         return post.getReportCount();
     }
 
-    public int reportComment(String email, Long id, ReportRequestDto dto){
-        User user = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
+    public int reportComment(String username, Long id, ReportRequestDto dto){
+        User user = userRepository.findByUsernameAndStatus(username, Status.ACTIVE)
                 .orElseThrow(()->new BusinessException(USER_NOT_EXIST));
 
         Comment comment = commentRepository.findByIdAndStatus(id, Status.ACTIVE)

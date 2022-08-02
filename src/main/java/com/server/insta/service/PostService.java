@@ -41,8 +41,8 @@ public class PostService {
 
 
     @Transactional
-    public void createPost(String email, CreatePostRequestDto dto){
-        User user = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
+    public void createPost(String username, CreatePostRequestDto dto){
+        User user = userRepository.findByUsernameAndStatus(username, Status.ACTIVE)
                 .orElseThrow(() -> new BusinessException(USER_NOT_EXIST));
 
 
@@ -67,7 +67,7 @@ public class PostService {
 
         return GetPostResponseDto.builder()
                 .userId(post.getUser().getId())
-                .nickname(post.getUser().getNickname())
+                .username(post.getUser().getUsername())
                 .profileImgUrl(post.getUser().getProfileImgUrl())
                 .caption(post.getCaption())
                 .likeCount(likeCount)
@@ -87,8 +87,8 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public List<GetFeedResponseDto> getFeed(String email, Long lastPostId, int pageSize){
-        User user = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
+    public List<GetFeedResponseDto> getFeed(String username, Long lastPostId, int pageSize){
+        User user = userRepository.findByUsernameAndStatus(username, Status.ACTIVE)
                 .orElseThrow(() -> new BusinessException(USER_NOT_EXIST));
         List<Post> pagePost = queryRepository.findAllPost(user, lastPostId, pageSize);
 
@@ -101,7 +101,7 @@ public class PostService {
 
             GetPostResponseDto dto = GetPostResponseDto.builder()
                     .userId(post.getUser().getId())
-                    .nickname(post.getUser().getNickname())
+                    .username(post.getUser().getUsername())
                     .profileImgUrl(post.getUser().getProfileImgUrl())
                     .caption(post.getCaption())
                     .likeCount(likeCount)
@@ -132,8 +132,8 @@ public class PostService {
     }
 
     @Transactional
-    public void deletePost(String email, Long id){
-        User user = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
+    public void deletePost(String username, Long id){
+        User user = userRepository.findByUsernameAndStatus(username, Status.ACTIVE)
                 .orElseThrow(() -> new BusinessException(USER_NOT_EXIST));
         Post post = postRepository.findByIdAndStatus(id, Status.ACTIVE)
                 .orElseThrow(() -> new BusinessException(POST_NOT_EXIST));
@@ -146,8 +146,8 @@ public class PostService {
     }
 
     @Transactional
-    public void updatePost(String email, Long id, UpdatePostRequestDto dto){
-        User user = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
+    public void updatePost(String username, Long id, UpdatePostRequestDto dto){
+        User user = userRepository.findByUsernameAndStatus(username, Status.ACTIVE)
                 .orElseThrow(() -> new BusinessException(USER_NOT_EXIST));
         Post post = postRepository.findByIdAndStatus(id, Status.ACTIVE)
                 .orElseThrow(() -> new BusinessException(POST_NOT_EXIST));

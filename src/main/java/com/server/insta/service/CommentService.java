@@ -34,8 +34,8 @@ public class CommentService {
     private final QueryRepository queryRepository;
 
     @Transactional
-    public void createComment(String email, Long id, CreateCommentRequestDto dto){
-        User user = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
+    public void createComment(String username, Long id, CreateCommentRequestDto dto){
+        User user = userRepository.findByUsernameAndStatus(username, Status.ACTIVE)
                 .orElseThrow(()->new BusinessException(USER_NOT_EXIST));
         Post post = postRepository.findByIdAndStatus(id, Status.ACTIVE)
                 .orElseThrow(()-> new BusinessException(POST_NOT_EXIST));
@@ -74,7 +74,7 @@ public class CommentService {
 
         return PostMapToCommentsDto.builder()
                 .userId(post.getUser().getId())
-                .nickname(post.getUser().getNickname())
+                .username(post.getUser().getUsername())
                 .profileImgUrl(post.getUser().getProfileImgUrl())
                 .caption(post.getCaption())
                 .createdPost(calculateCreatedTime(post.getCreatedAt()))
@@ -84,8 +84,8 @@ public class CommentService {
     }
 
     @Transactional
-    public void deleteComment(String email, Long id){
-        User user = userRepository.findByEmailAndStatus(email, Status.ACTIVE)
+    public void deleteComment(String username, Long id){
+        User user = userRepository.findByUsernameAndStatus(username, Status.ACTIVE)
                 .orElseThrow(()->new BusinessException(USER_NOT_EXIST));
 
         Comment comment = queryRepository.findCommentByIdWithParent(id)

@@ -28,16 +28,15 @@ public class User extends BaseTimeEntity {
     @Column(name = "user_id")
     private Long id;
 
-    @NotNull
-    @Column(length = 20)
+    //소셜 로그인 email 용도
     private String email;
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)  // 패스워드는 응답값에 포함하지 않는다.
     @Column(length = 20)
+    private String username;
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)  // 패스워드는 응답값에 포함하지 않는다.
     private String password;
 
-    @Column(length = 20)
-    private String nickname;
 
     @Column(length = 20)
     private String name;
@@ -99,11 +98,11 @@ public class User extends BaseTimeEntity {
     }
 
     @Builder
-    public User(String email, String password, String nickname, String name, String phoneNumber, String profileImgUrl,
-                String introduce, String website, Provider provider, Date birth, boolean isPublic) {
+    public User(String email, String username, String password, String name, String phoneNumber, String profileImgUrl,
+                String introduce, String website, Provider provider, Date birth, boolean isPublic, LocalDateTime scheduler) {
         this.email = email;
+        this.username = username;
         this.password = password;
-        this.nickname = nickname;
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.profileImgUrl = profileImgUrl;
@@ -111,9 +110,10 @@ public class User extends BaseTimeEntity {
         this.website = website;
         this.provider = provider;
         this.birth = birth;
-        this.isPublic = true;
+        this.isPublic = isPublic;
         this.status = Status.ACTIVE;
         this.authority = Authority.ROLE_USER;
+        this.scheduler = scheduler;
     }
 
 
@@ -121,7 +121,7 @@ public class User extends BaseTimeEntity {
     public GetFollowingResponseDto toFollowing(){
         return GetFollowingResponseDto.builder()
                 .userId(id)
-                .nickname(nickname)
+                .username(username)
                 .profileImgUrl(profileImgUrl)
                 .introduce(introduce)
                 .build();
@@ -130,7 +130,7 @@ public class User extends BaseTimeEntity {
     public GetFollowerResponseDto toFollower(){
         return GetFollowerResponseDto.builder()
                 .userId(id)
-                .nickname(nickname)
+                .username(username)
                 .profileImgUrl(profileImgUrl)
                 .introduce(introduce)
                 .build();
@@ -139,7 +139,7 @@ public class User extends BaseTimeEntity {
     public GetLikeUsersResponseDto toLikeUsers(){
         return GetLikeUsersResponseDto.builder()
                 .userId(id)
-                .nickname(nickname)
+                .username(username)
                 .profileImgUrl(profileImgUrl)
                 .introduce(introduce)
                 .build();

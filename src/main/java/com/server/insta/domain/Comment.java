@@ -80,7 +80,7 @@ public class Comment extends BaseTimeEntity {
                 .commentId(id)
                 .content(content)
                 .userId(user.getId())
-                .nickname(user.getNickname())
+                .username(user.getUsername())
                 .profileImgUrl(user.getProfileImgUrl())
                 .likeCount(likeCount)
                 .build();

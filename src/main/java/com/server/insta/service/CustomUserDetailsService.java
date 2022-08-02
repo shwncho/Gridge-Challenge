@@ -22,15 +22,15 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String email) {
-        return userRepository.findByEmailAndStatus(email, Status.ACTIVE)
+    public UserDetails loadUserByUsername(String username) {
+        return userRepository.findByUsernameAndStatus(username, Status.ACTIVE)
                 .map(this::createUser)
                 .orElseThrow(() -> new BusinessException(USER_NOT_EXIST));
     }
 
     private org.springframework.security.core.userdetails.User createUser(User user) {
         GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(user.getAuthority().toString());
-        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), Collections.singleton(grantedAuthority));
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), Collections.singleton(grantedAuthority));
     }
 
 

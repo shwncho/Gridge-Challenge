@@ -37,7 +37,7 @@ public class AuthController {
         return responseService.getSingleResult(authService.signUp(dto));
     }
 
-    @Operation(summary="로그인")
+    @Operation(summary="로그인",description = "소셜 로그인 일경우 email과 password를, 일반 로그인 일경우 username 과 password를 넘겨주세요.")
     @PostMapping("/signin")
     public SingleResult<SignInResponseDto> signIn(@RequestBody @Valid SignInRequestDto dto){
         return responseService.getSingleResult(authService.signIn(dto));

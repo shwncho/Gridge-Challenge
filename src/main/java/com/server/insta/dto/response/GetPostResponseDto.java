@@ -15,7 +15,7 @@ public class GetPostResponseDto {
     private Long userId;
 
     @Schema(description = "게시물 작성자 사용자 이름")
-    private String nickname;
+    private String username;
 
     @Schema(description = "게시물 작성자 프로필 사진")
     private String profileImgUrl;
