@@ -78,7 +78,7 @@ public class AuthService {
         }
 
         //1년 주기로 개인정보동의 받기(가입시 필수 동의를 거쳐야 가입이 되므로 가입날을 기준)
-        if(ChronoUnit.YEARS.between(user.getScheduler(), LocalDateTime.now())>0){
+        if(ChronoUnit.YEARS.between(user.getScheduler(), LocalDateTime.now())>0) {
             user.resetScheduler();
             throw new BusinessException(USER_AGREE_PRIVACY);
         }

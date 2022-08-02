@@ -11,11 +11,12 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
-import static com.server.insta.config.exception.BusinessExceptionStatus.METHOD_NOT_ALLOWED;
-import static com.server.insta.config.exception.BusinessExceptionStatus.SERVER_ERROR;
+import static com.server.insta.config.exception.BusinessExceptionStatus.*;
 
 @RestControllerAdvice
 @RequiredArgsConstructor
@@ -51,19 +52,30 @@ public class ExceptionAdvisor {
         return responseService.getFailResult(e.getStatus());
     }
 
+    @ExceptionHandler(NoHandlerFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public CommonResult NotFoundedException(){
+        return responseService.getFailResult(NOT_FOUND);
+    }
+
     /**
      * 지원하지 않은 HTTP method 호출 할 경우 발생
      */
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public CommonResult NotSupportedException(HttpRequestMethodNotSupportedException e){
+    public CommonResult NotSupportedException(){
         return responseService.getFailResult(METHOD_NOT_ALLOWED);
     }
 
-//    @ExceptionHandler(Exception.class)
-//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-//    public CommonResult commonException() {
-//        return responseService.getFailResult(SERVER_ERROR);
-//    }
+    @ExceptionHandler(SQLException.class)
+    public CommonResult DataBaseException(){
+        return responseService.getFailResult(DATABASE_ERROR);
+    }
+
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public CommonResult commonException() {
+        return responseService.getFailResult(SERVER_ERROR);
+    }
 
 
 

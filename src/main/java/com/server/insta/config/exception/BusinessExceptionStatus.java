@@ -11,6 +11,8 @@ public enum BusinessExceptionStatus {
     SERVER_ERROR("SERVER","서버와의 연결에 실패했습니다."),
     METHOD_NOT_ALLOWED("METHOD","허용되지 않은 메서드입니다."),
     KAKAO_LOGIN("KAKAO","카카오 로그인에 실패했습니다."),
+    DATABASE_ERROR("DB","데이터베이스 오류입니다."),
+    NOT_FOUND("NF","존재하지 않는 URL입니다."),
 
 
     //User
