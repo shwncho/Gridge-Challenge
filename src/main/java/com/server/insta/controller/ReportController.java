@@ -28,6 +28,9 @@ public class ReportController {
     "신고횟수가 10회 누적되었으므로 게시글을 비공개합니다. 반환")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "SUCCESS", description = "응답 성공"),
+            @ApiResponse(responseCode = "U001", description = "존재하지 않는 유저입니다."),
+            @ApiResponse(responseCode = "P001", description = "존재하지 않는 게시물입니다."),
+            @ApiResponse(responseCode = "R001", description = "본인 게시글은 신고할 수 없습니다."),
             @ApiResponse(responseCode = "DB", description = "데이터베이스 오류입니다."),
             @ApiResponse(responseCode = "SERVER",description = "서버와의 연결에 실패했습니다.")
     })
@@ -38,7 +41,7 @@ public class ReportController {
             @RequestBody @Valid ReportRequestDto dto
     ){
         int reportCount = reportService.reportPost(userDetails.getUsername(), postId, dto);
-        if(reportCount==1) return responseService.getSuccessResult("신고횟수가 10회 누적되었으므로 게시글을 비공개합니다.");
+        if(reportCount==10) return responseService.getSuccessResult("신고횟수가 10회 누적되었으므로 게시글을 비공개합니다.");
         return responseService.getSuccessResult();
     }
 
@@ -46,6 +49,9 @@ public class ReportController {
             "신고횟수가 10회 누적되었으므로 댓글을 비공개합니다. 반환")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "SUCCESS", description = "응답 성공"),
+            @ApiResponse(responseCode = "U001", description = "존재하지 않는 유저입니다."),
+            @ApiResponse(responseCode = "C001", description = "존재하지 않는 댓글입니다."),
+            @ApiResponse(responseCode = "R001", description = "본인 게시글은 신고할 수 없습니다."),
             @ApiResponse(responseCode = "DB", description = "데이터베이스 오류입니다."),
             @ApiResponse(responseCode = "SERVER",description = "서버와의 연결에 실패했습니다.")
     })
@@ -56,7 +62,7 @@ public class ReportController {
             @RequestBody @Valid ReportRequestDto dto
     ){
         int reportCount = reportService.reportComment(userDetails.getUsername(), commentId, dto);
-        if(reportCount==1) return responseService.getSuccessResult("신고횟수가 10회 누적되었으므로 댓글을 비공개합니다.");
+        if(reportCount==10) return responseService.getSuccessResult("신고횟수가 10회 누적되었으므로 댓글을 비공개합니다.");
         return responseService.getSuccessResult();
     }
 }

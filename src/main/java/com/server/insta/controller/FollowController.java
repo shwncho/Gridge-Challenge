@@ -29,6 +29,8 @@ public class FollowController {
     @Operation(summary = "팔로우/팔로우 취소")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "SUCCESS", description = "응답 성공"),
+            @ApiResponse(responseCode = "U001", description = "존재하지 않는 유저입니다."),
+            @ApiResponse(responseCode = "F001", description = "본인에게 팔로우 할 수 없습니다."),
             @ApiResponse(responseCode = "DB", description = "데이터베이스 오류입니다."),
             @ApiResponse(responseCode = "SERVER",description = "서버와의 연결에 실패했습니다.")
     })
@@ -44,6 +46,8 @@ public class FollowController {
     @Operation(summary = "팔로우 승인", description = "비공개 계정이 팔로우 요청을 승인")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "SUCCESS", description = "응답 성공"),
+            @ApiResponse(responseCode = "U001", description = "존재하지 않는 유저입니다."),
+            @ApiResponse(responseCode = "F001", description = "본인에게 팔로우 할 수 없습니다."),
             @ApiResponse(responseCode = "DB", description = "데이터베이스 오류입니다."),
             @ApiResponse(responseCode = "SERVER",description = "서버와의 연결에 실패했습니다.")
     })
@@ -59,6 +63,8 @@ public class FollowController {
     @Operation(summary = "팔로우 거부", description = "비공개 계정이 팔로우 요청을 거절")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "SUCCESS", description = "응답 성공"),
+            @ApiResponse(responseCode = "U001", description = "존재하지 않는 유저입니다."),
+            @ApiResponse(responseCode = "F001", description = "본인에게 팔로우 할 수 없습니다."),
             @ApiResponse(responseCode = "DB", description = "데이터베이스 오류입니다."),
             @ApiResponse(responseCode = "SERVER",description = "서버와의 연결에 실패했습니다.")
     })
@@ -74,6 +80,7 @@ public class FollowController {
     @Operation(summary = "팔로잉 유저들 조회")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "SUCCESS", description = "응답 성공"),
+            @ApiResponse(responseCode = "U001", description = "존재하지 않는 유저입니다."),
             @ApiResponse(responseCode = "DB", description = "데이터베이스 오류입니다."),
             @ApiResponse(responseCode = "SERVER",description = "서버와의 연결에 실패했습니다.")
     })
@@ -87,6 +94,7 @@ public class FollowController {
     @Operation(summary = "팔로워들 조회")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "SUCCESS", description = "응답 성공"),
+            @ApiResponse(responseCode = "U001", description = "존재하지 않는 유저입니다."),
             @ApiResponse(responseCode = "DB", description = "데이터베이스 오류입니다."),
             @ApiResponse(responseCode = "SERVER",description = "서버와의 연결에 실패했습니다.")
     })

@@ -16,7 +16,7 @@ import java.util.List;
 public class CreatePostRequestDto {
 
     @Schema(description = "게시물 설명")
-    @Size(max=1000, message = "최대 1000자 까지만 가능합니다.")
+    @Size(max=1000, message = "게시물 설명은 최대 1000자 까지만 가능합니다.")
     private String caption;
 
     @Schema(description = "게시물 해시태그")

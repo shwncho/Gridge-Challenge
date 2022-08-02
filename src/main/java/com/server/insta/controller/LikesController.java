@@ -27,6 +27,8 @@ public class LikesController {
     @Operation(summary = "게시물 좋아요/좋아요 취소")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "SUCCESS", description = "응답 성공"),
+            @ApiResponse(responseCode = "U001", description = "존재하지 않는 유저입니다."),
+            @ApiResponse(responseCode = "P001", description = "존재하지 않는 게시물입니다."),
             @ApiResponse(responseCode = "DB", description = "데이터베이스 오류입니다."),
             @ApiResponse(responseCode = "SERVER",description = "서버와의 연결에 실패했습니다.")
     })
@@ -43,6 +45,8 @@ public class LikesController {
     @Operation(summary = "댓글 좋아요/좋아요 취소")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "SUCCESS", description = "응답 성공"),
+            @ApiResponse(responseCode = "U001", description = "존재하지 않는 유저입니다."),
+            @ApiResponse(responseCode = "P001", description = "존재하지 않는 게시물입니다."),
             @ApiResponse(responseCode = "DB", description = "데이터베이스 오류입니다."),
             @ApiResponse(responseCode = "SERVER",description = "서버와의 연결에 실패했습니다.")
     })
@@ -60,6 +64,7 @@ public class LikesController {
     @Operation(summary = "게시물에 좋아요한 유저들 조회")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "SUCCESS", description = "응답 성공"),
+            @ApiResponse(responseCode = "P001", description = "존재하지 않는 게시물입니다."),
             @ApiResponse(responseCode = "DB", description = "데이터베이스 오류입니다."),
             @ApiResponse(responseCode = "SERVER",description = "서버와의 연결에 실패했습니다.")
     })

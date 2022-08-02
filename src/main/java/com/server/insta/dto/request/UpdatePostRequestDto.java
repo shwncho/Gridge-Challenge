@@ -12,7 +12,7 @@ import java.util.List;
 public class UpdatePostRequestDto {
 
     @Schema(description = "게시물 설명")
-    @Size(max=1000, message = "최대 1000자 까지만 가능합니다.")
+    @Size(max=1000, message = "게시물 설명은 최대 1000자 까지만 가능합니다.")
     private String caption;
 
     @Schema(description = "수정해서 새로 작성할 해시태그, 수정할 것 없으면 변경 안해도 됨")

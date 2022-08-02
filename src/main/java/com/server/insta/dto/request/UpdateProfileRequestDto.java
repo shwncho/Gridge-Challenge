@@ -15,7 +15,7 @@ public class UpdateProfileRequestDto {
 
     @NotBlank
     @Schema(description = "유저 실명")
-    @Size(max=20)
+    @Size(max=20, message = "이름은 20자 이내만 가능합니다.")
     private String name;
 
     @NotBlank

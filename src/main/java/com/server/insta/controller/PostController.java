@@ -36,6 +36,9 @@ public class PostController {
     @Operation(summary = "게시물 저장")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "SUCCESS", description = "응답 성공"),
+            @ApiResponse(responseCode = "VALID", description = "게시물 설명은 최대 1000자 까지만 가능합니다."),
+            @ApiResponse(responseCode = "VALID", description = "이미지를 최소 1개이상 업로드 해야합니다."),
+            @ApiResponse(responseCode = "U001", description = "존재하지 않는 유저입니다."),
             @ApiResponse(responseCode = "DB", description = "데이터베이스 오류입니다."),
             @ApiResponse(responseCode = "SERVER",description = "서버와의 연결에 실패했습니다.")
     })
@@ -53,6 +56,7 @@ public class PostController {
     @Operation(summary = "게시물 단건 조회")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "SUCCESS", description = "응답 성공"),
+            @ApiResponse(responseCode = "P001", description = "존재하지 않는 게시물입니다."),
             @ApiResponse(responseCode = "DB", description = "데이터베이스 오류입니다."),
             @ApiResponse(responseCode = "SERVER",description = "서버와의 연결에 실패했습니다.")
     })
@@ -68,6 +72,7 @@ public class PostController {
             " 마지막 게시물의 postId값(가장 작은 postId값)을 lastPostId에 넘겨주면 그 다음 페이지가 나오는 no offset 방식입니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "SUCCESS", description = "응답 성공"),
+            @ApiResponse(responseCode = "U001", description = "존재하지 않는 유저입니다."),
             @ApiResponse(responseCode = "DB", description = "데이터베이스 오류입니다."),
             @ApiResponse(responseCode = "SERVER",description = "서버와의 연결에 실패했습니다.")
     })
@@ -83,6 +88,9 @@ public class PostController {
     @Operation(summary = "게시물 삭제")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "SUCCESS", description = "응답 성공"),
+            @ApiResponse(responseCode = "U001", description = "존재하지 않는 유저입니다."),
+            @ApiResponse(responseCode = "P001", description = "존재하지 않는 게시물입니다."),
+            @ApiResponse(responseCode = "U005", description = "권한이 없는 유저입니다."),
             @ApiResponse(responseCode = "DB", description = "데이터베이스 오류입니다."),
             @ApiResponse(responseCode = "SERVER",description = "서버와의 연결에 실패했습니다.")
     })
@@ -98,6 +106,11 @@ public class PostController {
     @Operation(summary = "게시물 수정", description = "게시물 설명,이미지,태그 3가지 수정 가능")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "SUCCESS", description = "응답 성공"),
+            @ApiResponse(responseCode = "VALID", description = "게시물 설명은 최대 1000자 까지만 가능합니다."),
+            @ApiResponse(responseCode = "VALID", description = "이미지를 최소 1개이상 업로드 해야합니다."),
+            @ApiResponse(responseCode = "U001", description = "존재하지 않는 유저입니다."),
+            @ApiResponse(responseCode = "P001", description = "존재하지 않는 게시물입니다."),
+            @ApiResponse(responseCode = "U005", description = "권한이 없는 유저입니다."),
             @ApiResponse(responseCode = "DB", description = "데이터베이스 오류입니다."),
             @ApiResponse(responseCode = "SERVER",description = "서버와의 연결에 실패했습니다.")
     })
