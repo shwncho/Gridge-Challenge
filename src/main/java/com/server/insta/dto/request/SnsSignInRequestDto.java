@@ -9,10 +9,10 @@ import javax.validation.constraints.NotBlank;
 @Data
 public class SnsSignInRequestDto {
 
-    @NotBlank(message = "토큰 값을 넣어주세요.")
+    @NotBlank
     private String token;
 
-    @NotBlank(message = "oAuth Provider를 넣어주세요" )
+    @NotBlank
     @Schema(description = "oAuth Provider", example = "KAKAO,NAVER,GOOGLE,FACEBOOK,NORMAL")
     private Provider provider;
 }

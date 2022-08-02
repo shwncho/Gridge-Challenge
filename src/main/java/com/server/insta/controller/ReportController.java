@@ -6,6 +6,8 @@ import com.server.insta.dto.request.ReportRequestDto;
 import com.server.insta.service.ReportService;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,6 +26,11 @@ public class ReportController {
 
     @Operation(summary = "게시물 신고",description ="신고횟수 10회 누적 될경우"+
     "신고횟수가 10회 누적되었으므로 게시글을 비공개합니다. 반환")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "SUCCESS", description = "응답 성공"),
+            @ApiResponse(responseCode = "DB", description = "데이터베이스 오류입니다."),
+            @ApiResponse(responseCode = "SERVER",description = "서버와의 연결에 실패했습니다.")
+    })
     @PostMapping("/post/{postId}")
     public CommonResult reportPost(
             @AuthenticationPrincipal UserDetails userDetails,
@@ -37,6 +44,11 @@ public class ReportController {
 
     @Operation(summary = "댓글 신고",description ="신고횟수 10회 누적 될경우"+
             "신고횟수가 10회 누적되었으므로 댓글을 비공개합니다. 반환")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "SUCCESS", description = "응답 성공"),
+            @ApiResponse(responseCode = "DB", description = "데이터베이스 오류입니다."),
+            @ApiResponse(responseCode = "SERVER",description = "서버와의 연결에 실패했습니다.")
+    })
     @PostMapping("/comment/{commentId}")
     public CommonResult reportComment(
             @AuthenticationPrincipal UserDetails userDetails,

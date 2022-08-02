@@ -11,6 +11,8 @@ import com.server.insta.dto.response.GetFeedResponseDto;
 import com.server.insta.service.PostService;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -32,6 +34,11 @@ public class PostController {
     private final ResponseService responseService;
 
     @Operation(summary = "게시물 저장")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "SUCCESS", description = "응답 성공"),
+            @ApiResponse(responseCode = "DB", description = "데이터베이스 오류입니다."),
+            @ApiResponse(responseCode = "SERVER",description = "서버와의 연결에 실패했습니다.")
+    })
     @PostMapping("")
     public CommonResult createPost(
             @AuthenticationPrincipal UserDetails userDetails,
@@ -44,6 +51,11 @@ public class PostController {
     }
 
     @Operation(summary = "게시물 단건 조회")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "SUCCESS", description = "응답 성공"),
+            @ApiResponse(responseCode = "DB", description = "데이터베이스 오류입니다."),
+            @ApiResponse(responseCode = "SERVER",description = "서버와의 연결에 실패했습니다.")
+    })
     @GetMapping("/{postId}")
     public SingleResult<GetPostResponseDto> getPost(
             @PathVariable Long postId
@@ -54,6 +66,11 @@ public class PostController {
     @Operation(summary = "피드 조회", description = "한 페이지마다 10개의 피드가 구성됩니다."+
             " 처음 lastPostId를 null로 넘겨서 최근 10개의 게시물을 리턴받고" +
             " 마지막 게시물의 postId값(가장 작은 postId값)을 lastPostId에 넘겨주면 그 다음 페이지가 나오는 no offset 방식입니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "SUCCESS", description = "응답 성공"),
+            @ApiResponse(responseCode = "DB", description = "데이터베이스 오류입니다."),
+            @ApiResponse(responseCode = "SERVER",description = "서버와의 연결에 실패했습니다.")
+    })
     @GetMapping("/feed")
     public MultipleResult<GetFeedResponseDto> getFeed(
             @AuthenticationPrincipal UserDetails userDetails,
@@ -64,6 +81,11 @@ public class PostController {
     }
 
     @Operation(summary = "게시물 삭제")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "SUCCESS", description = "응답 성공"),
+            @ApiResponse(responseCode = "DB", description = "데이터베이스 오류입니다."),
+            @ApiResponse(responseCode = "SERVER",description = "서버와의 연결에 실패했습니다.")
+    })
     @PatchMapping("/{postId}/status")
     public CommonResult deletePost(
             @AuthenticationPrincipal UserDetails userDetails,
@@ -74,6 +96,11 @@ public class PostController {
     }
 
     @Operation(summary = "게시물 수정", description = "게시물 설명,이미지,태그 3가지 수정 가능")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "SUCCESS", description = "응답 성공"),
+            @ApiResponse(responseCode = "DB", description = "데이터베이스 오류입니다."),
+            @ApiResponse(responseCode = "SERVER",description = "서버와의 연결에 실패했습니다.")
+    })
     @PatchMapping("/{postId}")
     public CommonResult updatePost(
             @AuthenticationPrincipal UserDetails userDetails,

@@ -26,9 +26,10 @@ public class SignUpRequestDto {
 
     @NotBlank
     @Schema(description = "유저 실명")
-    @Size(max=20)
+    @Size(max=20, message = "이름은 20자 이내만 가능합니다.")
     private String name;
 
+    @Email(message = "이메일 형식이 아닙니다.")
     @Schema(description = "oAuth email, 소셜로그인일경우 이메일을 넣어주고 일반 유저는 null로 보내주시면 됩니다.")
     private String email;
 
