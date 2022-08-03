@@ -3,6 +3,7 @@ package com.server.insta.repository;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.server.insta.config.Entity.Authority;
 import com.server.insta.config.Entity.Status;
 import com.server.insta.domain.Comment;
 import com.server.insta.domain.Message;
@@ -10,7 +11,12 @@ import com.server.insta.domain.Post;
 import com.server.insta.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -121,6 +127,42 @@ public class QueryRepository {
     private BooleanExpression ltCommentId(Long commentId){
         if(commentId == null)   return null;
         return comment.id.lt(commentId);
+    }
+
+    //다중 조건 쿼리
+    public List<User> findAllByUsers(String name, String username, String joinedDate, Status status){
+        return queryFactory
+                .selectFrom(user)
+                .where(user.authority.eq(Authority.ROLE_USER),
+                        eqName(name),
+                        eqUsername(username),
+                        eqCreatedAt(joinedDate),
+                        eqStatus(status))
+                .fetch();
+    }
+
+    private BooleanExpression eqName(String name){
+        if(!StringUtils.hasText(name))  return null;
+        return user.name.eq(name);
+    }
+
+    private BooleanExpression eqUsername(String username){
+        if(!StringUtils.hasText(username))  return null;
+        return user.username.eq(username);
+    }
+
+    private BooleanExpression eqCreatedAt(String joinedDate) {
+        if (!StringUtils.hasText(joinedDate)) return null;
+        else {
+            LocalDate date = LocalDate.parse(joinedDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            return user.createdAt.between(date.atStartOfDay(), LocalDateTime.of(date, LocalTime.MAX));
+
+        }
+    }
+    private BooleanExpression eqStatus(Status status){
+        if(status==null)    return null;
+        else if(!StringUtils.hasText(status.toString())) return null;
+        return user.status.eq(status);
     }
 
 

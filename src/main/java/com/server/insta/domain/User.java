@@ -8,6 +8,7 @@ import com.server.insta.config.Entity.Status;
 import com.server.insta.dto.response.GetFollowerResponseDto;
 import com.server.insta.dto.response.GetFollowingResponseDto;
 import com.server.insta.dto.response.GetLikeUsersResponseDto;
+import com.server.insta.dto.response.GetSearchUsersResponseDto;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -144,4 +145,5 @@ public class User extends BaseTimeEntity {
                 .introduce(introduce)
                 .build();
     }
+
 }

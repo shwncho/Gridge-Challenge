@@ -1,10 +1,11 @@
 package com.server.insta.controller;
 
+import com.server.insta.config.Entity.Status;
 import com.server.insta.config.response.ResponseService;
 import com.server.insta.config.response.result.CommonResult;
 import com.server.insta.config.response.result.MultipleResult;
-import com.server.insta.config.response.result.SingleResult;
 import com.server.insta.dto.response.GetReportsResponseDto;
+import com.server.insta.dto.response.GetSearchUsersResponseDto;
 import com.server.insta.service.AdminService;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,6 +15,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Date;
+
 
 @Api(tags="Admin API")
 @RestController
@@ -128,6 +132,19 @@ public class AdminController {
     ){
         adminService.restoreComment(userDetails.getUsername(), commentId);
         return responseService.getSuccessResult();
+    }
+
+    @Operation(summary = "회원조회", description = "날짜는 YYYY-MM-DD 이런 형식으로 보내주세요. "+
+    "Status 예시: ACTIVE,INACTIVE, BLOCK, DELETED")
+    @GetMapping("/users")
+    public MultipleResult<GetSearchUsersResponseDto> getSearchUsers(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String username,
+            @RequestParam(required = false) String joinedDate,
+            @RequestParam(required = false) Status status
+    ){
+        return responseService.getMultipleResult(adminService.getSearchUsers(userDetails.getUsername(), name, username, joinedDate, status));
     }
 
 

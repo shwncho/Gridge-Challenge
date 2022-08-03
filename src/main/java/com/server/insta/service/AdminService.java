@@ -8,17 +8,21 @@ import com.server.insta.domain.Post;
 import com.server.insta.domain.Report;
 import com.server.insta.domain.User;
 import com.server.insta.dto.response.GetReportsResponseDto;
-import com.server.insta.repository.CommentRepository;
-import com.server.insta.repository.PostRepository;
-import com.server.insta.repository.ReportRepository;
-import com.server.insta.repository.UserRepository;
+import com.server.insta.dto.response.GetSearchUsersResponseDto;
+import com.server.insta.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static com.server.insta.config.exception.BusinessExceptionStatus.*;
@@ -32,7 +36,9 @@ public class AdminService {
     private final ReportRepository reportRepository;
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
+    private final QueryRepository queryRepository;
 
+    public static final String regexp = "^([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))$";
 
     @Transactional
     public List<GetReportsResponseDto> getReports(String username){
@@ -128,6 +134,36 @@ public class AdminService {
                 .orElseThrow(()-> new BusinessException(COMMENT_NOT_EXIST));
 
         comment.restoreComment();
+
+    }
+
+    @Transactional(readOnly = true)
+    public List<GetSearchUsersResponseDto> getSearchUsers(String adminId, String name, String username, String joinedDate, Status status){
+        User admin = userRepository.findByUsernameAndStatus(adminId, Status.ACTIVE)
+                .orElseThrow(()->new BusinessException(USER_NOT_EXIST));
+
+        if(!admin.getAuthority().equals(Authority.ROLE_ADMIN)){
+            throw new BusinessException(USER_NOT_ADMIN);
+        }
+
+        if(joinedDate!=null && !Pattern.matches(regexp, joinedDate)){
+            throw new BusinessException(ADMIN_INVALID_DATE);
+        }
+
+        List<User> users = queryRepository.findAllByUsers(name, username, joinedDate, status);
+
+        List<GetSearchUsersResponseDto> result = new ArrayList<>();
+        users.forEach(u->{
+            result.add(GetSearchUsersResponseDto.builder()
+                    .name(u.getName())
+                    .username(u.getUsername())
+                    .createdAt(u.getCreatedAt().format(DateTimeFormatter.ofPattern("yy.MM.dd")))
+                    .status(u.getStatus())
+                    .build());
+        });
+
+
+        return result;
 
     }
 
