@@ -33,7 +33,7 @@ public class PostController {
     private final PostService postService;
     private final ResponseService responseService;
 
-    @Operation(summary = "게시물 저장")
+    @Operation(summary = "게시물 저장", description = "게시물은 이미지, 동영상 둘 다 URL로 입력받는다. 최소 1개 이상의 이미지 or 동영상을 업로드 해야한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "SUCCESS", description = "응답 성공"),
             @ApiResponse(responseCode = "VALID", description = "게시물 설명은 최대 1000자 까지만 가능합니다."),

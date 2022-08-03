@@ -1,6 +1,7 @@
 package com.server.insta.domain;
 
 import com.server.insta.config.Entity.BaseTimeEntity;
+import com.server.insta.config.Entity.Status;
 import com.server.insta.dto.response.GetReportsResponseDto;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -30,11 +31,19 @@ public class Report extends BaseTimeEntity {
     @JoinColumn(name = "comment_id")
     private Comment comment;
 
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
+    public void deleteReport(){
+        this.status = Status.DELETED;
+    }
+
     @Builder
     public Report(String reason, Post post, Comment comment) {
         this.reason = reason;
         this.post = post;
         this.comment = comment;
+        this.status = Status.ACTIVE;
     }
 
     public GetReportsResponseDto toReport(LocalDateTime createdAt){

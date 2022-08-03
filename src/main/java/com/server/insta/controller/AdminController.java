@@ -49,7 +49,7 @@ public class AdminController {
             @ApiResponse(responseCode = "DB", description = "데이터베이스 오류입니다."),
             @ApiResponse(responseCode = "SERVER",description = "서버와의 연결에 실패했습니다.")
     })
-    @DeleteMapping("/report/{reportId}")
+    @PatchMapping("/report/{reportId}")
     public CommonResult deleteReport(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long reportId

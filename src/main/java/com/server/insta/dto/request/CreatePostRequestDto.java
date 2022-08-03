@@ -19,10 +19,10 @@ public class CreatePostRequestDto {
     @Size(max=1000, message = "게시물 설명은 최대 1000자 까지만 가능합니다.")
     private String caption;
 
-    @Schema(description = "게시물 해시태그")
+    @Schema(description = "게시물 해시태그(있어도 되고 없어도 됩니다.)")
     private List<String> tags = new ArrayList<>();
 
-    @Schema(description = "게시물 이미지들")
+    @Schema(description = "게시물 이미지들(최소 1개이상)")
     private List<String> medias = new ArrayList<>();
 
 

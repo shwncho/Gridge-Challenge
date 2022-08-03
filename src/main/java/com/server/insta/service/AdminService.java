@@ -63,7 +63,7 @@ public class AdminService {
                 .orElseThrow(()->new BusinessException(REPORT_NOT_EXIST));
 
 
-        reportRepository.delete(report);
+        report.deleteReport();
 
     }
 
