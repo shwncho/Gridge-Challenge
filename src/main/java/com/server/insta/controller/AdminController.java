@@ -136,6 +136,14 @@ public class AdminController {
 
     @Operation(summary = "회원조회", description = "날짜는 YYYY-MM-DD 이런 형식으로 보내주세요. "+
     "Status 예시: ACTIVE,INACTIVE, BLOCK, DELETED")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "SUCCESS", description = "응답 성공"),
+            @ApiResponse(responseCode = "U001", description = "존재하지 않는 유저입니다."),
+            @ApiResponse(responseCode = "U008", description = "관리자 계정이 아닙니다."),
+            @ApiResponse(responseCode = "ADM001", description = "날짜 형식이 올바르지 않습니다."),
+            @ApiResponse(responseCode = "DB", description = "데이터베이스 오류입니다."),
+            @ApiResponse(responseCode = "SERVER", description = "서버와의 연결에 실패했습니다.")
+    })
     @GetMapping("/users")
     public MultipleResult<GetSearchUsersResponseDto> getSearchUsers(
             @AuthenticationPrincipal UserDetails userDetails,
