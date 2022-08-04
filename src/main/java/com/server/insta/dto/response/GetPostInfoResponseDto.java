@@ -22,8 +22,11 @@ public class GetPostInfoResponseDto {
     @Schema(description = "게시물 태그들")
     private List<String> tags;
 
-    @Schema(description = "게시물 좋아요한 유저 username들")
+    @Schema(description = "게시물 좋아요한 username들")
     private List<String> likeUsername;
+
+    @Schema(description = "게시물에 댓글단 유저네임과 댓글내용")
+    private List<CommetsByPostInfoDto> commetsByPostInfoDtos;
 
     @Schema(description = "게시물이 신고 당한 횟수")
     private int reportCount;

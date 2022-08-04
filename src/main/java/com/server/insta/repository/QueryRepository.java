@@ -209,6 +209,4 @@ public class QueryRepository {
         else if(!StringUtils.hasText(status.toString())) return null;
         return post.status.eq(status);
     }
-
-
 }

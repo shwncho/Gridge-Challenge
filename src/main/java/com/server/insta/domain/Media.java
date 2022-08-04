@@ -18,7 +18,6 @@ public class Media extends BaseTimeEntity{
     @Column(name = "media_id")
     private Long id;
 
-
     @NotNull
     @Column(columnDefinition = "TEXT")
     private String media;

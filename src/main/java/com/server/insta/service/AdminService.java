@@ -252,6 +252,8 @@ public class AdminService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(()->new BusinessException(POST_NOT_EXIST));
 
+        List<Comment> comments = commentRepository.findAllByPost(post);
+
         return GetPostInfoResponseDto.builder()
                 .postId(post.getId())
                 .caption(post.getCaption())
@@ -263,6 +265,12 @@ public class AdminService {
                         .collect(Collectors.toList()))
                 .likeUsername(post.getLikes().stream()
                         .map(likes -> likes.getUser().getUsername())
+                        .collect(Collectors.toList()))
+                .commetsByPostInfoDtos(comments.stream()
+                        .map(comment -> CommetsByPostInfoDto.builder()
+                                .username(comment.getUser().getUsername())
+                                .content(comment.getContent())
+                                .build())
                         .collect(Collectors.toList()))
                 .reportCount(post.getReportCount())
                 .build();
