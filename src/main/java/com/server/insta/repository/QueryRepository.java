@@ -93,8 +93,6 @@ public class QueryRepository {
     public List<Post> findAllMyPost(User user, Long lastPostId, int size){
         return queryFactory.selectDistinct(post)
                 .from(post)
-                .join(media1).on(media1.post.eq(post))
-                .leftJoin(tag).on(tag.post.eq(post))
                 .where(ltPostId(lastPostId),
                         post.user.eq(user), post.status.eq(Status.ACTIVE))
                 .orderBy(post.id.desc())

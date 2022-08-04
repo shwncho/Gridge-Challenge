@@ -4,9 +4,11 @@ import com.server.insta.config.Entity.Status;
 import com.server.insta.config.response.ResponseService;
 import com.server.insta.config.response.result.CommonResult;
 import com.server.insta.config.response.result.MultipleResult;
+import com.server.insta.config.response.result.SingleResult;
 import com.server.insta.dto.response.GetReportsResponseDto;
 import com.server.insta.dto.response.GetSearchPostsResponseDto;
 import com.server.insta.dto.response.GetSearchUsersResponseDto;
+import com.server.insta.dto.response.GetUserInfoResponseDto;
 import com.server.insta.service.AdminService;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
@@ -158,6 +160,15 @@ public class AdminController {
             @Parameter(description = "페이징 회원 조회 사이즈") @RequestParam(value = "size") int pageSize
     ){
         return responseService.getMultipleResult(adminService.getSearchUsers(userDetails.getUsername(), name, username, joinedDate, status,pageIndex,pageSize));
+    }
+
+    @Operation(summary = "회원 상세 조회")
+    @GetMapping("/user/{username}")
+    public SingleResult<GetUserInfoResponseDto> getUserInfo(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable String username
+    ){
+        return responseService.getSingleResult(adminService.getUserInfo(userDetails.getUsername(),username));
     }
 
 

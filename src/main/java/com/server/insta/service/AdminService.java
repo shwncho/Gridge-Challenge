@@ -10,6 +10,7 @@ import com.server.insta.domain.User;
 import com.server.insta.dto.response.GetReportsResponseDto;
 import com.server.insta.dto.response.GetSearchPostsResponseDto;
 import com.server.insta.dto.response.GetSearchUsersResponseDto;
+import com.server.insta.dto.response.GetUserInfoResponseDto;
 import com.server.insta.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -191,6 +192,37 @@ public class AdminService {
                 .build()));
 
         return result;
+
+    }
+
+    @Transactional(readOnly = true)
+    public GetUserInfoResponseDto getUserInfo(String adminId, String username){
+        User admin = userRepository.findByUsernameAndStatus(adminId, Status.ACTIVE)
+                .orElseThrow(()->new BusinessException(USER_NOT_EXIST));
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(()->new BusinessException(USER_NOT_EXIST));
+
+        if(!admin.getAuthority().equals(Authority.ROLE_ADMIN)){
+            throw new BusinessException(USER_NOT_ADMIN);
+        }
+
+        return GetUserInfoResponseDto.builder()
+                .userId(user.getId())
+                .email(user.getEmail())
+                .username(user.getUsername())
+                .name(user.getName())
+                .phoneNumber(user.getPhoneNumber())
+                .profileImgUrl(user.getProfileImgUrl())
+                .introduce(user.getIntroduce())
+                .website(user.getWebsite())
+                .provider(user.getProvider())
+                .birth(user.getBirth())
+                .status(user.getStatus())
+                .authority(user.getAuthority())
+                .isPublic(user.isPublic)
+                .build();
+
 
     }
 
