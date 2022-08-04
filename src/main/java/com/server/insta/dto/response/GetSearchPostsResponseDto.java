@@ -12,8 +12,8 @@ import javax.persistence.Enumerated;
 @Builder
 public class GetSearchPostsResponseDto {
 
-    @Schema(description = "작성자 이름")
-    private String name;
+    @Schema(description = "게시물 번호")
+    private Long postId;
 
     @Schema(description = "작성자 아이디")
     private String username;

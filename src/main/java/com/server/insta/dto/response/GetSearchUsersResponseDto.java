@@ -14,6 +14,9 @@ import java.time.LocalDateTime;
 @Builder
 public class GetSearchUsersResponseDto {
 
+    @Schema(description = "회원 번호(유저 db id)")
+    private Long userId;
+
     @Schema(description = "회원 이름")
     private String name;
 

@@ -163,12 +163,12 @@ public class AdminController {
     }
 
     @Operation(summary = "회원 상세 조회")
-    @GetMapping("/user/{username}")
+    @GetMapping("/user/{userId}")
     public SingleResult<GetUserInfoResponseDto> getUserInfo(
             @AuthenticationPrincipal UserDetails userDetails,
-            @PathVariable String username
+            @PathVariable Long userId
     ){
-        return responseService.getSingleResult(adminService.getUserInfo(userDetails.getUsername(),username));
+        return responseService.getSingleResult(adminService.getUserInfo(userDetails.getUsername(),userId));
     }
 
     @Operation(summary = "회원 정지")
