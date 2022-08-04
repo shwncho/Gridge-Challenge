@@ -11,6 +11,7 @@ import com.server.insta.dto.response.GetFeedResponseDto;
 import com.server.insta.service.PostService;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -79,8 +80,8 @@ public class PostController {
     @GetMapping("/feed")
     public MultipleResult<GetFeedResponseDto> getFeed(
             @AuthenticationPrincipal UserDetails userDetails,
-            @RequestParam (required = false) Long lastPostId,
-            @RequestParam(value = "size",defaultValue = "10") int pageSize
+            @Parameter(description = "처음엔 null, 이후엔 조회된 피드의 가장 작은 postId값을 넣어주세요.") @RequestParam (required = false) Long lastPostId,
+            @Parameter(description = "페이징 피드 조회 페이지 사이즈, 기본값 10") @RequestParam(value = "size",defaultValue = "10") int pageSize
     ){
         return responseService.getMultipleResult(postService.getFeed(userDetails.getUsername(), lastPostId,pageSize));
     }

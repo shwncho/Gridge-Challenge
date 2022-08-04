@@ -62,8 +62,8 @@ public class CommentController {
     @GetMapping("/{postId}")
     public SingleResult<PostMapToCommentsDto> getComments(
             @PathVariable Long postId,
-            @RequestParam (required = false) Long lastCommentId,
-            @RequestParam(value = "size",defaultValue = "10") int pageSize
+            @Parameter(description = "처음엔 null, 이후엔 조회된 댓글의 가장 작은 commentId값을 넣어주세요.") @RequestParam (required = false) Long lastCommentId,
+            @Parameter(description = "페이징 댓글 조회 페이지 사이즈, 기본값 10") @RequestParam(value = "size",defaultValue = "10") int pageSize
     ){
         return responseService.getSingleResult(commentService.getComments(postId,lastCommentId,pageSize));
     }

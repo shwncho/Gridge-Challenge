@@ -41,7 +41,7 @@ public class AdminService {
     public static final String regexp = "^([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))$";
 
     @Transactional
-    public List<GetReportsResponseDto> getReports(String username){
+    public List<GetReportsResponseDto> getReports(String username, int pageIndex, int pageSize){
         User admin = userRepository.findByUsernameAndStatus(username, Status.ACTIVE)
                 .orElseThrow(()->new BusinessException(USER_NOT_EXIST));
 
@@ -49,7 +49,7 @@ public class AdminService {
             throw new BusinessException(USER_NOT_ADMIN);
         }
 
-        List<Report> reports = reportRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
+        List<Report> reports = queryRepository.findAllReports(pageIndex,pageSize);
 
         return reports.stream()
                 .map(r -> r.toReport(r.getCreatedAt()))
@@ -138,7 +138,8 @@ public class AdminService {
     }
 
     @Transactional(readOnly = true)
-    public List<GetSearchUsersResponseDto> getSearchUsers(String adminId, String name, String username, String joinedDate, Status status){
+    public List<GetSearchUsersResponseDto> getSearchUsers(String adminId, String name, String username, String joinedDate, Status status,
+                                                            int pageIndex, int pageSize){
         User admin = userRepository.findByUsernameAndStatus(adminId, Status.ACTIVE)
                 .orElseThrow(()->new BusinessException(USER_NOT_EXIST));
 
@@ -150,7 +151,7 @@ public class AdminService {
             throw new BusinessException(ADMIN_INVALID_DATE);
         }
 
-        List<User> users = queryRepository.findAllByUsers(name, username, joinedDate, status);
+        List<User> users = queryRepository.findAllByUsers(name, username, joinedDate, status, pageIndex, pageSize);
 
         List<GetSearchUsersResponseDto> result = new ArrayList<>();
         users.forEach(u->{

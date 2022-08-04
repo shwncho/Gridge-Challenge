@@ -9,6 +9,7 @@ import com.server.insta.dto.response.GetSearchUsersResponseDto;
 import com.server.insta.service.AdminService;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
@@ -39,9 +40,11 @@ public class AdminController {
     })
     @GetMapping("/report")
     public MultipleResult<GetReportsResponseDto> getReports(
-            @AuthenticationPrincipal UserDetails userDetails
+            @AuthenticationPrincipal UserDetails userDetails,
+            @Parameter(description = "페이징 회원 조회 인덱스, 0부터 시작합니다") @RequestParam int pageIndex,
+            @Parameter(description = "페이징 회원 조회 사이즈") @RequestParam(value = "size") int pageSize
     ){
-        return responseService.getMultipleResult(adminService.getReports(userDetails.getUsername()));
+        return responseService.getMultipleResult(adminService.getReports(userDetails.getUsername(),pageIndex, pageSize));
     }
 
     @Operation(summary = "신고삭제")
@@ -135,7 +138,8 @@ public class AdminController {
     }
 
     @Operation(summary = "회원조회", description = "날짜는 YYYY-MM-DD 이런 형식으로 보내주세요. "+
-    "Status 예시: ACTIVE,INACTIVE, BLOCK, DELETED")
+    "Status 예시: ACTIVE,INACTIVE, BLOCK, DELETED"+
+    "회원은 페이징을 통해 조회 가능합니다. 페이지 인덱스는 0부터 시작합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "SUCCESS", description = "응답 성공"),
             @ApiResponse(responseCode = "U001", description = "존재하지 않는 유저입니다."),
@@ -150,9 +154,11 @@ public class AdminController {
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String username,
             @RequestParam(required = false) String joinedDate,
-            @RequestParam(required = false) Status status
+            @RequestParam(required = false) Status status,
+            @Parameter(description = "페이징 회원 조회 인덱스, 0부터 시작합니다") @RequestParam int pageIndex,
+            @Parameter(description = "페이징 회원 조회 사이즈") @RequestParam(value = "size") int pageSize
     ){
-        return responseService.getMultipleResult(adminService.getSearchUsers(userDetails.getUsername(), name, username, joinedDate, status));
+        return responseService.getMultipleResult(adminService.getSearchUsers(userDetails.getUsername(), name, username, joinedDate, status,pageIndex,pageSize));
     }
 
 

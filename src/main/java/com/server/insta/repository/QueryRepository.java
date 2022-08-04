@@ -5,10 +5,7 @@ import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.server.insta.config.Entity.Authority;
 import com.server.insta.config.Entity.Status;
-import com.server.insta.domain.Comment;
-import com.server.insta.domain.Message;
-import com.server.insta.domain.Post;
-import com.server.insta.domain.User;
+import com.server.insta.domain.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
@@ -28,6 +25,7 @@ import static com.server.insta.domain.QMedia.media1;
 import static com.server.insta.domain.QTag.tag;
 import static com.server.insta.domain.QMessage.message;
 import static com.server.insta.domain.QUser.user;
+import static com.server.insta.domain.QReport.report;
 
 @Repository
 @RequiredArgsConstructor
@@ -129,8 +127,19 @@ public class QueryRepository {
         return comment.id.lt(commentId);
     }
 
+
+    //신고 조회 페이징(관리자)
+    public List<Report> findAllReports(int pageIndex, int pageSize){
+        return queryFactory.selectFrom(report)
+                .orderBy(report.createdAt.desc())
+                .offset(pageIndex)
+                .limit(pageSize)
+                .fetch();
+    }
+
+
     //다중 조건 쿼리
-    public List<User> findAllByUsers(String name, String username, String joinedDate, Status status){
+    public List<User> findAllByUsers(String name, String username, String joinedDate, Status status, int pageIndex, int pageSize){
         return queryFactory
                 .selectFrom(user)
                 .where(user.authority.eq(Authority.ROLE_USER),
@@ -138,6 +147,8 @@ public class QueryRepository {
                         eqUsername(username),
                         eqCreatedAt(joinedDate),
                         eqStatus(status))
+                .offset(pageIndex)
+                .limit(pageSize)
                 .fetch();
     }
 
