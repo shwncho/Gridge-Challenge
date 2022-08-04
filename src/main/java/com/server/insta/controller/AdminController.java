@@ -171,6 +171,16 @@ public class AdminController {
         return responseService.getSingleResult(adminService.getUserInfo(userDetails.getUsername(),username));
     }
 
+    @Operation(summary = "회원 정지")
+    @PatchMapping("/user/block/{userId}")
+    public CommonResult blockStatus(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Long userId
+    ){
+        adminService.blockStatus(userDetails.getUsername(), userId);
+        return responseService.getSuccessResult();
+    }
+
 
     @Operation(summary = "피드 조회", description = " 피드는 페이징을 통해 조회 가능합니다. 페이지 인덱스는 0부터 시작합니다.")
     @ApiResponses(value = {

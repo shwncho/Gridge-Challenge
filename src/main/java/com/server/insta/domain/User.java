@@ -85,6 +85,7 @@ public class User extends BaseTimeEntity {
         this.isPublic = false;
     }
 
+    public void blockStatus(){ this.status = Status.BLOCK; }
 
     public void deleteStatus(){
         this.status = Status.DELETED;

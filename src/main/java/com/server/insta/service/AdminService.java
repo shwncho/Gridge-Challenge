@@ -39,8 +39,8 @@ public class AdminService {
     public static final String regexp = "^([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))$";
 
     @Transactional
-    public List<GetReportsResponseDto> getReports(String username, int pageIndex, int pageSize){
-        User admin = userRepository.findByUsernameAndStatus(username, Status.ACTIVE)
+    public List<GetReportsResponseDto> getReports(String adminId, int pageIndex, int pageSize){
+        User admin = userRepository.findByUsernameAndStatus(adminId, Status.ACTIVE)
                 .orElseThrow(()->new BusinessException(USER_NOT_EXIST));
 
         if(!admin.getAuthority().equals(Authority.ROLE_ADMIN)){
@@ -55,8 +55,8 @@ public class AdminService {
     }
 
     @Transactional
-    public void deleteReport(String username, Long id){
-        User admin = userRepository.findByUsernameAndStatus(username, Status.ACTIVE)
+    public void deleteReport(String adminId, Long id){
+        User admin = userRepository.findByUsernameAndStatus(adminId, Status.ACTIVE)
                 .orElseThrow(()->new BusinessException(USER_NOT_EXIST));
 
         if(!admin.getAuthority().equals(Authority.ROLE_ADMIN)){
@@ -72,8 +72,8 @@ public class AdminService {
     }
 
     @Transactional
-    public void deletePost(String username, Long id){
-        User admin = userRepository.findByUsernameAndStatus(username, Status.ACTIVE)
+    public void deletePost(String adminId, Long id){
+        User admin = userRepository.findByUsernameAndStatus(adminId, Status.ACTIVE)
                 .orElseThrow(()->new BusinessException(USER_NOT_EXIST));
 
         if(!admin.getAuthority().equals(Authority.ROLE_ADMIN)){
@@ -88,8 +88,8 @@ public class AdminService {
     }
 
     @Transactional
-    public void restorePost(String username, Long id){
-        User admin = userRepository.findByUsernameAndStatus(username, Status.ACTIVE)
+    public void restorePost(String adminId, Long id){
+        User admin = userRepository.findByUsernameAndStatus(adminId, Status.ACTIVE)
                 .orElseThrow(()->new BusinessException(USER_NOT_EXIST));
 
         if(!admin.getAuthority().equals(Authority.ROLE_ADMIN)){
@@ -104,8 +104,8 @@ public class AdminService {
     }
 
     @Transactional
-    public void deleteComment(String username, Long id){
-        User admin = userRepository.findByUsernameAndStatus(username, Status.ACTIVE)
+    public void deleteComment(String adminId, Long id){
+        User admin = userRepository.findByUsernameAndStatus(adminId, Status.ACTIVE)
                 .orElseThrow(()->new BusinessException(USER_NOT_EXIST));
 
         if(!admin.getAuthority().equals(Authority.ROLE_ADMIN)){
@@ -120,8 +120,8 @@ public class AdminService {
     }
 
     @Transactional
-    public void restoreComment(String username, Long id){
-        User admin = userRepository.findByUsernameAndStatus(username, Status.ACTIVE)
+    public void restoreComment(String adminId, Long id){
+        User admin = userRepository.findByUsernameAndStatus(adminId, Status.ACTIVE)
                 .orElseThrow(()->new BusinessException(USER_NOT_EXIST));
 
         if(!admin.getAuthority().equals(Authority.ROLE_ADMIN)){
@@ -222,6 +222,23 @@ public class AdminService {
                 .authority(user.getAuthority())
                 .isPublic(user.isPublic)
                 .build();
+
+
+    }
+
+    @Transactional
+    public void blockStatus(String adminId, Long userId){
+        User admin = userRepository.findByUsernameAndStatus(adminId, Status.ACTIVE)
+                .orElseThrow(()->new BusinessException(USER_NOT_EXIST));
+
+        User user = userRepository.findByIdAndStatus(userId, Status.ACTIVE)
+                .orElseThrow(()->new BusinessException(USER_NOT_EXIST));
+
+        if(!admin.getAuthority().equals(Authority.ROLE_ADMIN)){
+            throw new BusinessException(USER_NOT_ADMIN);
+        }
+
+        user.blockStatus();
 
 
     }
