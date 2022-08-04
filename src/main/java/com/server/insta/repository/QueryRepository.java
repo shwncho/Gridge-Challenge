@@ -138,7 +138,7 @@ public class QueryRepository {
     }
 
 
-    //다중 조건 쿼리
+    //회원 검색 다중 조건
     public List<User> findAllByUsers(String name, String username, String joinedDate, Status status, int pageIndex, int pageSize){
         return queryFactory
                 .selectFrom(user)
@@ -147,7 +147,8 @@ public class QueryRepository {
                         eqUsername(username),
                         eqCreatedAt(joinedDate),
                         eqStatus(status))
-                .offset(pageIndex)
+                .orderBy(user.createdAt.desc())
+                .offset(pageIndex * pageSize)
                 .limit(pageSize)
                 .fetch();
     }
@@ -174,6 +175,41 @@ public class QueryRepository {
         if(status==null)    return null;
         else if(!StringUtils.hasText(status.toString())) return null;
         return user.status.eq(status);
+    }
+
+    //피드 검색 다중 조건
+    public List<Post> findAllByPosts(String username, String createdDate, Status status, int pageIndex, int pageSize){
+        return queryFactory
+                .selectDistinct(post)
+                .from(post)
+                .join(media1).on(media1.post.eq(post))
+                .leftJoin(tag).on(tag.post.eq(post))
+                .where( eqUsernameByPost(username),
+                        eqCreatedAtByPost(createdDate),
+                        eqStatusByPost(status))
+                .orderBy(post.createdAt.desc())
+                .offset(pageIndex * pageSize)
+                .limit(pageSize)
+                .fetch();
+    }
+
+    private BooleanExpression eqUsernameByPost(String username){
+        if(!StringUtils.hasText(username))  return null;
+        return post.user.username.eq(username);
+    }
+
+    private BooleanExpression eqCreatedAtByPost(String createdDate) {
+        if (!StringUtils.hasText(createdDate)) return null;
+        else {
+            LocalDate date = LocalDate.parse(createdDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            return post.createdAt.between(date.atStartOfDay(), LocalDateTime.of(date, LocalTime.MAX));
+
+        }
+    }
+    private BooleanExpression eqStatusByPost(Status status){
+        if(status==null)    return null;
+        else if(!StringUtils.hasText(status.toString())) return null;
+        return post.status.eq(status);
     }
 
 

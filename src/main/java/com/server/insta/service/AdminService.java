@@ -8,19 +8,16 @@ import com.server.insta.domain.Post;
 import com.server.insta.domain.Report;
 import com.server.insta.domain.User;
 import com.server.insta.dto.response.GetReportsResponseDto;
+import com.server.insta.dto.response.GetSearchPostsResponseDto;
 import com.server.insta.dto.response.GetSearchUsersResponseDto;
 import com.server.insta.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -154,15 +151,44 @@ public class AdminService {
         List<User> users = queryRepository.findAllByUsers(name, username, joinedDate, status, pageIndex, pageSize);
 
         List<GetSearchUsersResponseDto> result = new ArrayList<>();
-        users.forEach(u->{
-            result.add(GetSearchUsersResponseDto.builder()
+        users.forEach(u-> result.add(GetSearchUsersResponseDto.builder()
                     .name(u.getName())
                     .username(u.getUsername())
                     .createdAt(u.getCreatedAt().format(DateTimeFormatter.ofPattern("yy.MM.dd")))
                     .status(u.getStatus())
-                    .build());
-        });
+                    .build())
+        );
 
+
+        return result;
+
+    }
+
+    @Transactional(readOnly = true)
+    public List<GetSearchPostsResponseDto> getSearchPosts(String adminId, String username, String createdDate, Status status,
+                                                          int pageIndex, int pageSize){
+
+        User admin = userRepository.findByUsernameAndStatus(adminId, Status.ACTIVE)
+                .orElseThrow(()->new BusinessException(USER_NOT_EXIST));
+
+        if(!admin.getAuthority().equals(Authority.ROLE_ADMIN)){
+            throw new BusinessException(USER_NOT_ADMIN);
+        }
+
+        if(createdDate!=null && !Pattern.matches(regexp, createdDate)){
+            throw new BusinessException(ADMIN_INVALID_DATE);
+        }
+
+        List<Post> posts = queryRepository.findAllByPosts(username, createdDate, status, pageIndex, pageSize);
+
+        List<GetSearchPostsResponseDto> result = new ArrayList<>();
+
+        posts.forEach(p -> result.add(GetSearchPostsResponseDto.builder()
+                .name(p.getUser().getName())
+                .username(p.getUser().getUsername())
+                .createdAt(p.getCreatedAt().format(DateTimeFormatter.ofPattern("yy.MM.dd")))
+                .status(p.getStatus())
+                .build()));
 
         return result;
 

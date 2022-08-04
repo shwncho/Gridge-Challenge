@@ -5,6 +5,7 @@ import com.server.insta.config.response.ResponseService;
 import com.server.insta.config.response.result.CommonResult;
 import com.server.insta.config.response.result.MultipleResult;
 import com.server.insta.dto.response.GetReportsResponseDto;
+import com.server.insta.dto.response.GetSearchPostsResponseDto;
 import com.server.insta.dto.response.GetSearchUsersResponseDto;
 import com.server.insta.service.AdminService;
 import io.swagger.annotations.Api;
@@ -30,7 +31,7 @@ public class AdminController {
     private final AdminService adminService;
 
 
-    @Operation(summary = "신고조회")
+    @Operation(summary = "신고조회", description = "신고는 페이징을 통해 조회 가능합니다. 페이지 인덱스는 0부터 시작합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "SUCCESS", description = "응답 성공"),
             @ApiResponse(responseCode = "U001", description = "존재하지 않는 유저입니다."),
@@ -137,9 +138,7 @@ public class AdminController {
         return responseService.getSuccessResult();
     }
 
-    @Operation(summary = "회원조회", description = "날짜는 YYYY-MM-DD 이런 형식으로 보내주세요. "+
-    "Status 예시: ACTIVE,INACTIVE, BLOCK, DELETED"+
-    "회원은 페이징을 통해 조회 가능합니다. 페이지 인덱스는 0부터 시작합니다.")
+    @Operation(summary = "회원조회", description = " 회원은 페이징을 통해 조회 가능합니다. 페이지 인덱스는 0부터 시작합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "SUCCESS", description = "응답 성공"),
             @ApiResponse(responseCode = "U001", description = "존재하지 않는 유저입니다."),
@@ -153,7 +152,7 @@ public class AdminController {
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String username,
-            @RequestParam(required = false) String joinedDate,
+            @Parameter(description = "날짜는 YYYY-MM-DD 이런 형식으로 보내주세요.") @RequestParam(required = false) String joinedDate,
             @RequestParam(required = false) Status status,
             @Parameter(description = "페이징 회원 조회 인덱스, 0부터 시작합니다") @RequestParam int pageIndex,
             @Parameter(description = "페이징 회원 조회 사이즈") @RequestParam(value = "size") int pageSize
@@ -162,4 +161,24 @@ public class AdminController {
     }
 
 
+    @Operation(summary = "피드 조회", description = " 피드는 페이징을 통해 조회 가능합니다. 페이지 인덱스는 0부터 시작합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "SUCCESS", description = "응답 성공"),
+            @ApiResponse(responseCode = "U001", description = "존재하지 않는 유저입니다."),
+            @ApiResponse(responseCode = "U008", description = "관리자 계정이 아닙니다."),
+            @ApiResponse(responseCode = "ADM001", description = "날짜 형식이 올바르지 않습니다."),
+            @ApiResponse(responseCode = "DB", description = "데이터베이스 오류입니다."),
+            @ApiResponse(responseCode = "SERVER", description = "서버와의 연결에 실패했습니다.")
+    })
+    @GetMapping("/posts")
+    public MultipleResult<GetSearchPostsResponseDto> getSearchPosts(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestParam(required = false) String username,
+            @Parameter(description = "날짜는 YYYY-MM-DD 이런 형식으로 보내주세요.") @RequestParam(required = false) String createdDate,
+            @RequestParam(required = false) Status status,
+            @Parameter(description = "페이징 피드 조회 인덱스, 0부터 시작합니다") @RequestParam int pageIndex,
+            @Parameter(description = "페이징 피드 조회 사이즈") @RequestParam(value = "size") int pageSize
+    ){
+        return responseService.getMultipleResult(adminService.getSearchPosts(userDetails.getUsername(),username,createdDate,status,pageIndex,pageSize));
+    }
 }
