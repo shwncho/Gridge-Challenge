@@ -15,6 +15,9 @@ public class GetSearchPostsResponseDto {
     @Schema(description = "게시물 번호")
     private Long postId;
 
+    @Schema(description = "게시물 설명")
+    private String caption;
+
     @Schema(description = "작성자 아이디")
     private String username;
 

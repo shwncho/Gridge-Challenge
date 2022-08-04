@@ -3,19 +3,14 @@ package com.server.insta.service;
 import com.server.insta.config.Entity.Authority;
 import com.server.insta.config.Entity.Status;
 import com.server.insta.config.exception.BusinessException;
-import com.server.insta.domain.Comment;
-import com.server.insta.domain.Post;
-import com.server.insta.domain.Report;
-import com.server.insta.domain.User;
-import com.server.insta.dto.response.GetReportsResponseDto;
-import com.server.insta.dto.response.GetSearchPostsResponseDto;
-import com.server.insta.dto.response.GetSearchUsersResponseDto;
-import com.server.insta.dto.response.GetUserInfoResponseDto;
+import com.server.insta.domain.*;
+import com.server.insta.dto.response.*;
 import com.server.insta.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -235,12 +230,42 @@ public class AdminService {
 
         posts.forEach(p -> result.add(GetSearchPostsResponseDto.builder()
                 .postId(p.getId())
+                .caption(p.getCaption())
                 .username(p.getUser().getUsername())
                 .createdAt(p.getCreatedAt().format(DateTimeFormatter.ofPattern("yy.MM.dd")))
                 .status(p.getStatus())
                 .build()));
 
         return result;
+
+    }
+
+    @Transactional(readOnly = true)
+    public GetPostInfoResponseDto getPostInfo(String adminId, Long postId){
+        User admin = userRepository.findByUsernameAndStatus(adminId, Status.ACTIVE)
+                .orElseThrow(()->new BusinessException(USER_NOT_EXIST));
+
+        if(!admin.getAuthority().equals(Authority.ROLE_ADMIN)){
+            throw new BusinessException(USER_NOT_ADMIN);
+        }
+
+        Post post = postRepository.findById(postId)
+                .orElseThrow(()->new BusinessException(POST_NOT_EXIST));
+
+        return GetPostInfoResponseDto.builder()
+                .postId(post.getId())
+                .caption(post.getCaption())
+                .medias(post.getMedias().stream()
+                        .map(Media::getMedia)
+                        .collect(Collectors.toList()))
+                .tags(post.getTags().stream()
+                        .map(Tag::getContent)
+                        .collect(Collectors.toList()))
+                .likeUsername(post.getLikes().stream()
+                        .map(likes -> likes.getUser().getUsername())
+                        .collect(Collectors.toList()))
+                .reportCount(post.getReportCount())
+                .build();
 
     }
 

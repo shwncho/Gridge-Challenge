@@ -5,10 +5,7 @@ import com.server.insta.config.response.ResponseService;
 import com.server.insta.config.response.result.CommonResult;
 import com.server.insta.config.response.result.MultipleResult;
 import com.server.insta.config.response.result.SingleResult;
-import com.server.insta.dto.response.GetReportsResponseDto;
-import com.server.insta.dto.response.GetSearchPostsResponseDto;
-import com.server.insta.dto.response.GetSearchUsersResponseDto;
-import com.server.insta.dto.response.GetUserInfoResponseDto;
+import com.server.insta.dto.response.*;
 import com.server.insta.service.AdminService;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
@@ -202,4 +199,14 @@ public class AdminController {
     ){
         return responseService.getMultipleResult(adminService.getSearchPosts(userDetails.getUsername(),username,createdDate,status,pageIndex,pageSize));
     }
+
+    @Operation(summary = "피드 상세 조회")
+    @GetMapping("/post/{postId}")
+    public SingleResult<GetPostInfoResponseDto> getPostInfo(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Long postId
+    ){
+        return responseService.getSingleResult(adminService.getPostInfo(userDetails.getUsername(),postId));
+    }
+
 }

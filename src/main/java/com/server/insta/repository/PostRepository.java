@@ -13,6 +13,7 @@ import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Post,Long> {
     Optional<Post> findByIdAndStatus(Long id, Status status);
+    Optional<Post> findById(Long id);
 
     List<Post> findAllByUser(User user);
 
