@@ -117,13 +117,7 @@ public class UserService {
             throw new BusinessException(USER_EXIST_USERNAME);
         }
 
-        userRepository.save(User.builder()
-                .profileImgUrl(user.getProfileImgUrl())
-                .name(user.getName())
-                .username(user.getUsername())
-                .website(user.getWebsite())
-                .introduce(user.getIntroduce())
-                .build());
+        user.changeProfile(dto.getProfileImgUrl(), dto.getName(), dto.getUsername(), dto.getWebsite(), dto.getIntroduce());
 
     }
 

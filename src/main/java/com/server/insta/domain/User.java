@@ -73,6 +73,14 @@ public class User extends BaseTimeEntity {
     //공개/비공개 계정
     public boolean isPublic;
 
+    public void changeProfile(String profileImgUrl, String name, String username, String website, String introduce){
+        this.profileImgUrl = profileImgUrl;
+        this.name = name;
+        this.username = username;
+        this.website = website;
+        this.introduce = introduce;
+    }
+
     public void changePassword(String password){
         this.password = password;
     }
