@@ -193,7 +193,7 @@ public class AdminService {
     }
 
     @Transactional
-    public void blockStatus(String adminId, Long userId){
+    public void blockUser(String adminId, Long userId){
         User admin = userRepository.findByUsernameAndStatus(adminId, Status.ACTIVE)
                 .orElseThrow(()->new BusinessException(USER_NOT_EXIST));
 
@@ -277,6 +277,25 @@ public class AdminService {
 
     }
 
+    @Transactional
+    public void deleteFeed(String adminId, Long postId){
+        User admin = userRepository.findByUsernameAndStatus(adminId, Status.ACTIVE)
+                .orElseThrow(()->new BusinessException(USER_NOT_EXIST));
+
+        if(!admin.getAuthority().equals(Authority.ROLE_ADMIN)){
+            throw new BusinessException(USER_NOT_ADMIN);
+        }
+
+        Post post = postRepository.findById(postId)
+                .orElseThrow(()->new BusinessException(POST_NOT_EXIST));
+
+        List<Comment> comments = commentRepository.findAllByPost(post);
+
+        post.deletePost();
+        comments.forEach(Comment::deleteComment);
+
+
+    }
 
 
 

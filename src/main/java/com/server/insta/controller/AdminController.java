@@ -169,12 +169,12 @@ public class AdminController {
     }
 
     @Operation(summary = "회원 정지")
-    @PatchMapping("/user/block/{userId}")
-    public CommonResult blockStatus(
+    @PatchMapping("/user/{userId}")
+    public CommonResult blockUser(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long userId
     ){
-        adminService.blockStatus(userDetails.getUsername(), userId);
+        adminService.blockUser(userDetails.getUsername(), userId);
         return responseService.getSuccessResult();
     }
 
@@ -209,5 +209,13 @@ public class AdminController {
         return responseService.getSingleResult(adminService.getPostInfo(userDetails.getUsername(),postId));
     }
 
-
+    @Operation(summary = "피드 삭제")
+    @PatchMapping("/post/{postId}")
+    public CommonResult deleteFeed(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Long postId
+    ){
+        adminService.deleteFeed(userDetails.getUsername(), postId);
+        return responseService.getSuccessResult();
+    }
 }
