@@ -19,6 +19,12 @@ public class GetUserPageDto {
     @Schema(description = "유저 실명")
     private String name;
 
+    @Schema(description = "유저 소개")
+    private String introduce;
+
+    @Schema(description = "유저 웹사이트")
+    private String website;
+
     @Schema(description = "게시물 개수")
     private int postCount;
 

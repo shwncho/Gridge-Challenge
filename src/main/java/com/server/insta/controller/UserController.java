@@ -64,7 +64,7 @@ public class UserController {
         return responseService.getSuccessResult();
     }
 
-    @Operation(summary = "프로필 수정")
+    @Operation(summary = "프로필 수정", description = "Username을 변경할경우 Spring security 내부에 저장된 Username값이 달라지기 때문에 바뀐 username으로 재로그인을 해야합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "SUCCESS", description = "응답 성공"),
             @ApiResponse(responseCode = "U001", description = "존재하지 않는 유저입니다."),

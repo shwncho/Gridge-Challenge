@@ -25,6 +25,8 @@ public enum BusinessExceptionStatus {
     USER_NOT_CHANGE_PASSWORD("U007","소셜 로그인 유저는 비밀번호를 변경할 수 없습니다."),
     USER_NOT_ADMIN("U008","관리자 계정이 아닙니다."),
     USER_AGREE_PRIVACY("U009","개인정보처리동의를 다시 받아야 합니다."),
+    USER_NOT_CHANGE_NAME("U010","14일 이내에 이미 이름을 2번 변경했습니다."),
+    USER_NOT_CHANGE_USERNAME("U011","14일 이내에 이미 사용자 이름을 2번 변경했습니다."),
 
     //Post
     POST_NOT_EXIST("P001","존재하지 않는 게시물입니다."),

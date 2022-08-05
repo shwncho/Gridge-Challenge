@@ -70,6 +70,16 @@ public class User extends BaseTimeEntity {
     //개인정보동의 1년주기 체크용도
     private LocalDateTime scheduler;
 
+    // 이름 14일 주기 체크 용도
+    private LocalDateTime updateNameDate;
+    // 사용자 이름 14일 주기 체크 용도
+    private LocalDateTime updateUsernameDate;
+
+    private int nameCount;
+
+    private int usernameCount;
+
+
     //공개/비공개 계정
     public boolean isPublic;
 
@@ -79,6 +89,18 @@ public class User extends BaseTimeEntity {
         this.username = username;
         this.website = website;
         this.introduce = introduce;
+    }
+
+    public void changeUpdateNameDate(){
+        this.updateNameDate = LocalDateTime.now();
+        this.nameCount=1;
+    }
+    public void addNameCount(){ this.nameCount++;}
+    public void addUsernameCount(){ this.usernameCount++;}
+
+    public void changeUpdateUsernameDate(){
+        this.updateUsernameDate = LocalDateTime.now();
+        this.usernameCount=1;
     }
 
     public void changePassword(String password){

@@ -88,6 +88,8 @@ public class UserService {
                 .username(user.getUsername())
                 .profileImgUrl(user.getProfileImgUrl())
                 .name(user.getName())
+                .introduce(user.getIntroduce())
+                .website(user.getWebsite())
                 .postCount(postCount)
                 .followerCount(followerCount)
                 .followingCount(followingCount)
@@ -113,9 +115,38 @@ public class UserService {
         User user = userRepository.findByUsernameAndStatus(username, Status.ACTIVE)
                 .orElseThrow(()->new BusinessException(USER_NOT_EXIST));
 
-        if(userRepository.existsByUsername(dto.getUsername())){
+        //본인의 사용자 이름이 아니고, 다른 유저가 사용자 이름을 사용하고 있을 때
+        if(!user.getUsername().equals(dto.getUsername()) && userRepository.existsByUsername(dto.getUsername())){
             throw new BusinessException(USER_EXIST_USERNAME);
         }
+
+        // 이름을 변경하려 할 때
+        if(!dto.getName().equals(user.getName())){
+            //이름을 변경한적이 없거나 or 이전 변경기간이 14일이 넘었을 때
+            if(user.getUpdateNameDate()==null || ChronoUnit.DAYS.between(user.getUpdateNameDate(), LocalDateTime.now())>14){
+                user.changeUpdateNameDate();
+            }
+            //변경기간이 14일 이내 일 때
+            else{
+                if(user.getNameCount()==2)   throw new BusinessException(USER_NOT_CHANGE_NAME);
+                else    user.addNameCount();
+            }
+        }
+
+        // 사용자 이름을 변경하려 할 때
+        if(!dto.getUsername().equals(user.getUsername())){
+            // 사용자 이름을 변경한적이 없거나 or 이전 변경기간이 14일이 넘었을 때
+            if(user.getUpdateUsernameDate()==null || ChronoUnit.DAYS.between(user.getUpdateUsernameDate(), LocalDateTime.now())>14){
+                user.changeUpdateUsernameDate();
+            }
+            //변경기간이 14일 이내 일 때
+            else{
+                if(user.getUsernameCount()==2)   throw new BusinessException(USER_NOT_CHANGE_USERNAME);
+                else    user.addUsernameCount();
+            }
+        }
+
+
 
         user.changeProfile(dto.getProfileImgUrl(), dto.getName(), dto.getUsername(), dto.getWebsite(), dto.getIntroduce());
 
