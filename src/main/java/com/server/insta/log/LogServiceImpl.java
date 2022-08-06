@@ -38,7 +38,14 @@ public class LogServiceImpl implements LogService{
     }
 
     @Override
-    public void deleteLog(){
+    public void deleteLog(String adminId){
+        User admin = userRepository.findByUsernameAndStatus(adminId, Status.ACTIVE)
+                .orElseThrow(()->new BusinessException(USER_NOT_EXIST));
+
+        if(!admin.getAuthority().equals(Authority.ROLE_ADMIN)){
+            throw new BusinessException(USER_NOT_ADMIN);
+        }
+
         logsRepository.deleteAll();
     }
 

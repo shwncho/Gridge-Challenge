@@ -4,5 +4,5 @@ public interface LogService {
 
     void add(String text);
 
-    void deleteLog();
+    void deleteLog(String adminId);
 }

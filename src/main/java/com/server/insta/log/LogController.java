@@ -1,6 +1,7 @@
 package com.server.insta.log;
 
 import com.server.insta.config.response.ResponseService;
+import com.server.insta.config.response.result.CommonResult;
 import com.server.insta.config.response.result.MultipleResult;
 import com.server.insta.dto.response.GetLogsResponseDto;
 import io.swagger.annotations.Api;
@@ -9,10 +10,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Api(tags="Log API")
 @RestController
@@ -33,5 +31,14 @@ public class LogController {
             @Parameter(description = "페이징 피드 조회 사이즈") @RequestParam(value = "size") int pageSize
     ){
         return responseService.getMultipleResult(logService.getLogs(userDetails.getUsername(), startDate, endDate, pageIndex, pageSize));
+    }
+
+    @Operation(summary = "로그 전체 삭제", description = "DB에 저장되어있는 로그를 전부 지우는 용도입니다. 주의해서 사용해주세요.")
+    @DeleteMapping("")
+    public CommonResult deleteLogs(
+            @AuthenticationPrincipal UserDetails userDetails
+    ){
+        logService.deleteLog(userDetails.getUsername());
+        return responseService.getSuccessResult();
     }
 }
