@@ -71,11 +71,11 @@ public class ExceptionAdvisor {
         return responseService.getFailResult(DATABASE_ERROR);
     }
 
-    @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public CommonResult commonException() {
-        return responseService.getFailResult(SERVER_ERROR);
-    }
+//    @ExceptionHandler(Exception.class)
+//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+//    public CommonResult commonException() {
+//        return responseService.getFailResult(SERVER_ERROR);
+//    }
 
 
 

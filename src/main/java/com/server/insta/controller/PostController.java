@@ -49,7 +49,8 @@ public class PostController {
             @RequestBody @Valid CreatePostRequestDto dto
 
     ){
-        if(dto.getMedias().isEmpty())   return responseService.getFailResult("VALID","이미지를 최소 1개이상 업로드 해야합니다.");
+        if(dto.getMedias().isEmpty())   return responseService.getFailResult("VALID","이미지 or 동영상을 최소 1개이상 업로드 해야합니다.");
+        else if(dto.getMedias().size()>10)  return responseService.getFailResult("VALID", "이미지 or 동영상은 최대 10개까지 업로드 가능합니다.");
         postService.createPost(userDetails.getUsername(), dto);
         return responseService.getSuccessResult();
     }
@@ -121,7 +122,8 @@ public class PostController {
             @PathVariable Long postId,
             @RequestBody @Valid UpdatePostRequestDto dto
             ){
-        if(dto.getMedias().isEmpty())   return responseService.getFailResult("VALID","이미지를 최소 1개이상 업로드 해야합니다.");
+        if(dto.getMedias().isEmpty())   return responseService.getFailResult("VALID","이미지 or 동영상을 최소 1개이상 업로드 해야합니다.");
+        else if(dto.getMedias().size()>10)  return responseService.getFailResult("VALID", "이미지 or 동영상은 최대 10개까지 업로드 가능합니다.");
         postService.updatePost(userDetails.getUsername(), postId, dto);
         return responseService.getSuccessResult();
     }

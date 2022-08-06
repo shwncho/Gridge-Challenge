@@ -6,6 +6,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.server.insta.config.Entity.Authority;
 import com.server.insta.config.Entity.Status;
 import com.server.insta.domain.*;
+import com.server.insta.log.Logs;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
@@ -26,6 +27,7 @@ import static com.server.insta.domain.QTag.tag;
 import static com.server.insta.domain.QMessage.message;
 import static com.server.insta.domain.QUser.user;
 import static com.server.insta.domain.QReport.report;
+import static com.server.insta.log.QLogs.logs;
 
 @Repository
 @RequiredArgsConstructor
@@ -138,6 +140,25 @@ public class QueryRepository {
                 .offset(pageIndex * pageSize)
                 .limit(pageSize)
                 .fetch();
+    }
+
+    public List<Logs> findAllLog(String startDate, String endDate, int pageIndex, int pageSize){
+        return queryFactory.selectFrom(logs)
+                .where(eqCreatedAtByLog(startDate, endDate))
+                .orderBy(logs.createdAt.desc())
+                .offset(pageIndex * pageSize)
+                .limit(pageSize)
+                .fetch();
+    }
+
+    private BooleanExpression eqCreatedAtByLog(String startDate, String endDate){
+        if(!StringUtils.hasText(startDate) && !StringUtils.hasText(endDate))    return null;
+        else{
+            LocalDate start = LocalDate.parse(startDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            LocalDate end = LocalDate.parse(endDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+            return logs.createdAt.between(start.atStartOfDay(), LocalDateTime.of(end,LocalTime.MAX));
+        }
     }
 
     private BooleanExpression ltPostId(Long postId){
