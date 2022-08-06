@@ -46,7 +46,12 @@ public class AdminService {
         List<Report> reports = queryRepository.findAllReports(pageIndex,pageSize);
 
         return reports.stream()
-                .map(r -> r.toReport(r.getCreatedAt()))
+                .map(r -> GetReportsResponseDto.builder()
+                        .postId(r.getPost().getId())
+                        .commentId(r.getComment()!=null ? r.getComment().getId() : null)
+                        .reason(r.getReason())
+                        .createdAt(r.getCreatedAt())
+                        .build())
                 .collect(Collectors.toList());
     }
 

@@ -147,34 +147,4 @@ public class User extends BaseTimeEntity {
         this.authority = Authority.ROLE_USER;
         this.scheduler = scheduler;
     }
-
-
-
-    public GetFollowingResponseDto toFollowing(){
-        return GetFollowingResponseDto.builder()
-                .userId(id)
-                .username(username)
-                .profileImgUrl(profileImgUrl)
-                .introduce(introduce)
-                .build();
-    }
-
-    public GetFollowerResponseDto toFollower(){
-        return GetFollowerResponseDto.builder()
-                .userId(id)
-                .username(username)
-                .profileImgUrl(profileImgUrl)
-                .introduce(introduce)
-                .build();
-    }
-
-    public GetLikeUsersResponseDto toLikeUsers(){
-        return GetLikeUsersResponseDto.builder()
-                .userId(id)
-                .username(username)
-                .profileImgUrl(profileImgUrl)
-                .introduce(introduce)
-                .build();
-    }
-
 }

@@ -67,8 +67,15 @@ public class CommentService {
         Map<Long, GetCommentsResponseDto> map = new HashMap<>();
         comments.forEach(c -> {
             int likeCount = likesRepository.countByComment(c);
-            GetCommentsResponseDto dto = c.toCommentsDto(likeCount);
-            dto.setCreatedComment(calculateCreatedTime(c.getCreatedAt()));
+            GetCommentsResponseDto dto = GetCommentsResponseDto.builder()
+                    .commentId(c.getId())
+                    .content(c.getContent())
+                    .userId(c.getUser().getId())
+                    .username(c.getUser().getUsername())
+                    .profileImgUrl(c.getUser().getProfileImgUrl())
+                    .likeCount(likeCount)
+                    .createdComment(calculateCreatedTime(c.getCreatedAt()))
+                    .build();
             map.put(dto.getCommentId(), dto);
             if(c.getParent() != null)   map.get(c.getParent().getId()).getChildren().add(dto);
             else    commentList.add(dto);

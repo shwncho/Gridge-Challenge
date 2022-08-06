@@ -126,7 +126,12 @@ public class FollowService {
         return followRepository.findAllByFromUser(fromUser)
                 .stream().map(Follow::getToUser)
                 .collect(Collectors.toList())
-                .stream().map(User::toFollowing)
+                .stream().map(u->GetFollowingResponseDto.builder()
+                .userId(u.getId())
+                .username(u.getUsername())
+                .profileImgUrl(u.getProfileImgUrl())
+                .introduce(u.getIntroduce())
+                .build())
                 .collect(Collectors.toList());
     }
 
@@ -139,7 +144,12 @@ public class FollowService {
         return followRepository.findAllByToUser(toUser)
                 .stream().map(Follow::getFromUser)
                 .collect(Collectors.toList())
-                .stream().map(User::toFollower)
+                .stream().map(u->GetFollowerResponseDto.builder()
+                        .userId(u.getId())
+                        .username(u.getUsername())
+                        .profileImgUrl(u.getProfileImgUrl())
+                        .introduce(u.getIntroduce())
+                        .build())
                 .collect(Collectors.toList());
     }
 }

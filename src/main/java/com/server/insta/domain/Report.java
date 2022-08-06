@@ -46,14 +46,4 @@ public class Report extends BaseTimeEntity {
         this.status = Status.ACTIVE;
     }
 
-    public GetReportsResponseDto toReport(LocalDateTime createdAt){
-        return GetReportsResponseDto.builder()
-                .postId(post.getId())
-                .commentId(comment!=null ? comment.getId() : null)
-                .reason(reason)
-                .createdAt(createdAt)
-                .build();
-    }
-
-
 }

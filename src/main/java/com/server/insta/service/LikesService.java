@@ -103,7 +103,12 @@ public class LikesService {
                 .map(Likes::getUser).collect(Collectors.toList());
 
         return users.stream()
-                .map(User::toLikeUsers)
+                .map(u->GetLikeUsersResponseDto.builder()
+                        .userId(u.getId())
+                        .username(u.getUsername())
+                        .profileImgUrl(u.getProfileImgUrl())
+                        .introduce(u.getIntroduce())
+                        .build())
                 .collect(Collectors.toList());
 
 

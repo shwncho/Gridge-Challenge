@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,14 +35,16 @@ public class GetCommentsResponseDto {
     @Schema(description = "댓글 좋아요 개수")
     private int likeCount;
 
+
     @Builder
-    public GetCommentsResponseDto(Long commentId, String content, Long userId, String username, String profileImgUrl, int likeCount){
+    public GetCommentsResponseDto(Long commentId, String content, Long userId, String username, String profileImgUrl, int likeCount, String createdComment){
         this.commentId = commentId;
         this.content = content;
         this.userId = userId;
         this.username = username;
         this.profileImgUrl = profileImgUrl;
         this.likeCount = likeCount;
+        this.createdComment =createdComment;
     }
 
 
