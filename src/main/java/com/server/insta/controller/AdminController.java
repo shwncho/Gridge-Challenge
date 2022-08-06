@@ -160,6 +160,13 @@ public class AdminController {
     }
 
     @Operation(summary = "회원 상세 조회")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "SUCCESS", description = "응답 성공"),
+            @ApiResponse(responseCode = "DB", description = "데이터베이스 오류입니다."),
+            @ApiResponse(responseCode = "U001", description = "존재하지 않는 유저입니다."),
+            @ApiResponse(responseCode = "U008", description = "관리자 계정이 아닙니다."),
+            @ApiResponse(responseCode = "SERVER",description = "서버와의 연결에 실패했습니다.")
+    })
     @GetMapping("/user/{userId}")
     public SingleResult<GetUserInfoResponseDto> getUserInfo(
             @AuthenticationPrincipal UserDetails userDetails,
@@ -169,6 +176,13 @@ public class AdminController {
     }
 
     @Operation(summary = "회원 정지")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "SUCCESS", description = "응답 성공"),
+            @ApiResponse(responseCode = "DB", description = "데이터베이스 오류입니다."),
+            @ApiResponse(responseCode = "U001", description = "존재하지 않는 유저입니다."),
+            @ApiResponse(responseCode = "U008", description = "관리자 계정이 아닙니다."),
+            @ApiResponse(responseCode = "SERVER",description = "서버와의 연결에 실패했습니다.")
+    })
     @PatchMapping("/user/{userId}")
     public CommonResult blockUser(
             @AuthenticationPrincipal UserDetails userDetails,
@@ -201,6 +215,14 @@ public class AdminController {
     }
 
     @Operation(summary = "피드 상세 조회")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "SUCCESS", description = "응답 성공"),
+            @ApiResponse(responseCode = "DB", description = "데이터베이스 오류입니다."),
+            @ApiResponse(responseCode = "U001", description = "존재하지 않는 유저입니다."),
+            @ApiResponse(responseCode = "P001", description = "존재하지 않는 게시물입니다."),
+            @ApiResponse(responseCode = "U008", description = "관리자 계정이 아닙니다."),
+            @ApiResponse(responseCode = "SERVER",description = "서버와의 연결에 실패했습니다.")
+    })
     @GetMapping("/post/{postId}")
     public SingleResult<GetPostInfoResponseDto> getPostInfo(
             @AuthenticationPrincipal UserDetails userDetails,
@@ -210,6 +232,14 @@ public class AdminController {
     }
 
     @Operation(summary = "피드 삭제")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "SUCCESS", description = "응답 성공"),
+            @ApiResponse(responseCode = "DB", description = "데이터베이스 오류입니다."),
+            @ApiResponse(responseCode = "U001", description = "존재하지 않는 유저입니다."),
+            @ApiResponse(responseCode = "P001", description = "존재하지 않는 게시물입니다."),
+            @ApiResponse(responseCode = "U008", description = "관리자 계정이 아닙니다."),
+            @ApiResponse(responseCode = "SERVER",description = "서버와의 연결에 실패했습니다.")
+    })
     @PatchMapping("/post/{postId}")
     public CommonResult deleteFeed(
             @AuthenticationPrincipal UserDetails userDetails,

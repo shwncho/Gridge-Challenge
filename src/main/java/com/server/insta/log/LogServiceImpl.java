@@ -3,7 +3,6 @@ package com.server.insta.log;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
 @Service

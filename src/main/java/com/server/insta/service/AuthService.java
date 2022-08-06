@@ -40,7 +40,6 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
-    private final QueryRepository queryRepository;
 
 
     //회원가입
