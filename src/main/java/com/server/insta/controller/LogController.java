@@ -1,9 +1,10 @@
-package com.server.insta.log;
+package com.server.insta.controller;
 
 import com.server.insta.config.response.ResponseService;
 import com.server.insta.config.response.result.CommonResult;
 import com.server.insta.config.response.result.MultipleResult;
 import com.server.insta.dto.response.GetLogsResponseDto;
+import com.server.insta.log.LogServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

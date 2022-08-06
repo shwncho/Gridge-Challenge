@@ -1,19 +1,15 @@
-package com.server.insta.log;
+package com.server.insta.domain;
 
 import com.server.insta.config.Entity.BaseTimeEntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
-@Data
 @Entity
+@Getter
 public class Logs extends BaseTimeEntity {
 
     @Id

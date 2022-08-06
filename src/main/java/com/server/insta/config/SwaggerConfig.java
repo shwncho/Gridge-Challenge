@@ -21,15 +21,14 @@ import java.util.List;
 @EnableWebMvc
 public class SwaggerConfig {
 
-    @Value("${url.dev}")
-    private String dev;
+    @Value("${server.url}")
+    private String url;
 
     @Bean
     public Docket SwaggerApi() {
-        Server serverLocal = new Server("local", "http://localhost:8080", "for local usages", Collections.emptyList(), Collections.emptyList());
-        Server devServer = new Server("test", dev, "for testing", Collections.emptyList(), Collections.emptyList());
+        Server server = new Server("server", url, "for server usage", Collections.emptyList(), Collections.emptyList());
         return new Docket(DocumentationType.OAS_30)
-                .servers(serverLocal,devServer)
+                .servers(server)
                 .securityContexts(Arrays.asList(securityContext()))
                 .securitySchemes(Arrays.asList(apiKey()))
                 .ignoredParameterTypes(AuthenticationPrincipal.class)

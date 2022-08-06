@@ -10,24 +10,24 @@ import springfox.documentation.spi.DocumentationType;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
+import java.util.List;
 
 @Component
 public class Workaround implements WebMvcOpenApiTransformationFilter {
 
-    @Value("${url.dev}")
-    private String dev;
+    @Value("${server.url}")
+    private String url;
 
     @Override
     public OpenAPI transform(OpenApiTransformationContext<HttpServletRequest> context) {
         OpenAPI openApi = context.getSpecification();
-        Server localServer = new Server();
-        localServer.setDescription("local");
-        localServer.setUrl("http://localhost:8080");
 
-        Server testServer = new Server();
-        testServer.setDescription("dev");
-        testServer.setUrl(dev);
-        openApi.setServers(Arrays.asList(localServer, testServer));
+        Server server = new Server();
+        server.setDescription("Server");
+        server.setUrl(url);
+
+        openApi.setServers(List.of(server));
+
         return openApi;
     }
 

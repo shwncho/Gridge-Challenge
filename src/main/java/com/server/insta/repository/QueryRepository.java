@@ -6,7 +6,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.server.insta.config.Entity.Authority;
 import com.server.insta.config.Entity.Status;
 import com.server.insta.domain.*;
-import com.server.insta.log.Logs;
+import com.server.insta.domain.Logs;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.server.insta.domain.QFollow.follow;
-import static com.server.insta.domain.QLikes.likes;
 import static com.server.insta.domain.QComment.comment;
 import static com.server.insta.domain.QPost.post;
 import static com.server.insta.domain.QMedia.media1;
@@ -27,7 +26,7 @@ import static com.server.insta.domain.QTag.tag;
 import static com.server.insta.domain.QMessage.message;
 import static com.server.insta.domain.QUser.user;
 import static com.server.insta.domain.QReport.report;
-import static com.server.insta.log.QLogs.logs;
+import static com.server.insta.domain.QLogs.logs;
 
 @Repository
 @RequiredArgsConstructor
