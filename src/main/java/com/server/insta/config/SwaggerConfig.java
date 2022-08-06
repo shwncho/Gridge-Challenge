@@ -42,8 +42,8 @@ public class SwaggerConfig {
     }
 
     private ApiInfo swaggerInfo() {
-        return new ApiInfoBuilder().title("SpringBoot API Documentation")
-                .description("APi Docs for Server")
+        return new ApiInfoBuilder().title("Gridge-Challenge API Docs")
+                .description("API Docs for Server")
                 .version("v0.0.1")
                 .build();
     }
