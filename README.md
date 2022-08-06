@@ -4,7 +4,7 @@
 <div align="center">
   <img src="https://img.shields.io/badge/SpringBoot-2.6.6-6DB33F?logo=SpringBoot"> 
   <img src="https://img.shields.io/badge/SpringSecurity-sky">
-  <img src="https://img.shields.io/badge/Gradle-02303A?style=plastic&logo=Gradle&logoColor=white"></a>&nbsp;
+  <img src="https://img.shields.io/badge/Gradle-02303A?style=flat&logo=Gradle&logoColor=white"></a>&nbsp;
   <img src="https://img.shields.io/badge/Java-11-9cf">
   <img src="https://img.shields.io/badge/JPA-Green">
   <img src="https://img.shields.io/badge/QueryDsl-5.0.0-blue">
@@ -18,7 +18,7 @@
   <img src="https://img.shields.io/badge/AWS EC2-orange"> 
   <img src="https://img.shields.io/badge/AWS RDS-blue"> 
   <img src="https://img.shields.io/badge/Nginx-1.18.0-009639?logo=Nginx">
-  <img src="https://img.shields.io/badge/Ubuntu-E95420?style=flat-square&logo=Ubuntu&logoColor=white"</a>&nbsp;
+  <img src="https://img.shields.io/badge/Ubuntu-E95420?style=flat&logo=Ubuntu&logoColor=white"</a>&nbsp;
 
 </div>
 &nbsp;
@@ -56,6 +56,7 @@
  ┃ ┣ 📂dto
  ┃ ┃ ┣ 📂request
  ┃ ┃ ┗ 📂response
+ ┃ ┣ 📂log          - Log 관련모음          
  ┃ ┣ 📂repository
  ┃ ┣ 📂service
 ```
@@ -76,7 +77,8 @@
 
 ## 📔 ERD
 
-<img width="403" alt="스크린샷 2022-08-05 오후 7 09 11" src="https://user-images.githubusercontent.com/88089316/183055461-dc2e32f6-7edb-4df7-80e7-18c646f7bfd1.png">
+<img width="640" alt="스크린샷 2022-08-06 오후 6 41 13" src="https://user-images.githubusercontent.com/88089316/183243638-5db24600-a1c8-4ca1-bf5d-356a5e1ee80c.png">
+
 
 
 
