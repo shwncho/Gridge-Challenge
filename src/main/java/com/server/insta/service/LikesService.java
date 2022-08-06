@@ -7,6 +7,7 @@ import com.server.insta.domain.Likes;
 import com.server.insta.domain.Post;
 import com.server.insta.domain.User;
 import com.server.insta.dto.response.GetLikeUsersResponseDto;
+import com.server.insta.log.NoLogging;
 import com.server.insta.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -92,6 +93,7 @@ public class LikesService {
     }
 
 
+    @NoLogging
     @Transactional(readOnly = true)
     public List<GetLikeUsersResponseDto> getLikeUsers(Long id){
         Post post = postRepository.findByIdAndStatus(id,Status.ACTIVE)

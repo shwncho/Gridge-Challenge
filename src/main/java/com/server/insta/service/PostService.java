@@ -8,6 +8,7 @@ import com.server.insta.domain.Tag;
 import com.server.insta.dto.request.UpdatePostRequestDto;
 import com.server.insta.dto.response.GetFeedResponseDto;
 import com.server.insta.dto.response.GetPostResponseDto;
+import com.server.insta.log.NoLogging;
 import com.server.insta.repository.*;
 import com.server.insta.domain.User;
 import com.server.insta.dto.request.CreatePostRequestDto;
@@ -86,6 +87,7 @@ public class PostService {
                 .build();
     }
 
+    @NoLogging
     @Transactional(readOnly = true)
     public List<GetFeedResponseDto> getFeed(String username, Long lastPostId, int pageSize){
         User user = userRepository.findByUsernameAndStatus(username, Status.ACTIVE)

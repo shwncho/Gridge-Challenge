@@ -9,6 +9,7 @@ import com.server.insta.dto.request.CreateCommentRequestDto;
 import com.server.insta.dto.response.GetCommentsResponseDto;
 import com.server.insta.dto.response.GetPostResponseDto;
 import com.server.insta.dto.response.PostMapToCommentsDto;
+import com.server.insta.log.NoLogging;
 import com.server.insta.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -54,6 +55,7 @@ public class CommentService {
     }
 
 
+    @NoLogging
     @Transactional(readOnly = true)
     public PostMapToCommentsDto getComments(Long postId, Long lastCommentId, int pageSize){
         Post post = postRepository.findByIdAndStatus(postId, Status.ACTIVE)

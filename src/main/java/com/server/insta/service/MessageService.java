@@ -7,6 +7,7 @@ import com.server.insta.domain.User;
 import com.server.insta.dto.request.SendMessageRequestDto;
 import com.server.insta.dto.response.GetChattingResponseDto;
 import com.server.insta.dto.response.GetMessageResponseDto;
+import com.server.insta.log.NoLogging;
 import com.server.insta.repository.MessageRepository;
 import com.server.insta.repository.QueryRepository;
 import com.server.insta.repository.UserRepository;
@@ -48,6 +49,7 @@ public class MessageService {
                 .build());
     }
 
+    @NoLogging
     @Transactional(readOnly = true)
     public GetChattingResponseDto getChatting(String username, Long id){
         User user = userRepository.findByUsernameAndStatus(username,Status.ACTIVE)

@@ -12,6 +12,7 @@ import com.server.insta.dto.request.UpdateProfileRequestDto;
 import com.server.insta.dto.response.GetFeedResponseDto;
 import com.server.insta.dto.response.GetPostResponseDto;
 import com.server.insta.dto.response.GetUserPageDto;
+import com.server.insta.log.NoLogging;
 import com.server.insta.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -38,7 +39,7 @@ public class UserService {
     private final QueryRepository queryRepository;
     private final PasswordEncoder passwordEncoder;
 
-
+    @NoLogging
     @Transactional(readOnly = true)
     public GetUserPageDto getUserPage(Long userId, Long lastPostId, int pageSize){
         User user = userRepository.findByIdAndStatus(userId, Status.ACTIVE)

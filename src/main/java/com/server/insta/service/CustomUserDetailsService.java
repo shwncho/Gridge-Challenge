@@ -3,6 +3,7 @@ package com.server.insta.service;
 import com.server.insta.config.Entity.Status;
 import com.server.insta.config.exception.BusinessException;
 import com.server.insta.domain.User;
+import com.server.insta.log.NoLogging;
 import com.server.insta.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,6 +22,7 @@ import static com.server.insta.config.exception.BusinessExceptionStatus.USER_NOT
 public class CustomUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
 
+    @NoLogging
     @Override
     public UserDetails loadUserByUsername(String username) {
         return userRepository.findByUsernameAndStatus(username, Status.ACTIVE)

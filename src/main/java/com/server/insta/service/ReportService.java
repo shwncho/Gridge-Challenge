@@ -14,6 +14,7 @@ import com.server.insta.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import static com.server.insta.config.exception.BusinessExceptionStatus.*;
 
@@ -27,6 +28,7 @@ public class ReportService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
 
+    @Transactional
     public int reportPost(String username, Long id, ReportRequestDto dto){
         User user = userRepository.findByUsernameAndStatus(username, Status.ACTIVE)
                 .orElseThrow(()->new BusinessException(USER_NOT_EXIST));
@@ -54,6 +56,7 @@ public class ReportService {
         return post.getReportCount();
     }
 
+    @Transactional
     public int reportComment(String username, Long id, ReportRequestDto dto){
         User user = userRepository.findByUsernameAndStatus(username, Status.ACTIVE)
                 .orElseThrow(()->new BusinessException(USER_NOT_EXIST));

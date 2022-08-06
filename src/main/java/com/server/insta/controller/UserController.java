@@ -6,6 +6,7 @@ import com.server.insta.config.response.result.SingleResult;
 import com.server.insta.dto.request.ResetPasswordRequestDto;
 import com.server.insta.dto.request.UpdateProfileRequestDto;
 import com.server.insta.dto.response.GetUserPageDto;
+import com.server.insta.log.NoLogging;
 import com.server.insta.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;

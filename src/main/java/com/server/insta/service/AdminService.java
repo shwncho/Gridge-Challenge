@@ -5,6 +5,7 @@ import com.server.insta.config.Entity.Status;
 import com.server.insta.config.exception.BusinessException;
 import com.server.insta.domain.*;
 import com.server.insta.dto.response.*;
+import com.server.insta.log.NoLogging;
 import com.server.insta.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -130,6 +131,7 @@ public class AdminService {
 
     }
 
+    @NoLogging
     @Transactional(readOnly = true)
     public List<GetSearchUsersResponseDto> getSearchUsers(String adminId, String name, String username, String joinedDate, Status status,
                                                             int pageIndex, int pageSize){
@@ -161,6 +163,7 @@ public class AdminService {
 
     }
 
+    @NoLogging
     @Transactional(readOnly = true)
     public GetUserInfoResponseDto getUserInfo(String adminId, Long userId){
         User admin = userRepository.findByUsernameAndStatus(adminId, Status.ACTIVE)
@@ -209,6 +212,7 @@ public class AdminService {
 
     }
 
+    @NoLogging
     @Transactional(readOnly = true)
     public List<GetSearchPostsResponseDto> getSearchPosts(String adminId, String username, String createdDate, Status status,
                                                           int pageIndex, int pageSize){
@@ -240,6 +244,7 @@ public class AdminService {
 
     }
 
+    @NoLogging
     @Transactional(readOnly = true)
     public GetPostInfoResponseDto getPostInfo(String adminId, Long postId){
         User admin = userRepository.findByUsernameAndStatus(adminId, Status.ACTIVE)
