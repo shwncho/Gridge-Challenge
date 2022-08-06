@@ -34,28 +34,6 @@ public class QueryRepository {
     private final JPAQueryFactory queryFactory;
 
 
-
-    public boolean existFollowByUser(User fromUser, User toUser){
-        Integer fetchFirst = queryFactory
-                .selectOne()
-                .from(follow)
-                .where(follow.fromUser.eq(fromUser), follow.toUser.eq(toUser))
-                .fetchFirst();
-
-        return fetchFirst != null;
-    }
-
-    public boolean existLikeByUserAndPost(User user, Post post){
-        Integer fetchFirst = queryFactory
-                .selectOne()
-                .from(likes)
-                .where(likes.user.eq(user),likes.post.eq(post),likes.status.eq(Status.ACTIVE))
-                .fetchFirst();
-
-        return fetchFirst != null;
-    }
-
-
     public Optional<Comment> findCommentByIdWithParent(Long id){
         return Optional.ofNullable(queryFactory.selectFrom(comment)
                 .leftJoin(comment.parent)
@@ -64,11 +42,13 @@ public class QueryRepository {
                 .fetchOne());
     }
 
-    public List<Message> findMessagesByUser(User user, User otherUser){
+    public List<Message> findChattingByUser(User user, User otherUser, Long lastMessageId, int pageSize){
         return queryFactory.selectFrom(message)
-                .where((message.sender.eq(user).and(message.receiver.eq(otherUser)))
+                .where(ltMessageId(lastMessageId),
+                        (message.sender.eq(user).and(message.receiver.eq(otherUser)))
                         .or(message.sender.eq(otherUser).and(message.receiver.eq(user))))
                 .orderBy(message.id.desc())
+                .limit(pageSize)
                 .fetch();
     }
 
@@ -100,10 +80,6 @@ public class QueryRepository {
                 .fetch();
     }
 
-    private BooleanExpression ltPostId(Long postId){
-        if(postId == null)  return null;
-        return post.id.lt(postId);
-    }
 
     //게시물의 댓글조회 페이징
     public List<Comment> findCommentsByPost(Post post, Long lastCommentId, int size){
@@ -118,11 +94,6 @@ public class QueryRepository {
                 )
                 .limit(size)
                 .fetch();
-    }
-
-    private BooleanExpression ltCommentId(Long commentId){
-        if(commentId == null)   return null;
-        return comment.id.lt(commentId);
     }
 
 
@@ -151,6 +122,53 @@ public class QueryRepository {
                 .fetch();
     }
 
+
+
+    //피드 검색 다중 조건
+    public List<Post> findAllByPosts(String username, String createdDate, Status status, int pageIndex, int pageSize){
+        return queryFactory
+                .selectDistinct(post)
+                .from(post)
+                .join(media1).on(media1.post.eq(post))
+                .leftJoin(tag).on(tag.post.eq(post))
+                .where( eqUsernameByPost(username),
+                        eqCreatedAtByPost(createdDate),
+                        eqStatusByPost(status))
+                .orderBy(post.createdAt.desc())
+                .offset(pageIndex * pageSize)
+                .limit(pageSize)
+                .fetch();
+    }
+
+    private BooleanExpression ltPostId(Long postId){
+        if(postId == null)  return null;
+        return post.id.lt(postId);
+    }
+
+    private BooleanExpression ltCommentId(Long commentId){
+        if(commentId == null)   return null;
+        return comment.id.lt(commentId);
+    }
+
+    private BooleanExpression eqUsernameByPost(String username){
+        if(!StringUtils.hasText(username))  return null;
+        return post.user.username.eq(username);
+    }
+
+    private BooleanExpression eqCreatedAtByPost(String createdDate) {
+        if (!StringUtils.hasText(createdDate)) return null;
+        else {
+            LocalDate date = LocalDate.parse(createdDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            return post.createdAt.between(date.atStartOfDay(), LocalDateTime.of(date, LocalTime.MAX));
+
+        }
+    }
+    private BooleanExpression eqStatusByPost(Status status){
+        if(status==null)    return null;
+        else if(!StringUtils.hasText(status.toString())) return null;
+        return post.status.eq(status);
+    }
+
     private BooleanExpression eqName(String name){
         if(!StringUtils.hasText(name))  return null;
         return user.name.eq(name);
@@ -175,38 +193,8 @@ public class QueryRepository {
         return user.status.eq(status);
     }
 
-    //피드 검색 다중 조건
-    public List<Post> findAllByPosts(String username, String createdDate, Status status, int pageIndex, int pageSize){
-        return queryFactory
-                .selectDistinct(post)
-                .from(post)
-                .join(media1).on(media1.post.eq(post))
-                .leftJoin(tag).on(tag.post.eq(post))
-                .where( eqUsernameByPost(username),
-                        eqCreatedAtByPost(createdDate),
-                        eqStatusByPost(status))
-                .orderBy(post.createdAt.desc())
-                .offset(pageIndex * pageSize)
-                .limit(pageSize)
-                .fetch();
-    }
-
-    private BooleanExpression eqUsernameByPost(String username){
-        if(!StringUtils.hasText(username))  return null;
-        return post.user.username.eq(username);
-    }
-
-    private BooleanExpression eqCreatedAtByPost(String createdDate) {
-        if (!StringUtils.hasText(createdDate)) return null;
-        else {
-            LocalDate date = LocalDate.parse(createdDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-            return post.createdAt.between(date.atStartOfDay(), LocalDateTime.of(date, LocalTime.MAX));
-
-        }
-    }
-    private BooleanExpression eqStatusByPost(Status status){
-        if(status==null)    return null;
-        else if(!StringUtils.hasText(status.toString())) return null;
-        return post.status.eq(status);
+    private BooleanExpression ltMessageId(Long lastMessageId){
+        if(lastMessageId==null) return null;
+        return message.id.lt(lastMessageId);
     }
 }

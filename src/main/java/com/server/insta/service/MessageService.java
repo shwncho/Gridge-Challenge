@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.server.insta.config.exception.BusinessExceptionStatus.*;
 
@@ -49,9 +50,11 @@ public class MessageService {
                 .build());
     }
 
+
+
     @NoLogging
     @Transactional(readOnly = true)
-    public GetChattingResponseDto getChatting(String username, Long id){
+    public GetChattingResponseDto getChatting(String username, Long id, Long lastMessageId, int pageSize){
         User user = userRepository.findByUsernameAndStatus(username,Status.ACTIVE)
                 .orElseThrow(()->new BusinessException(USER_NOT_EXIST));
         User otherUser = userRepository.findByIdAndStatus(id, Status.ACTIVE)
@@ -61,7 +64,7 @@ public class MessageService {
             throw new BusinessException(USER_NOT_SEND_SELF);
         }
 
-        List<Message> messages = queryRepository.findMessagesByUser(user, otherUser);
+        List<Message> messages = queryRepository.findChattingByUser(user, otherUser,lastMessageId,pageSize);
 
         if(messages.isEmpty()){
             throw new BusinessException(MESSAGE_NOT_EXIST);
@@ -69,6 +72,7 @@ public class MessageService {
 
         List<GetMessageResponseDto> dto = new ArrayList<>();
         messages.forEach(m-> dto.add(GetMessageResponseDto.builder()
+                        .messageId(m.getId())
                         .sender(user.getId()==m.getSender().getId() ? "본인" : "상대방")
                         .content(m.getContent())
                         .createdAt(m.getCreatedAt().toString())

@@ -2,12 +2,14 @@ package com.server.insta.controller;
 
 import com.server.insta.config.response.ResponseService;
 import com.server.insta.config.response.result.CommonResult;
+import com.server.insta.config.response.result.MultipleResult;
 import com.server.insta.config.response.result.SingleResult;
 import com.server.insta.dto.request.SendMessageRequestDto;
 import com.server.insta.dto.response.GetChattingResponseDto;
 import com.server.insta.service.MessageService;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +47,7 @@ public class MessageController {
         return responseService.getSuccessResult();
     }
 
-    @Operation(summary = "채팅 조회", description = "나와 채팅을 주고받은 유저의 id값을 넣어주면 됩니다.")
+    @Operation(summary = "채팅 조회", description = "나와 채팅을 주고받은 상대방의 id값을 넣어주면 됩니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "SUCCESS", description = "응답 성공"),
             @ApiResponse(responseCode = "U001", description = "존재하지 않는 유저입니다."),
@@ -57,8 +59,10 @@ public class MessageController {
     @GetMapping("/{userId}")
     public SingleResult<GetChattingResponseDto> getChatting(
             @AuthenticationPrincipal UserDetails userDetails,
-            @PathVariable Long userId
+            @PathVariable Long userId,
+            @Parameter(description = "처음엔 null, 이후엔 조회된 메세지의 가장 작은 messageId값을 넣어주세요.") @RequestParam (required = false) Long lastMessageId,
+            @Parameter(description = "페이징 채팅 조회 페이지 사이즈, 기본값 10") @RequestParam(value = "size",defaultValue = "10") int pageSize
     ){
-        return responseService.getSingleResult(messageService.getChatting(userDetails.getUsername(), userId));
+        return responseService.getSingleResult(messageService.getChatting(userDetails.getUsername(), userId, lastMessageId, pageSize));
     }
 }

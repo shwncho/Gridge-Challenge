@@ -11,6 +11,9 @@ import java.time.LocalDateTime;
 @Builder
 public class GetMessageResponseDto {
 
+    @Schema(description = "메세지 db id")
+    private Long messageId;
+
     @Schema(description = "메세지를 보내는 유저")
     private String sender;
 
