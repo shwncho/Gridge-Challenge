@@ -33,7 +33,6 @@ public class CommentController {
     @Operation(summary = "댓글 작성")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "SUCCESS", description = "응답 성공"),
-            @ApiResponse(responseCode = "VALID", description = "댓글은 최대 200자까지만 작성가능합니다."),
             @ApiResponse(responseCode = "U001", description = "존재하지 않는 유저입니다."),
             @ApiResponse(responseCode = "P001", description = "존재하지 않는 게시물입니다."),
             @ApiResponse(responseCode = "C001", description = "존재하지 않는 댓글입니다."),

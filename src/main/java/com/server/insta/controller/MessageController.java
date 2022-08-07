@@ -31,7 +31,6 @@ public class MessageController {
     @Operation(summary = "메세지 보내기")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "SUCCESS", description = "응답 성공"),
-            @ApiResponse(responseCode = "VALID", description = "메세지는 최대 200자까지 가능합니다."),
             @ApiResponse(responseCode = "U001", description = "존재하지 않는 유저입니다."),
             @ApiResponse(responseCode = "U006", description = "본인에게 메세지를 보낼 수 없습니다."),
             @ApiResponse(responseCode = "DB", description = "데이터베이스 오류입니다."),

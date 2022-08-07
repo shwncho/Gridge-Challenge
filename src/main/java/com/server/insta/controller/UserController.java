@@ -50,7 +50,6 @@ public class UserController {
     @Operation(summary = "비밀번호 재설정")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "SUCCESS", description = "응답 성공"),
-            @ApiResponse(responseCode = "VALID", description = "비밀번호는 공백없이 특수문자가 적어도 1개 이상이 포함된 6자~20자의 비밀번호이어야 합니다."),
             @ApiResponse(responseCode = "U001", description = "존재하지 않는 유저입니다."),
             @ApiResponse(responseCode = "U007", description = "소셜 로그인 유저는 비밀번호를 변경할 수 없습니다."),
             @ApiResponse(responseCode = "DB", description = "데이터베이스 오류입니다."),
@@ -70,8 +69,6 @@ public class UserController {
             @ApiResponse(responseCode = "SUCCESS", description = "응답 성공"),
             @ApiResponse(responseCode = "U001", description = "존재하지 않는 유저입니다."),
             @ApiResponse(responseCode = "U002", description = "이미 존재하는 사용자 이름입니다."),
-            @ApiResponse(responseCode = "VALID", description =  "이름은 20자 이내만 가능합니다."),
-            @ApiResponse(responseCode = "VALID", description = "사용자 이름은 소문자 영어, 숫자,'_', '.'만 20자 이내로 사용가능합니다."),
             @ApiResponse(responseCode = "DB", description = "데이터베이스 오류입니다."),
             @ApiResponse(responseCode = "SERVER",description = "서버와의 연결에 실패했습니다.")
     })

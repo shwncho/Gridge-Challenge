@@ -35,11 +35,6 @@ public class AuthController {
     @Operation(summary="회원가입")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "SUCCESS", description = "응답 성공"),
-            @ApiResponse(responseCode = "VALID", description = "사용자 이름은 소문자 영어, 숫자,'_', '.'만 20자 이내로 사용가능합니다."),
-            @ApiResponse(responseCode = "VALID", description = "이름은 20자 이내만 가능합니다."),
-            @ApiResponse(responseCode = "VALID", description = "이메일 형식이 아닙니다."),
-            @ApiResponse(responseCode = "VALID", description = "비밀번호는 공백없이 특수문자가 적어도 1개 이상이 포함된 6자~20자의 비밀번호이어야 합니다."),
-            @ApiResponse(responseCode = "VALID", description = "휴대폰 번호는 11자리 이어야 합니다."),
             @ApiResponse(responseCode = "DB", description = "데이터베이스 오류입니다."),
             @ApiResponse(responseCode = "U002", description = "이미 존재하는 사용자 이름입니다."),
             @ApiResponse(responseCode = "SERVER",description = "서버와의 연결에 실패했습니다.")
@@ -53,7 +48,6 @@ public class AuthController {
     @Operation(summary="로그인",description = "소셜 로그인 일경우 email과 password를, 일반 로그인 일경우 username과 password를 넘겨주세요.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "SUCCESS", description = "응답 성공"),
-            @ApiResponse(responseCode = "VALID", description = "비밀번호는 공백없이 특수문자가 적어도 1개 이상이 포함된 6자~20자의 비밀번호이어야 합니다."),
             @ApiResponse(responseCode = "U001", description = "존재하지 않는 유저입니다."),
             @ApiResponse(responseCode = "U003", description = "비밀번호가 일치하지 않습니다."),
             @ApiResponse(responseCode = "U009", description = "개인정보처리동의를 다시 받아야 합니다."),
@@ -97,7 +91,6 @@ public class AuthController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "SUCCESS", description = "응답 성공"),
             @ApiResponse(responseCode = "U001", description = "존재하지 않는 유저입니다."),
-            @ApiResponse(responseCode = "VALID", description = "비밀번호는 공백없이 특수문자가 적어도 1개 이상이 포함된 6자~20자의 비밀번호이어야 합니다."),
             @ApiResponse(responseCode = "U003", description = "비밀번호가 일치하지 않습니다."),
             @ApiResponse(responseCode = "DB", description = "데이터베이스 오류입니다."),
             @ApiResponse(responseCode = "SERVER",description = "서버와의 연결에 실패했습니다.")
