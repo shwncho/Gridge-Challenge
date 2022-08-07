@@ -77,7 +77,8 @@
 
 ## 📔 ERD
 
-<img width="640" alt="스크린샷 2022-08-06 오후 6 41 13" src="https://user-images.githubusercontent.com/88089316/183243638-5db24600-a1c8-4ca1-bf5d-356a5e1ee80c.png">
+<img width="675" alt="2200807_Server_심플:조석환_ERD" src="https://user-images.githubusercontent.com/88089316/183279746-aa589d86-8633-478e-8120-b42871d76d7d.png">
+
 
 
 
