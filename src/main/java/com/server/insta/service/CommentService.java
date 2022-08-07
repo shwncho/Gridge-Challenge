@@ -104,16 +104,14 @@ public class CommentService {
             throw new BusinessException(USER_NOT_INVALID);
         }
 
-        if(comment.getChild().size() != 0)  comment.deleteComment();
-        else    commentRepository.delete(getDeletableAncestorComment(comment));
+        //parent가 null인 것은 최상위 댓글을 지운다는 의미 -> 자식 댓글 있으면 자식 댓글도 다 지워짐 없으면 본인만 지워짐
+        if(comment.getParent()==null){
+            comment.getChild().forEach(Comment::deleteComment);
+            comment.deleteComment();
+        }
+        else    comment.deleteComment();
 
 
-    }
-
-    private Comment getDeletableAncestorComment(Comment comment){
-        Comment parent = comment.getParent();
-        if(parent != null && parent.getChild().size() ==1 && parent.getStatus() == Status.DELETED)  return  getDeletableAncestorComment(parent);
-        return comment;
     }
 
     //작성시간 계산
