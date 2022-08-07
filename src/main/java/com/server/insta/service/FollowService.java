@@ -123,7 +123,7 @@ public class FollowService {
         User fromUser = userRepository.findByIdAndStatus(id, Status.ACTIVE)
                 .orElseThrow(() -> new BusinessException(USER_NOT_EXIST));
 
-        return followRepository.findAllByFromUser(fromUser)
+        return followRepository.findAllByFromUserAndToUserStatus(fromUser,Status.ACTIVE)
                 .stream().map(Follow::getToUser)
                 .collect(Collectors.toList())
                 .stream().map(u->GetFollowingResponseDto.builder()
@@ -141,7 +141,7 @@ public class FollowService {
         User toUser = userRepository.findByIdAndStatus(id, Status.ACTIVE)
                 .orElseThrow(() -> new BusinessException(USER_NOT_EXIST));
 
-        return followRepository.findAllByToUser(toUser)
+        return followRepository.findAllByToUserAndFromUserStatus(toUser, Status.ACTIVE)
                 .stream().map(Follow::getFromUser)
                 .collect(Collectors.toList())
                 .stream().map(u->GetFollowerResponseDto.builder()
