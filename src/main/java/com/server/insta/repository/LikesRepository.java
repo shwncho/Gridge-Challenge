@@ -15,7 +15,7 @@ public interface LikesRepository extends JpaRepository<Likes,Long> {
 
     Likes findByUserAndComment(User user, Comment comment);
 
-    List<Likes> findAllByPost(Post post);
+    List<Likes> findAllByPostAndUserStatus(Post post, Status status);
 
     int countByPost(Post post);
 

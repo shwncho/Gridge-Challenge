@@ -99,7 +99,7 @@ public class LikesService {
         Post post = postRepository.findByIdAndStatus(id,Status.ACTIVE)
                 .orElseThrow(() -> new BusinessException(POST_NOT_EXIST));
 
-        List<User> users = likesRepository.findAllByPost(post).stream()
+        List<User> users = likesRepository.findAllByPostAndUserStatus(post,Status.ACTIVE).stream()
                 .map(Likes::getUser).collect(Collectors.toList());
 
         return users.stream()
