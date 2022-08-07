@@ -145,6 +145,7 @@ public class PostService {
         }
 
         post.deletePost();
+        post.getMedias().forEach(Media::deleteMedia);
     }
 
     @Transactional
@@ -161,18 +162,11 @@ public class PostService {
 
 
         post.setCaption(dto.getCaption());
+        mediaRepository.findAllByPost(post).forEach(Media::deleteMedia);
+        tagRepository.findAllByPost(post).forEach(Tag::deleteTag);
         post.getMedias().clear();
         post.getTags().clear();
 
-        /**
-         * 게시글을 수정할 때 기존 이미지와 태그들을 새로운 값들과 매칭시키는 것보다 지우고 생성하는게 더 효율적이라 판단
-         * 이유: 몇 개의 값들이 지워지고 추가될지를 판단할 수 없으므로
-         */
-
-        //caption은 변경감지를 이용하여 바꾸고
-        //tags,medias는 병합방식을 이용하여 이미지와 태그를 새로 갈아끼운다.
-        mediaRepository.deleteAll(mediaRepository.findAllByPost(post));
-        tagRepository.deleteAll(tagRepository.findAllByPost(post));
 
         List<Media> medias=dto.getMedias().stream().map(m -> new Media(m,post)).collect(Collectors.toList());
         post.getMedias().addAll(medias);

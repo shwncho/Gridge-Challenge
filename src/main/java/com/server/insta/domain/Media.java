@@ -1,6 +1,7 @@
 package com.server.insta.domain;
 
 import com.server.insta.config.Entity.BaseTimeEntity;
+import com.server.insta.config.Entity.Status;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,15 +27,16 @@ public class Media extends BaseTimeEntity{
     @JoinColumn(name = "post_id")
     private Post post;
 
-    public Media(String media) {
-        this.media = media;
-    }
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
 
     @Builder
     public Media(String media, Post post) {
         this.post = post;
         this.media = media;
         post.getMedias().add(this);
+        this.status = Status.ACTIVE;
     }
 
     public void setMedia(String media) {
@@ -45,6 +47,10 @@ public class Media extends BaseTimeEntity{
         this.post = post;
         post.getMedias().add(this);
 
+    }
+
+    public void deleteMedia(){
+        this.status = Status.DELETED;
     }
 
 }

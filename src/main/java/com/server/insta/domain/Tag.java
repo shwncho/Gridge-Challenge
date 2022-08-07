@@ -1,6 +1,7 @@
 package com.server.insta.domain;
 
 import com.server.insta.config.Entity.BaseTimeEntity;
+import com.server.insta.config.Entity.Status;
 import lombok.*;
 
 import javax.persistence.*;
@@ -22,10 +23,15 @@ public class Tag extends BaseTimeEntity {
     @JoinColumn(name = "post_id")
     private Post post;
 
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
     @Builder
     public Tag(String content, Post post){
         this.content = content;
         this.post = post;
+        post.getTags().add(this);
+        this.status = Status.ACTIVE;
     }
 
     public Tag(String content){
@@ -40,5 +46,9 @@ public class Tag extends BaseTimeEntity {
     public void setPost(Post post) {
         this.post = post;
         post.getTags().add(this);
+    }
+
+    public void deleteTag(){
+        this.status = Status.DELETED;
     }
 }
