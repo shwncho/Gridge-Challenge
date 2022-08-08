@@ -8,6 +8,7 @@ import com.server.insta.dto.response.GetFollowingResponseDto;
 import com.server.insta.service.FollowService;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -84,9 +85,9 @@ public class FollowController {
             @ApiResponse(responseCode = "DB", description = "데이터베이스 오류입니다."),
             @ApiResponse(responseCode = "SERVER",description = "서버와의 연결에 실패했습니다.")
     })
-    @GetMapping("/following/{id}")
+    @GetMapping("/following/{userId}")
     public MultipleResult<GetFollowingResponseDto> getFollowing(
-            @PathVariable Long id
+            @Parameter(description = "팔로잉 유저들을 조회하고 싶은 유저의 id를 넣어주면 됩니다.") @PathVariable Long id
     ){
         return responseService.getMultipleResult(followService.getFollowing(id));
     }
@@ -98,9 +99,9 @@ public class FollowController {
             @ApiResponse(responseCode = "DB", description = "데이터베이스 오류입니다."),
             @ApiResponse(responseCode = "SERVER",description = "서버와의 연결에 실패했습니다.")
     })
-    @GetMapping("/follower/{id}")
+    @GetMapping("/follower/{userId}")
     public MultipleResult<GetFollowerResponseDto> getFollower(
-            @PathVariable Long id
+            @Parameter(description = "팔로워 유저들을 조회하고 싶은 유저의 id를 넣어주면 됩니다.") @PathVariable Long id
     ){
         return responseService.getMultipleResult(followService.getFollower(id));
     }
