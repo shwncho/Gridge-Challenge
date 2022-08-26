@@ -19,4 +19,4 @@ public class LoggingController {
     public String checkHealth() {
         return "healthy";
     }
-    }
+}
