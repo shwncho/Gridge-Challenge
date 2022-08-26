@@ -68,7 +68,7 @@
 
 
 ## 📝 Architecture
-<img width="800" alt="스크린샷 2022-08-05 오후 6 54 41" src="https://user-images.githubusercontent.com/88089316/183052923-faccaade-da02-4ddc-8f66-53e62145ebb4.png">
+<img width="800" alt="Architecture" src="https://user-images.githubusercontent.com/88089316/186970475-40deb6ea-6b70-4829-9604-103a8a220a44.png">
 
 &nbsp;
 &nbsp;
