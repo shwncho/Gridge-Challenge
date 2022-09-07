@@ -10,7 +10,6 @@ import com.server.insta.dto.response.AdminStatusResponseDto;
 import com.server.insta.dto.response.SignInResponseDto;
 import com.server.insta.dto.request.SignUpRequestDto;
 import com.server.insta.dto.response.SignUpResponseDto;
-import com.server.insta.dto.response.SnsSignInResponseDto;
 import com.server.insta.service.AuthService;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
@@ -45,7 +44,7 @@ public class AuthController {
         return responseService.getSingleResult(authService.signUp(dto));
     }
 
-    @Operation(summary="로그인",description = "소셜 로그인 일경우 email과 password를, 일반 로그인 일경우 username과 password를 넘겨주세요.")
+    @Operation(summary="로그인", description = "일반 로그인에 사용되며 username과 password만 입력하면됩니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "SUCCESS", description = "응답 성공"),
             @ApiResponse(responseCode = "U001", description = "존재하지 않는 유저입니다."),
@@ -67,7 +66,7 @@ public class AuthController {
             @ApiResponse(responseCode = "SERVER",description = "서버와의 연결에 실패했습니다.")
     })
     @PostMapping("/sns-signin")
-    public SingleResult<SnsSignInResponseDto> snsSignIn(@RequestBody @Valid SnsSignInRequestDto dto){
+    public SingleResult<SignInResponseDto> snsSignIn(@RequestBody @Valid SnsSignInRequestDto dto){
         return responseService.getSingleResult(authService.snsSignIn(dto));
     }
 

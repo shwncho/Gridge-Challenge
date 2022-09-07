@@ -13,12 +13,9 @@ import com.server.insta.dto.response.SignInResponseDto;
 import com.server.insta.dto.request.SignUpRequestDto;
 import com.server.insta.dto.response.SignUpResponseDto;
 import com.server.insta.domain.User;
-import com.server.insta.dto.response.SnsSignInResponseDto;
-import com.server.insta.repository.QueryRepository;
 import com.server.insta.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -63,12 +60,6 @@ public class AuthService {
     @Transactional
     public SignInResponseDto signIn(SignInRequestDto dto){
 
-        //소셜 로그인 일경우 email이 null이 아님
-        if(dto.getEmail()!=null){
-            User oAuthUser = userRepository.findByEmailAndStatus(dto.getEmail(),Status.ACTIVE)
-                    .orElseThrow(()->new BusinessException(USER_NOT_EXIST));
-            dto.setUsername(oAuthUser.getUsername());
-        }
         User user = userRepository.findByUsernameAndStatus(dto.getUsername(), Status.ACTIVE)
                 .orElseThrow(() -> new BusinessException(USER_NOT_EXIST));
 
@@ -96,20 +87,40 @@ public class AuthService {
     }
 
     @Transactional
-    public SnsSignInResponseDto snsSignIn(SnsSignInRequestDto dto){
-        SnsSignInResponseDto user;
+    public SignInResponseDto snsSignIn(SnsSignInRequestDto dto){
+        SignInRequestDto oAuthUser;
         if(dto.getProvider().equals(Provider.KAKAO)) {
-            user =CreateKaKaoUser.createKaKaoUserInfo(dto.getToken());
+            oAuthUser =CreateKaKaoUser.createKaKaoUserInfo(dto.getToken());
         }
 //        다른 소셜 로그인도 구현할 경우의 로직
-//        else if(dto.getProvider().equals(Provider.NAVER))   user=CreateNaverUser.createNaverUserInfo(dto.getToken());
-//        else if(dto.getProvider().equals(Provider.GOOGLE))  user=CreateGoogleUser.createGoogleUserInfo(dto.getToken());
-//        else if(dto.getProvider().equals(Provider.FACEBOOK))    user=CreateFacebookUser.createFacebookUserInfo(dto.getToken());
+//        else if(dto.getProvider().equals(Provider.NAVER))   oAuthUser=CreateNaverUser.createNaverUserInfo(dto.getToken());
+//        else if(dto.getProvider().equals(Provider.GOOGLE))  oAuthUser=CreateGoogleUser.createGoogleUserInfo(dto.getToken());
+//        else if(dto.getProvider().equals(Provider.FACEBOOK))    oAuthUser=CreateFacebookUser.createFacebookUserInfo(dto.getToken());
         else{
             throw new BusinessException(USER_INVALID_OAUTH);
         }
 
-        return user;
+        User user = userRepository.findByEmailAndStatus(oAuthUser.getEmail(), Status.ACTIVE)
+                .orElseThrow(() -> new BusinessException(USER_NOT_EXIST));
+
+        if (!passwordEncoder.matches(oAuthUser.getPassword(), user.getPassword())) {
+            throw new BusinessException(USER_INVALID_PASSWORD);
+        }
+
+        //1년 주기로 개인정보동의 받기(가입시 필수 동의를 거쳐야 가입이 되므로 가입날을 기준)
+        if(ChronoUnit.YEARS.between(user.getScheduler(), LocalDateTime.now())>0) {
+            user.resetScheduler();
+            throw new BusinessException(USER_AGREE_PRIVACY);
+        }
+
+
+
+        UsernamePasswordAuthenticationToken authenticationToken = oAuthUser.toAuthentication();
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String token = jwtProvider.createToken(authentication);
+
+        return new SignInResponseDto(user.getId(), token);
 
 
 

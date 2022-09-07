@@ -4,10 +4,10 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.server.insta.config.Entity.Provider;
 import com.server.insta.config.exception.BusinessException;
-import com.server.insta.dto.response.SnsSignInResponseDto;
+import com.server.insta.dto.request.SignInRequestDto;
+import com.server.insta.dto.response.SignInResponseDto;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -16,7 +16,7 @@ import static com.server.insta.config.exception.BusinessExceptionStatus.KAKAO_LO
 
 public class CreateKaKaoUser {
 
-    public static SnsSignInResponseDto createKaKaoUserInfo(String token){
+    public static SignInRequestDto createKaKaoUserInfo(String token){
 
         String reqURL = "https://kapi.kakao.com/v2/user/me";
 
@@ -59,10 +59,9 @@ public class CreateKaKaoUser {
 
             br.close();
 
-            return SnsSignInResponseDto.builder()
+            return SignInRequestDto.builder()
                     .email(email)
                     .password(id+"@k")  //비밀번호에 특수문자 적어도 1개 이상포함이므로 추가
-                    .provider(Provider.KAKAO)
                     .build();
 
         } catch(Exception e){
