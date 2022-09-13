@@ -114,7 +114,7 @@ public class AuthService {
         }
 
 
-
+        oAuthUser.setUsername(user.getUsername());
         UsernamePasswordAuthenticationToken authenticationToken = oAuthUser.toAuthentication();
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
