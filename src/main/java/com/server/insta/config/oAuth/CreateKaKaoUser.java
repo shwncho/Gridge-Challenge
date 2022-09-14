@@ -58,7 +58,7 @@ public class CreateKaKaoUser {
 
             return SnsSignInResponseDto.builder()
                     .email(email)
-                    .id(id)  //비밀번호에 특수문자 적어도 1개 이상포함이므로 추가
+                    .id(Math.abs(id))  //비밀번호에 특수문자 적어도 1개 이상포함이므로 추가
                     .build();
 
         } catch(Exception e){

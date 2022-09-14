@@ -105,6 +105,7 @@ public class AuthService {
         Optional<User> user = userRepository.findByEmailAndStatus(oAuthUser.getEmail(), Status.ACTIVE);
         if(user.isEmpty()){
             return SnsSignInResponseDto.createKaKaoProfile(oAuthUser.getEmail(),oAuthUser.getId());
+
         }
         User currentUser = user.get();
 

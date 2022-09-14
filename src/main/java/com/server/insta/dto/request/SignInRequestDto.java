@@ -3,15 +3,17 @@ package com.server.insta.dto.request;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.server.insta.config.Entity.Provider;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class SignInRequestDto {
 

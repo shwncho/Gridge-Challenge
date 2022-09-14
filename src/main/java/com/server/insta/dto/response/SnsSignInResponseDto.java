@@ -9,6 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString
 public class SnsSignInResponseDto {
 
     @Schema(description = "유저 db id")
