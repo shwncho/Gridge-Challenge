@@ -1,5 +1,7 @@
 package com.server.insta.controller;
 
+import com.server.insta.config.Entity.Provider;
+import com.server.insta.config.oAuth.CreateKaKaoUser;
 import com.server.insta.config.response.ResponseService;
 import com.server.insta.config.response.result.CommonResult;
 import com.server.insta.config.response.result.SingleResult;
@@ -10,6 +12,7 @@ import com.server.insta.dto.response.AdminStatusResponseDto;
 import com.server.insta.dto.response.SignInResponseDto;
 import com.server.insta.dto.request.SignUpRequestDto;
 import com.server.insta.dto.response.SignUpResponseDto;
+import com.server.insta.dto.response.SnsSignInResponseDto;
 import com.server.insta.service.AuthService;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
@@ -66,7 +69,7 @@ public class AuthController {
             @ApiResponse(responseCode = "SERVER",description = "서버와의 연결에 실패했습니다.")
     })
     @PostMapping("/sns-signin")
-    public SingleResult<SignInResponseDto> snsSignIn(@RequestBody @Valid SnsSignInRequestDto dto){
+    public SingleResult<SnsSignInResponseDto> snsSignIn(@RequestBody @Valid SnsSignInRequestDto dto){
         return responseService.getSingleResult(authService.snsSignIn(dto));
     }
 

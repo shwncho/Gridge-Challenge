@@ -2,13 +2,10 @@ package com.server.insta.config.oAuth;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import com.server.insta.config.Entity.Provider;
 import com.server.insta.config.exception.BusinessException;
-import com.server.insta.dto.request.SignInRequestDto;
-import com.server.insta.dto.response.SignInResponseDto;
+import com.server.insta.dto.response.SnsSignInResponseDto;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -16,7 +13,7 @@ import static com.server.insta.config.exception.BusinessExceptionStatus.KAKAO_LO
 
 public class CreateKaKaoUser {
 
-    public static SignInRequestDto createKaKaoUserInfo(String token){
+    public static SnsSignInResponseDto createKaKaoUserInfo(String token){
 
         String reqURL = "https://kapi.kakao.com/v2/user/me";
 
@@ -59,9 +56,9 @@ public class CreateKaKaoUser {
 
             br.close();
 
-            return SignInRequestDto.builder()
+            return SnsSignInResponseDto.builder()
                     .email(email)
-                    .password(id+"@k")  //비밀번호에 특수문자 적어도 1개 이상포함이므로 추가
+                    .id(id)  //비밀번호에 특수문자 적어도 1개 이상포함이므로 추가
                     .build();
 
         } catch(Exception e){

@@ -13,6 +13,7 @@ import com.server.insta.dto.response.SignInResponseDto;
 import com.server.insta.dto.request.SignUpRequestDto;
 import com.server.insta.dto.response.SignUpResponseDto;
 import com.server.insta.domain.User;
+import com.server.insta.dto.response.SnsSignInResponseDto;
 import com.server.insta.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Optional;
 
 import static com.server.insta.config.exception.BusinessExceptionStatus.*;
 
@@ -87,8 +89,8 @@ public class AuthService {
     }
 
     @Transactional
-    public SignInResponseDto snsSignIn(SnsSignInRequestDto dto){
-        SignInRequestDto oAuthUser;
+    public SnsSignInResponseDto snsSignIn(SnsSignInRequestDto dto){
+        SnsSignInResponseDto oAuthUser;
         if(dto.getProvider().equals(Provider.KAKAO)) {
             oAuthUser =CreateKaKaoUser.createKaKaoUserInfo(dto.getToken());
         }
@@ -100,31 +102,31 @@ public class AuthService {
             throw new BusinessException(USER_INVALID_OAUTH);
         }
 
-        User user = userRepository.findByEmailAndStatus(oAuthUser.getEmail(), Status.ACTIVE)
-                .orElseThrow(() -> new BusinessException(USER_NOT_EXIST));
-
-        if (!passwordEncoder.matches(oAuthUser.getPassword(), user.getPassword())) {
-            throw new BusinessException(USER_INVALID_PASSWORD);
+        Optional<User> user = userRepository.findByEmailAndStatus(oAuthUser.getEmail(), Status.ACTIVE);
+        if(user.isEmpty()){
+            return SnsSignInResponseDto.createKaKaoProfile(oAuthUser.getEmail(),oAuthUser.getId());
         }
+        User currentUser = user.get();
+
 
         //1년 주기로 개인정보동의 받기(가입시 필수 동의를 거쳐야 가입이 되므로 가입날을 기준)
-        if(ChronoUnit.YEARS.between(user.getScheduler(), LocalDateTime.now())>0) {
-            user.resetScheduler();
+        if(ChronoUnit.YEARS.between(currentUser.getScheduler(), LocalDateTime.now())>0) {
+            currentUser.resetScheduler();
             throw new BusinessException(USER_AGREE_PRIVACY);
         }
 
 
-        oAuthUser.setUsername(user.getUsername());
-        UsernamePasswordAuthenticationToken authenticationToken = oAuthUser.toAuthentication();
+        UsernamePasswordAuthenticationToken authenticationToken =  new UsernamePasswordAuthenticationToken(currentUser.getUsername(), oAuthUser.getId()+"@k");
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = jwtProvider.createToken(authentication);
 
-        return new SignInResponseDto(user.getId(), token);
+        return SnsSignInResponseDto.createKaKaoUser(currentUser.getId(), token, oAuthUser.getProvider());
 
 
 
     }
+
 
     @Transactional
     public void deleteStatus(String username){
@@ -154,5 +156,7 @@ public class AuthService {
         return new AdminStatusResponseDto(token);
 
     }
+
+
 
 }
