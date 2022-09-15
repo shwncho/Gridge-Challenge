@@ -24,12 +24,12 @@ public class SnsSignInResponseDto {
 
     //카카오 id
     @Schema(description = "카카오 고유 id")
-    private int id;
+    private Long id;
 
     @Schema(description = "oAuth Provider")
     private Provider provider;
 
-    public static SnsSignInResponseDto createKaKaoProfile(String email, int id){
+    public static SnsSignInResponseDto createKaKaoProfile(String email, Long id){
         return SnsSignInResponseDto.builder()
                 .email(email)
                 .id(id)

@@ -44,7 +44,7 @@ public class CreateKaKaoUser {
             JsonParser parser = new JsonParser();
             JsonElement element = parser.parse(result.toString());
 
-            int id = element.getAsJsonObject().get("id").getAsInt();
+            Long id = element.getAsJsonObject().get("id").getAsLong();
             boolean hasEmail = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("has_email").getAsBoolean();
             String email = "";
             if (hasEmail) {
@@ -58,7 +58,7 @@ public class CreateKaKaoUser {
 
             return SnsSignInResponseDto.builder()
                     .email(email)
-                    .id(Math.abs(id))  //비밀번호에 특수문자 적어도 1개 이상포함이므로 추가
+                    .id(id)  //비밀번호에 특수문자 적어도 1개 이상포함이므로 추가
                     .build();
 
         } catch(Exception e){
