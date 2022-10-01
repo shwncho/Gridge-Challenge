@@ -26,7 +26,7 @@
 &nbsp;
 
 ## 📖 API Docs
-### <a href = "https://dev.umcsimple.shop/swagger-ui/index.html"> Gridge-Challenge API Docs </a>
+### <a href = "https://documenter.getpostman.com/view/18156183/2s83tCMECu"> Gridge-Challenge API Docs </a>
 
 &nbsp;
 &nbsp;
